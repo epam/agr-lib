@@ -1,0 +1,41 @@
+{
+  "name": "agr-lib",
+  "version": "1.0.0",
+  "description": "",
+  "private": "true",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged",
+    "commitlint": "commitlint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.epam.com:epm-uii/agr/agr-lib.git"
+  },
+  "author": "Azat Khalilov <azat_khalilov@epam.com>",
+  "contributors": [
+    {
+      "name": "Azat Khalilov",
+      "email": "azat_khalilov@epam.com"
+    },
+    {
+      "name": "Vasily Bernshteyn",
+      "email": "vasily_bernshteyn@epam.com"
+    }
+  ],
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@commitlint/cli": "^13.2.0",
+    "@commitlint/config-conventional": "^13.2.0",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.2.0",
+    "typescript": "^4.4.3"
+  }
+}
