@@ -1,0 +1,46 @@
+$font-family-light: "Inter Light";
+$font-family-regular: 'Inter Regular';
+$font-family-semi-bold: 'Inter SemiBold';
+$font-family-bold: 'Inter Bold';
+
+$font-base-size: 14px;
+$font-size-s: $font-base-size - 2;
+$font-size-xs: $font-base-size - 3;
+$font-size-x: $font-base-size+2;
+$font-size-2x: $font-base-size+6;
+$font-size-3x: $font-base-size+10;
+$font-size-4x: $font-base-size+18;
+
+
+$color-default: #000000;
+$color-primary: #EE242D;
+$color-primary2: #5C6F7B;
+
+$color-secondary: #B0C5CC;
+$color-secondary-dark: #51535D;
+$color-secondary-light-gray: #AEC5CB;
+$color-secondary-gray: #E5E5E5;
+$color-secondary-green: #A6E35F;
+$color-secondary-yellow: #FDCF41;
+$color-secondary-mint: #87D2CE;
+$color-secondary-blue: #64B4E2;
+$color-secondary-orange: #FF7548;
+$color-gray0: #F0F2F3;
+$color-gray2: #85878F;
+$color-error: $color-primary;
+
+$color-outline-divider: #e5e5e5;
+$color-outline: #e5e5e5;
+$color-positive-value: rgba($color-secondary-green,0.2);
+$color-negative-value: rgba($color-primary,0.2);
+
+
+$color-semi-bold: rgba(0, 0, 0, 0.5);
+$color-table-bg: $color-gray0;
+$color-page-content-bg: #F2F2F2;
+
+$border-radius: 3px;
+
+
+
+//new

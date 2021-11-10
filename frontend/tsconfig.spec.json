@@ -13,6 +13,8 @@
   ],
   "include": [
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "agr-lib/src/**/*.spec.ts",
+    "agr-lib/src/**/*.d.ts"
   ]
 }

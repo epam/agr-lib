@@ -1,0 +1,56 @@
+@import "variables";
+:host{
+  padding: 16px 0 0 0;
+  display: flex;
+  height: 100%;
+  width:100%;
+  flex-direction: column;
+}
+
+.agr-filter-values{
+  font-size: $font-size-xs;
+  tr {
+    td, th {
+      text-align: left;
+      font-weight: normal;
+      background-color: white;
+      border: none;
+      //height: 16px;
+      font-size: $font-size-xs;
+    }
+    th.u-text-right{
+      text-align: right;
+    }
+
+    th{
+      height: 32px;
+    }
+
+  }
+  tr:nth-last-child(1){
+    th{
+      border-bottom: 1px solid $color-primary;
+      .sqr-input{
+        height: 24px;
+        width: 100%;
+      }
+    }
+  }
+}
+.agr-filter-checkbox{
+  margin-right: 12px;
+}
+
+.agr-filter-content{
+  padding: 0;
+  margin-top: 8px;
+  flex: 1;
+}
+
+.agr-grid-filter{
+
+  .sqr-table-filter-header{
+    padding: 0 8px;
+  }
+
+}
