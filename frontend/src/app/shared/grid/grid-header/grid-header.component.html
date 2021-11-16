@@ -1,0 +1,64 @@
+<div class="agr-grid-header-title">
+  {{column.columnDef.title}}
+</div>
+<div class="agr-grid-header-right">
+  <ng-container *ngIf="column.columnDef.sortable">
+    <i class="mdi mdi-arrow-down agr-grid-header-button"
+       [ngClass]="{'agr-grid-header-button-active':column.columnDef.sort}"
+       *ngIf="column.columnDef.sort==ColumnSort.desc||!!!column.columnDef.sort"
+       (click)="sort($event)"></i>
+    <i class="mdi mdi-arrow-up agr-grid-header-button"
+       [ngClass]="{'agr-grid-header-button-active':column.columnDef.sort}"
+       *ngIf="column.columnDef.sort==ColumnSort.asc||!!!column.columnDef.sort"
+       (click)="sort($event)"></i>
+  </ng-container>
+  <i class="mdi mdi-filter agr-grid-header-button"
+     [ngClass]="{'agr-grid-header-button-active':column.columnDef.filter,
+     'agr-grid-header-button-visible':opened}"
+     *ngIf="column.columnDef.filterable"
+     (click)="overlay.toggle($event)"></i>
+</div>
+<p-overlayPanel
+  [styleClass]="styleClass"
+  #overlay
+  [appendTo]="'body'"
+  (onShow)="open()"
+  (onHide)="close()">
+  <ng-template pTemplate>
+    <div class="agr-filter-condition">
+      <p-dropdown [(ngModel)]="condition"
+                  [options]="conditions"
+                  [autoDisplayFirst]="false"
+                  optionLabel="label"
+                  dataKey="value"
+                  (ngModelChange)="changeLogic()"
+                  styleClass="agr-filter-dropdown"
+                  panelStyleClass="agr-filter-dropdown">
+      </p-dropdown>
+      <button class="agr-btn agr-filter-clear-btn"
+              (click)="clearFilter()">
+        <i class="mdi mdi-trash-can-outline"></i>
+        Clear
+      </button>
+    </div>
+    <agr-select-filter
+      *ngIf="column.columnDef.filterType===ColumnFilterTypes.select||!column.columnDef.filterType"
+      [values]="filterValues" (selected)="changeFilter($event)"></agr-select-filter>
+    <!--    <sqr-number-table-filter *ngIf="column.filterType===filterType.number"-->
+    <!--                             [rangeInit]="filterValue"-->
+    <!--                             [data]="data"-->
+    <!--                             [filterData]="filterData"-->
+    <!--                             [filterService]="filterService"-->
+    <!--                             [min]="data[0]"-->
+    <!--                             [max]="data[1]"-->
+    <!--                             [step]="column.step"></sqr-number-table-filter>-->
+    <!--    <sqr-date-table-filter *ngIf="column.filterType===filterType.date"-->
+    <!--                           [data]="data"-->
+    <!--                           [filterData]="filterData"-->
+    <!--                           [filterValue]="filterValue"-->
+    <!--                           [filterService]="filterService"></sqr-date-table-filter>-->
+    <!--    <ng-container *ngIf="column.filterType===filterType.custom">-->
+    <!--      <ng-container *ngComponentOutlet="column.customFilterComponent;injector:filterInjector"></ng-container>-->
+    <!--    </ng-container>-->
+  </ng-template>
+</p-overlayPanel>

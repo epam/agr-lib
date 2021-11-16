@@ -1,0 +1,53 @@
+<p-table class="agr-section-table"
+         aqrFixTablePrimeng
+         [value]="grid.gridEngine.data"
+         [scrollable]="true"
+         [style]="{width:'100%'}"
+         scrollHeight="flex"
+         [virtualScroll]="true"
+         [virtualRowHeight]="25"
+         [reorderableColumns]="true"
+         [resizableColumns]="true"
+         columnResizeMode="expand">
+  <ng-template pTemplate="colgroup">
+   <colgroup>
+     <col *ngFor="let column of grid.gridEngine.body" [style.width]="column.width"/>
+   </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr *ngFor="let rowHeader of grid.gridEngine.header;index as index;last as last">
+      <th *ngFor="let column of rowHeader"
+          [attr.colspan]="column.colSpan"
+          [attr.rowspan]="column.rowSpan"
+          [class.agr-table__gap] = false
+          [ngClass]="{'agr-table__gap':false,'agr-grid-section':index==0}"
+          pResizableColumn
+          pReorderableColumn
+          agrDragColumn>
+          <ng-container [ngSwitch]="index">
+            <ng-container *ngSwitchCase="0">
+              <agr-grid-section-header
+                [title]="column.columnDef.title"
+                [collapsible]="column.columnDef.collapsible"
+                [collapsed]="column.columnDef.collapsed"
+                (collapse)="toggleCollapse(column)">
+              </agr-grid-section-header>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <agr-grid-header [column]="column"></agr-grid-header>
+<!--              <button *ngIf="column.columnDef.collapsible" (click)="toggleCollapse(column)">Coll</button>-->
+            </ng-container>
+
+          </ng-container>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body"  let-rowData>
+    <tr>
+      <td *ngFor="let column of grid.gridEngine.body">
+        {{grid.gridEngine.getColumnValue(rowData,column.columnDef)}}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

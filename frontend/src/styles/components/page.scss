@@ -1,0 +1,50 @@
+@import "../variables";
+
+$page-header-background-color: white;
+$page-header-height: 56px;
+
+.agr-page {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.agr-page-header {
+  background-color: $page-header-background-color;
+  height: $page-header-height;
+  padding: 8px 0 8px 16px;
+  display: flex;
+  align-items: center;
+  &-title{
+    font-size: 19px;
+    font-weight: 500;
+  }
+  &-caption{
+    font-size: 11px;
+    font-weight: 400;
+    color:#006AFF;
+  }
+}
+
+.agr-page-content {
+  background-color: $color-page-content-bg;
+  flex: 1;
+  padding: 16px;
+  overflow: hidden;
+}
+.agr-sub-page{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.agr-page-content-sub-content {
+  flex: 1;
+  position: relative;
+  display: flex;
+  overflow: auto;
+  padding: 16px 0 4px 0;
+  height: 100%;
+}
+

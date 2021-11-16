@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "outDir": "dist/spec",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "types": [
+      "mocha",
+      "jasmine"
+    ]
+  },
+  "include": [
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
