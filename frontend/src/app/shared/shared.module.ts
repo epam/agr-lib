@@ -8,6 +8,7 @@ import {SelectFilterComponent} from "./grid/filter/select-filter/select-filter.c
 import {FormsModule} from "@angular/forms";
 import {OverlayPanelModule, PanelModule} from "primeng";
 import {LibraryModule} from "./library.module";
+import {NumberFilterComponent} from "./grid/filter/number-filter/number-filter.component";
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import {LibraryModule} from "./library.module";
     DragColumnDirective,
     GridSectionHeaderComponent,
     GridHeaderComponent,
-    SelectFilterComponent
+    SelectFilterComponent,
+    NumberFilterComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import {LibraryModule} from "./library.module";
     LibraryModule,
     GridSectionHeaderComponent,
     GridHeaderComponent,
-    SelectFilterComponent
+    SelectFilterComponent,
+    NumberFilterComponent
   ]
 })
 export class SharedModule {

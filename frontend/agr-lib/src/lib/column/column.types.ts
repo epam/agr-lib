@@ -13,24 +13,4 @@ export const ColumnTypes  = {
   text : 'text',
 } as const;
 
-export type ColumnType = typeof ColumnTypes[keyof typeof ColumnTypes]
-
-
-
-export interface ColumnFilterSettings {
-  type?: ColumnFilterType;
-  skipEmptyValues?: boolean;
-}
-
-
-export interface ColumnNumberFilterData {
-  min: number;
-  max: number;
-  showEmpty?: boolean;
-}
-
-export interface ColumnDateFilterData {
-  startDate: Date | string;
-  endDate: Date | string;
-  showEmpty?: boolean;
-}
+export type ColumnType = typeof ColumnTypes[keyof typeof ColumnTypes];

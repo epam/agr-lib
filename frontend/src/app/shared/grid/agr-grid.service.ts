@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AgrEngine, Column, ColumnSelectFilterValue} from 'agr-lib';
+import {AgrEngine, Column, ColumnSelectFilterData} from 'agr-lib';
 import {ColumnFilter} from "agr-lib/lib/column/column-filter.types";
 
 @Injectable()
@@ -10,8 +10,8 @@ export class AgrGridService<T> {
 
   }
 
-  getColumnFilterValues(column: Column){
-    return this.gridEngine.getColumnFilterValues(column)
+  getColumnFilterData(column: Column){
+    return this.gridEngine.getColumnFilterData(column)
   }
 
   switchSort(column:Column, multiple?:boolean){

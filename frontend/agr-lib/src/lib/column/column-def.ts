@@ -18,6 +18,7 @@ export interface ColumnDef {
   filterable?:boolean;
   filter?:ColumnFilter;
   filterType?:ColumnFilterType;
+  step?:number;//step for number filter
   skipEmptyValues?:boolean;
 
   data?:unknown;
