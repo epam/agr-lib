@@ -9,5 +9,8 @@ export type {AgrEngineOptions} from './lib/grid/agr-engine';
 export {AgrEngine, Column, ColumnHelper, ColumnSortOrder, ColumnTypes}
 
 export {ColumnFilterType, ColumnFilterTypes,} from "./lib/column/column-filter.types";
-export type {ColumnSelectFilterData, ColumnFilter, ColumnNumberFilterData, ColumnFilterValueType} from "./lib/column/column-filter.types";
+export type {
+  ColumnSelectFilterData, ColumnFilter, ColumnNumberFilterData, ColumnDateFilterData, ColumnFilterValueType,
+  ColumnFilterDataType
+} from "./lib/column/column-filter.types";
 

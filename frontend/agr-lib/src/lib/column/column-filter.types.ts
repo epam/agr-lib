@@ -7,7 +7,8 @@ export const ColumnFilterTypes =  {
 } as const
 
 export type ColumnFilterType = typeof ColumnFilterTypes[keyof typeof ColumnFilterTypes]
-export type ColumnFilterValueType = string[]|ColumnNumberFilterData
+export type ColumnFilterValueType = string[]|ColumnNumberFilterData|ColumnDateFilterData
+export type ColumnFilterDataType = ColumnSelectFilterData[]|ColumnNumberFilterData|ColumnDateFilterData
 
 export interface ColumnFilter{
   value?:ColumnFilterValueType;

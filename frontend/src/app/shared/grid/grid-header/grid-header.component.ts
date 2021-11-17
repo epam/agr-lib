@@ -1,5 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Column, ColumnSortOrder, ColumnFilterTypes, ColumnSelectFilterData} from "agr-lib";
+import {
+  Column,
+  ColumnSortOrder,
+  ColumnFilterTypes,
+  ColumnSelectFilterData,
+  ColumnDateFilterData,
+  ColumnFilterDataType, ColumnFilterValueType
+} from "agr-lib";
 import {AgrGridFilterSortService} from "../agr-grid-filter-sort.service";
 import {ColumnNumberFilterData} from "agr-lib/lib/column/column-filter.types";
 
@@ -13,7 +20,7 @@ export class GridHeaderComponent implements OnInit {
   ColumnSort = ColumnSortOrder;
   ColumnFilterTypes = ColumnFilterTypes;
   styleClass = 'agr-grid-header-overlay';
-  filterData: ColumnSelectFilterData[]| ColumnNumberFilterData;
+  filterData: ColumnSelectFilterData[]| ColumnNumberFilterData| ColumnDateFilterData;
   opened: boolean;
   conditions: { label: string, value: string }[];
   condition: any;
@@ -80,10 +87,21 @@ export class GridHeaderComponent implements OnInit {
     console.log(this.filterData);
   }
 
-  asNumberData(filterData: ColumnSelectFilterData[] | ColumnNumberFilterData):ColumnNumberFilterData {
+  asNumberData(filterData: ColumnFilterDataType):ColumnNumberFilterData {
     return (filterData as ColumnNumberFilterData)
   }
-  asSelectData(filterData: ColumnSelectFilterData[] | ColumnNumberFilterData):ColumnSelectFilterData[] {
+  asSelectData(filterData: ColumnFilterDataType):ColumnSelectFilterData[] {
     return (filterData as ColumnSelectFilterData[])
+  }
+  asDateData(filterData: ColumnFilterDataType):ColumnDateFilterData {
+    return (filterData as ColumnDateFilterData)
+  }
+
+  asNumberValue(filterValue: ColumnFilterValueType):ColumnNumberFilterData {
+    return (filterValue as ColumnNumberFilterData)
+  }
+
+  asDateValue(filterValue: ColumnFilterValueType):ColumnDateFilterData {
+    return (filterValue as ColumnDateFilterData)
   }
 }
