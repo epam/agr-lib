@@ -62,6 +62,7 @@ export class AgrEngine<T> {
   }
 
   //TODO Write test for logic
+  //TODO Think about simplify
   private createColumns(columnsDefinition: ColumnDef[]) {
     this.header = [];
     this.body = [];
@@ -127,6 +128,18 @@ export class AgrEngine<T> {
       for (const column of this.header[rowIndex]) {
         if (!Array.isArray(column.columns) || column.columns.length === 0) {
           column.rowSpan = rowSpan;
+        }
+
+      }
+    }
+    if (this.options.sectionMode && this.header.length > 0) {
+      for (const column of this.header[0]) {
+        column.isLast = true;
+        let children = column.columns;
+        while (children) {
+          const lastChild = children[children.length - 1];
+          lastChild.isLast = true;
+          children = Array.isArray(lastChild.columns) && lastChild.columns.length > 0 ? lastChild.columns : null;
         }
       }
     }

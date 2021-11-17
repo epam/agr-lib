@@ -7,9 +7,6 @@ export function SectionGridColumnDefs(): ColumnDef[] {
       title: 'Identity',
       field: 'identity_group',
       collapsible: true,
-      data:{
-        isSection:true
-      },
       columns: [
         {
           title: '#',
@@ -52,6 +49,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
     {
       title: 'Location',
       field: 'location_group',
+      collapsible:true,
       columns: [
         {
           title: 'Country',

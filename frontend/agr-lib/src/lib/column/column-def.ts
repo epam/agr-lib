@@ -19,6 +19,7 @@ export interface ColumnDef {
   filter?:ColumnFilter;
   filterType?:ColumnFilterType;
   step?:number;//step for number filter
+  pin?:boolean;
 
   data?:unknown;
 
