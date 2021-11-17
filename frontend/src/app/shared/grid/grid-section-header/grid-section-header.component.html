@@ -3,7 +3,7 @@
     {{title}}
   </div>
   <div class="agr-grid-section-header-buttons">
-    <button class="mdi mdi-cog"></button>
+<!--    <button class="mdi mdi-cog"></button>-->
     <ng-container *ngIf="collapsible">
       <button class="mdi"
               [ngClass]="{'mdi-arrow-expand':collapsed,'mdi-arrow-collapse':!collapsed}"
@@ -11,6 +11,7 @@
 
       </button>
     </ng-container>
-    <button class="mdi mdi-pin mdi-rotate-45"></button>
+    <button class="mdi mdi-pin mdi-rotate-45"
+            *ngIf="pin"></button>
   </div>
 </div>

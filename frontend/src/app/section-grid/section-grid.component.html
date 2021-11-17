@@ -17,11 +17,10 @@
 
   <ng-template pTemplate="header">
     <tr *ngFor="let rowHeader of grid.gridEngine.header;index as index;last as last">
-      <th *ngFor="let column of rowHeader"
+      <th *ngFor="let column of rowHeader;last as last"
           [attr.colspan]="column.colSpan"
           [attr.rowspan]="column.rowSpan"
-          [class.agr-table__gap] = false
-          [ngClass]="{'agr-table__gap':false,'agr-grid-section':index==0}"
+          [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0}"
           pResizableColumn
           pReorderableColumn
           agrDragColumn>
@@ -45,7 +44,8 @@
   </ng-template>
   <ng-template pTemplate="body"  let-rowData>
     <tr>
-      <td *ngFor="let column of grid.gridEngine.body">
+      <td *ngFor="let column of grid.gridEngine.body;last as last"
+          [ngClass]="{'agr-end-section':column.isLast}">
         {{grid.gridEngine.getColumnValue(rowData,column.columnDef)}}
       </td>
     </tr>
