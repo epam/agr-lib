@@ -1,0 +1,8 @@
+<p-calendar styleClass="agr-date-filter-calendar"
+            [(ngModel)]="dateRange"
+            [inline]="true"
+            [numberOfMonths]="2"
+            [showOtherMonths]="false"
+            selectionMode="range"
+            [showWeek]="true"
+            (ngModelChange)="onDateChange()"></p-calendar>

@@ -9,6 +9,7 @@ import {FormsModule} from "@angular/forms";
 import {OverlayPanelModule, PanelModule} from "primeng";
 import {LibraryModule} from "./library.module";
 import {NumberFilterComponent} from "./grid/filter/number-filter/number-filter.component";
+import {DateFilterComponent} from "./grid/filter/date-filter/date-filter.component";
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {NumberFilterComponent} from "./grid/filter/number-filter/number-filter.c
     GridSectionHeaderComponent,
     GridHeaderComponent,
     SelectFilterComponent,
-    NumberFilterComponent
+    NumberFilterComponent,
+    DateFilterComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +35,8 @@ import {NumberFilterComponent} from "./grid/filter/number-filter/number-filter.c
     GridSectionHeaderComponent,
     GridHeaderComponent,
     SelectFilterComponent,
-    NumberFilterComponent
+    NumberFilterComponent,
+    DateFilterComponent
   ]
 })
 export class SharedModule {

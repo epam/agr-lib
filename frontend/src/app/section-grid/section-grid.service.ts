@@ -15,17 +15,20 @@ export class SectionGridService extends AgrGridService<MedicalRecord> {
       {
         index_number: 1,
         firstName: 'Test2',
-        tempIn9: 36.6
+        tempIn9: 36.6,
+        birthDate:'2021-11-11'
       },
       {
         index_number: 2,
         firstName: 'Test1',
-        tempIn9: 37.6
+        tempIn9: 37.6,
+        birthDate:'2021-11-15'
       },
       {
         index_number: 2,
         firstName: 'Test1',
-        tempIn9: 38.6
+        tempIn9: 38.6,
+        birthDate:'2021-11-19'
       }
     ]
   }

@@ -4,7 +4,8 @@ import {ColumnDef} from "../column/column-def";
 import {Column} from "../column/column";
 import {ColumnSortOrder, ColumnSortOrderType, ColumnTypes} from "../column/column.types";
 import {
-  ColumnFilter,
+  ColumnDateFilterData,
+  ColumnFilter, ColumnFilterDataType,
   ColumnFilterTypes,
   ColumnNumberFilterData,
   ColumnSelectFilterData
@@ -228,7 +229,7 @@ export class AgrEngine<T> {
 
 //TODO Test
   switchFilter(column: Column, filter: ColumnFilter) {
-    if (!filter.value || (filter.value as string[]).length === 0){
+    if (!filter.value || (filter.value as string[]).length === 0) {
       this.removeFilter(column);
       return;
     }
@@ -254,10 +255,12 @@ export class AgrEngine<T> {
   }
 
 //TODO Test
-  getColumnFilterData(column: Column): ColumnSelectFilterData[]|ColumnNumberFilterData {
+  getColumnFilterData(column: Column): ColumnFilterDataType {
     switch (column.columnDef.filterType ?? ColumnFilterTypes.select) {
       case ColumnFilterTypes.number:
         return this.getNumberFilterData(column);
+      case ColumnFilterTypes.date:
+        return this.getDateFilterData(column);
       //     case ColumnFilterType.custom:
       //       return this.getCustomFilterValues(column);
       default:
@@ -287,7 +290,7 @@ export class AgrEngine<T> {
         });
       }
     }
-    return sortBy([...mapValues.values()],'label');
+    return sortBy([...mapValues.values()], 'label');
   }
 
   private isSelectedFilterValue(column: Column, value: any) {
@@ -303,11 +306,11 @@ export class AgrEngine<T> {
     for (const row of this._originalData) {
       const values = this.getValueAsArray(row, column.columnDef);
       for (const value of values) {
-        if (!wasInit){
-          wasInit=true;
+        if (!wasInit) {
+          wasInit = true;
           filterData = {
-            min:value,
-            max:value
+            min: value,
+            max: value
           }
         }
         if (value > filterData.max) {
@@ -320,6 +323,39 @@ export class AgrEngine<T> {
     }
     return filterData;
   }
+
+  getDateFilterData(column: Column): ColumnDateFilterData {
+    let filterData: ColumnDateFilterData
+    let wasInit = false;
+    for (const row of this._originalData) {
+      const values = this.getValueAsArray(row, column.columnDef);
+      for (let value of values) {
+        if (!value) {
+          continue;
+        }
+        try {
+          value = new Date(value);
+        } catch {
+          continue;
+        }
+        if (!wasInit) {
+          wasInit = true;
+          filterData = {
+            startDate: value,
+            endDate: value
+          }
+        }
+        // if (value.getTime() > filterData.startDate.getTime()) {
+        //   filterData.max = value;
+        // }
+        // if (value < filterData.min) {
+        //   filterData.min = value;
+        // }
+      }
+    }
+    return filterData;
+  }
+
   //
   // getCustomFilterValues(column: Column) {
   //   //it's stub for custom filter. Developer can override method in child with some custom logic
@@ -354,8 +390,8 @@ export class AgrEngine<T> {
     switch (columnDef.filterType) {
       case ColumnFilterTypes.number:
         return this.filterNumberColumn(values, columnDef.filter.value as ColumnNumberFilterData);
-      // case ColumnFilterType.date:
-      //   return this.filterDateColumn(values, filter.data as ColumnDateFilterData);
+      case ColumnFilterTypes.date:
+        return this.filterDateColumn(values, columnDef.filter.value as ColumnDateFilterData);
       // case ColumnFilterType.custom:
       //   return this.filterCustomColumn(row, filter);
       default:
@@ -381,23 +417,20 @@ export class AgrEngine<T> {
     }
     return false;
   }
-  //
-  // protected filterDateColumn(values: any[], filterData: ColumnDateFilterData): boolean {
-  //   for (const value of values) {
-  //     if (this.isEmptyValue(value)) {
-  //       return <boolean>filterData.showEmpty;
-  //     }
-  //     const valueAsDate = this.toDate(value);
-  //     const filterAsDate = {
-  //       startDate: this.toDate(filterData.startDate),
-  //       endDate: this.toDate(filterData.endDate),
-  //     };
-  //     if (valueAsDate.getTime() >= filterAsDate.startDate.getTime() && valueAsDate.getTime() <= filterAsDate.endDate.getTime()) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
+
+  protected filterDateColumn(columnValues: any[], filterValue: ColumnDateFilterData): boolean {
+    const filterAsDate = {
+      startDate: this.toDate(filterValue.startDate),
+      endDate: this.toDate(filterValue.endDate),
+    };
+    for (const value of columnValues) {
+      const valueAsDate = this.toDate(value);
+      if (valueAsDate.getTime() >= filterAsDate.startDate.getTime() && valueAsDate.getTime() <= filterAsDate.endDate.getTime()) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /* eslint-disable @typescript-eslint/no-unused-vars */
   protected filterCustomColumn(values: any[], filterValue: any): boolean {
@@ -416,6 +449,8 @@ export class AgrEngine<T> {
   }
 
   private toDate(value: string | Date): Date {
-    return new Date(value);
+    const date = new Date(value);
+    date.setHours(0,0,0,0);
+    return date;
   }
 }

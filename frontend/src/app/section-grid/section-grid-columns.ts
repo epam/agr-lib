@@ -32,8 +32,10 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         {
           title: 'Birth Date',
           field: 'birthDate',
-          width: 50,
+          width: 100,
           hideInCollapse:true,
+          filterType: ColumnFilterTypes.date,
+          filterable: true
         },
         {
           title: 'National ID',
