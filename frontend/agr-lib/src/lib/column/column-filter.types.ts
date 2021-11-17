@@ -1,8 +1,3 @@
-export interface ColumnSelectFilterValue {
-  label: string;
-  value: any;
-  selected?:boolean;
-}
 
 export const ColumnFilterTypes =  {
   select:'select',
@@ -12,10 +7,26 @@ export const ColumnFilterTypes =  {
 } as const
 
 export type ColumnFilterType = typeof ColumnFilterTypes[keyof typeof ColumnFilterTypes]
+export type ColumnFilterValueType = string[]|ColumnNumberFilterData
 
 export interface ColumnFilter{
-  value?:string[];
+  value?:ColumnFilterValueType;
   condition?:string;
+  showEmpty?:boolean;
 }
 
+export interface ColumnSelectFilterData {
+  label: string;
+  value: any;
+  selected?:boolean;
+}
 
+export interface ColumnNumberFilterData {
+  min: number;
+  max: number;
+}
+
+export interface ColumnDateFilterData {
+  startDate: Date | string;
+  endDate: Date | string;
+}

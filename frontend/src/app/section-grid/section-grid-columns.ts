@@ -1,4 +1,4 @@
-import {ColumnDef} from "agr-lib";
+import {ColumnDef, ColumnFilterTypes} from "agr-lib";
 
 
 export function SectionGridColumnDefs(): ColumnDef[] {
@@ -79,8 +79,11 @@ export function SectionGridColumnDefs(): ColumnDef[] {
       columns: [
         {
           title: '9:00',
-          field: 'in9',
-          width: 50
+          field: 'tempIn9',
+          width: 50,
+          filterType:ColumnFilterTypes.number,
+          filterable: true,
+          step:0.1
         },
         {
           title: '14:00',

@@ -193,13 +193,13 @@ body {
 
   .agr-grid-header-overlay.ui-overlaypanel {
     .ui-overlaypanel-content {
-      height: 350px;
+      height: auto;
     }
   }
 
-  .agr-grid-header-overlay.agr-number-filter.ui-overlaypanel {
+  .agr-grid-header-overlay.agr-select-filter.ui-overlaypanel {
     .ui-overlaypanel-content {
-      height: 100px;
+      height: 300px;
     }
   }
 
@@ -540,7 +540,7 @@ body {
   }
 
   //Slider
-  .agr-number-filter__slider {
+  .agr-number-filter-slider {
     $slider-handle: 10px;
 
     .ui-slider {

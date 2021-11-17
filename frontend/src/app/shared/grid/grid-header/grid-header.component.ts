@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Column, ColumnSortOrder, ColumnFilterTypes, ColumnSelectFilterValue} from "agr-lib";
+import {Column, ColumnSortOrder, ColumnFilterTypes, ColumnSelectFilterData} from "agr-lib";
 import {AgrGridFilterSortService} from "../agr-grid-filter-sort.service";
+import {ColumnNumberFilterData} from "agr-lib/lib/column/column-filter.types";
 
 @Component({
   selector: 'agr-grid-header',
@@ -12,7 +13,7 @@ export class GridHeaderComponent implements OnInit {
   ColumnSort = ColumnSortOrder;
   ColumnFilterTypes = ColumnFilterTypes;
   styleClass = 'agr-grid-header-overlay';
-  filterValues: ColumnSelectFilterValue[];
+  filterData: ColumnSelectFilterData[]| ColumnNumberFilterData;
   opened: boolean;
   conditions: { label: string, value: string }[];
   condition: any;
@@ -21,6 +22,9 @@ export class GridHeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.column.columnDef.filterType || this.column.columnDef.filterType===ColumnFilterTypes.select) {
+      this.styleClass+=' agr-select-filter';
+    }
   }
 
   sort($event: MouseEvent) {
@@ -37,6 +41,7 @@ export class GridHeaderComponent implements OnInit {
   }
 
   changeFilter(filterValue: any) {
+    console.log(filterValue)
     this.filterSortService.switchFilter(this.column, {value: filterValue, condition: this.condition.value});
   }
 
@@ -71,7 +76,14 @@ export class GridHeaderComponent implements OnInit {
     } else {
       this.condition = this.conditions.find((condition) => condition.value === 'AND');
     }
-    this.filterValues = this.filterSortService.getColumnFilterValues(this.column);
+    this.filterData = this.filterSortService.getColumnFilterData(this.column);
+    console.log(this.filterData);
   }
 
+  asNumberData(filterData: ColumnSelectFilterData[] | ColumnNumberFilterData):ColumnNumberFilterData {
+    return (filterData as ColumnNumberFilterData)
+  }
+  asSelectData(filterData: ColumnSelectFilterData[] | ColumnNumberFilterData):ColumnSelectFilterData[] {
+    return (filterData as ColumnSelectFilterData[])
+  }
 }

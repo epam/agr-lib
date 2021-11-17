@@ -1,8 +1,14 @@
 import orderBy from 'lodash-es/orderBy';
+import sortBy from 'lodash-es/sortBy';
 import {ColumnDef} from "../column/column-def";
 import {Column} from "../column/column";
 import {ColumnSortOrder, ColumnSortOrderType, ColumnTypes} from "../column/column.types";
-import {ColumnFilter, ColumnFilterTypes, ColumnSelectFilterValue} from "../column/column-filter.types";
+import {
+  ColumnFilter,
+  ColumnFilterTypes,
+  ColumnNumberFilterData,
+  ColumnSelectFilterData
+} from "../column/column-filter.types";
 
 interface ColumnStack {
   column: Column;
@@ -13,8 +19,8 @@ interface ColumnStack {
 }
 
 export interface AgrEngineOptions {
-  unSortColumn?: boolean;
-  sectionMode?:boolean;
+  unSortColumn?: boolean; //TODO Rename property because unclear what is made
+  sectionMode?: boolean;
 }
 
 export class AgrEngine<T> {
@@ -153,6 +159,7 @@ export class AgrEngine<T> {
         this.addSort(column, ColumnSortOrder.asc, multiple);
     }
   }
+
 //TODO Test
   resetSort() {
     for (const columnDef of [...this.sortColumnsData.values()]) {
@@ -160,6 +167,7 @@ export class AgrEngine<T> {
     }
     this.sortColumnsData.clear();
   }
+
 //TODO Test
   addSort(column: Column, order: ColumnSortOrderType, multiple?: boolean) {
     if (!multiple) {
@@ -169,6 +177,7 @@ export class AgrEngine<T> {
     this.sortColumnsData.set(column.getColumnId(), column.columnDef);
     this.sort();
   }
+
 //TODO Test
   removeSort(column: Column) {
     column.columnDef.sort = null;
@@ -207,60 +216,65 @@ export class AgrEngine<T> {
   setColumnValue(data: any, columnDef: ColumnDef, value: any) {
     columnDef.setValue ? columnDef.setValue(data, value) : (data[columnDef.field] = value);
   }
+
 //TODO Test
-  getListFilterConditions():string[]{
-     const conditions = ['AND','OR'];
-     if (this.options.sectionMode){
-       conditions.push('OR_GROUP');
-     }
-     return conditions;
+  getListFilterConditions(): string[] {
+    const conditions = ['AND', 'OR'];
+    if (this.options.sectionMode) {
+      conditions.push('OR_GROUP');
+    }
+    return conditions;
   }
+
 //TODO Test
   switchFilter(column: Column, filter: ColumnFilter) {
-    //TODO Make checking for other types
-    if (filter.value.length === 0) {
+    if (!filter.value || (filter.value as string[]).length === 0){
       this.removeFilter(column);
       return;
     }
     column.columnDef.filter = filter;
-    this.filterColumnsData.set(column.getColumnId(),column.columnDef);
+    this.filterColumnsData.set(column.getColumnId(), column.columnDef);
     this.filter();
   }
+
 //TODO Test
   removeFilter(column: Column) {
     this.filterColumnsData.delete(column.getColumnId());
     column.columnDef.filter = null;
     this.filter();
   }
+
 //TODO Test
-  resetFilter(){
+  resetFilter() {
     for (const columnDef of [...this.filterColumnsData.values()]) {
       columnDef.filter = null;
     }
     this.filterColumnsData.clear();
     this.filter();
   }
+
 //TODO Test
-  getColumnFilterValues(column: Column): ColumnSelectFilterValue[] {
+  getColumnFilterData(column: Column): ColumnSelectFilterData[]|ColumnNumberFilterData {
     switch (column.columnDef.filterType ?? ColumnFilterTypes.select) {
-      //     case ColumnFilterType.number:
-      //       return this.getNumberFilterValues(column);
+      case ColumnFilterTypes.number:
+        return this.getNumberFilterData(column);
       //     case ColumnFilterType.custom:
       //       return this.getCustomFilterValues(column);
       default:
         return this.getSelectFilterValues(column);
     }
   }
+
 //TODO Test
-  getSelectFilterValues(column: Column): ColumnSelectFilterValue[] {
-    const mapValues = new Map<any, ColumnSelectFilterValue>();
+  getSelectFilterValues(column: Column): ColumnSelectFilterData[] {
+    const mapValues = new Map<any, ColumnSelectFilterData>();
     for (const row of this._originalData) {
       const label = this.getColumnDisplayValue(row, column.columnDef) ?? '';
       const tempValue = this.getColumnValue(row, column.columnDef);
       const values = Array.isArray(tempValue) ? tempValue : [tempValue];
       //TODO Make grid options skipEmptyValues and column property  allows empty
       if (!column.columnDef.skipEmptyValues) {
-        mapValues.set('', {label: '', value: '',selected: this.isSelectedFilterValue(column,'')});
+        mapValues.set('', {label: '', value: '', selected: this.isSelectedFilterValue(column, '')});
       }
       for (const value of values) {
         if (column.columnDef.skipEmptyValues && this.isEmptyValue(value)) {
@@ -269,38 +283,43 @@ export class AgrEngine<T> {
         mapValues.set(value, {
           label,
           value: value,
-          selected: this.isSelectedFilterValue(column,value)
+          selected: this.isSelectedFilterValue(column, value)
         });
       }
     }
-    return [...mapValues.values()];
-    // return sortBy([...mapValues.values()],'label');
-  }
-  private isSelectedFilterValue(column: Column,value:any){
-    if (!this.filterColumnsData.has(column.getColumnId())){
-      return false;
-    }
-    return (this.filterColumnsData.get(column.getColumnId()).filter as ColumnFilter).value.includes(value)
+    return sortBy([...mapValues.values()],'label');
   }
 
-  // getNumberFilterValues(column: Column): GridNumberFilterValues {
-  //   const filterValues: GridNumberFilterValues = {
-  //     min: 0,
-  //     max: 0,
-  //   };
-  //   for (const row of this.originalData) {
-  //     const values = this.getValueAsArray(row, column);
-  //     for (const value of values) {
-  //       if (value > filterValues.max) {
-  //         filterValues.max = value;
-  //       }
-  //       if (value < filterValues.min) {
-  //         filterValues.min = value;
-  //       }
-  //     }
-  //   }
-  //   return filterValues;
-  // }
+  private isSelectedFilterValue(column: Column, value: any) {
+    if (!this.filterColumnsData.has(column.getColumnId())) {
+      return false;
+    }
+    return (this.filterColumnsData.get(column.getColumnId()).filter.value as string[]).includes(value)
+  }
+
+  getNumberFilterData(column: Column): ColumnNumberFilterData {
+    let filterData: ColumnNumberFilterData
+    let wasInit = false;
+    for (const row of this._originalData) {
+      const values = this.getValueAsArray(row, column.columnDef);
+      for (const value of values) {
+        if (!wasInit){
+          wasInit=true;
+          filterData = {
+            min:value,
+            max:value
+          }
+        }
+        if (value > filterData.max) {
+          filterData.max = value;
+        }
+        if (value < filterData.min) {
+          filterData.min = value;
+        }
+      }
+    }
+    return filterData;
+  }
   //
   // getCustomFilterValues(column: Column) {
   //   //it's stub for custom filter. Developer can override method in child with some custom logic
@@ -330,21 +349,21 @@ export class AgrEngine<T> {
     this._data = data;
   }
 
-  protected filterByColumn(columnDef:ColumnDef, row): boolean {
+  protected filterByColumn(columnDef: ColumnDef, row): boolean {
     const values = this.getValueAsArray(row, columnDef);
     switch (columnDef.filterType) {
-      // case ColumnFilterTypes.number:
-      //   return this.filterNumberColumn(values, filter.data as ColumnNumberFilterData);
+      case ColumnFilterTypes.number:
+        return this.filterNumberColumn(values, columnDef.filter.value as ColumnNumberFilterData);
       // case ColumnFilterType.date:
       //   return this.filterDateColumn(values, filter.data as ColumnDateFilterData);
       // case ColumnFilterType.custom:
       //   return this.filterCustomColumn(row, filter);
       default:
-        return this.filterSelectColumn(values, (columnDef.filter as ColumnFilter).value);
+        return this.filterSelectColumn(values, (columnDef.filter.value as string[]));
     }
   }
 
-  protected filterSelectColumn(columnValues: any[], filterValue: any[]): boolean {
+  protected filterSelectColumn(columnValues: any[], filterValue: string[]): boolean {
     for (const value of columnValues) {
       const isIncluded = filterValue.includes(value);
       if (isIncluded) {
@@ -354,14 +373,14 @@ export class AgrEngine<T> {
     return false;
   }
 
-  // protected filterNumberColumn(values: number[], filterData: ColumnNumberFilterData): boolean {
-  //   for (const value of values) {
-  //     if ((value >= filterData.min && value <= filterData.min) || (filterData.showEmpty && this.isEmptyValue(value))) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
+  protected filterNumberColumn(columnValues: number[], filterValue: ColumnNumberFilterData): boolean {
+    for (const value of columnValues) {
+      if (value >= filterValue.min && value <= filterValue.max) {
+        return true;
+      }
+    }
+    return false;
+  }
   //
   // protected filterDateColumn(values: any[], filterData: ColumnDateFilterData): boolean {
   //   for (const value of values) {

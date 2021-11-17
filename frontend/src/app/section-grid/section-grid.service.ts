@@ -14,12 +14,20 @@ export class SectionGridService extends AgrGridService<MedicalRecord> {
     this.gridEngine.data = [
       {
         index_number: 1,
-        firstName:'Test2'
+        firstName: 'Test2',
+        tempIn9: 36.6
       },
       {
         index_number: 2,
-        firstName:'Test1'
-      }]
+        firstName: 'Test1',
+        tempIn9: 37.6
+      },
+      {
+        index_number: 2,
+        firstName: 'Test1',
+        tempIn9: 38.6
+      }
+    ]
   }
 
 

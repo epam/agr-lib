@@ -1,0 +1,22 @@
+<div class="agr-filter-content">
+  <input type="number"
+         [min]="data?.min" [max]="data?.max"
+         [step]="step"
+         [(ngModel)]="range[0]"
+         (ngModelChange)="onChange()"> -
+  <input type="number"
+         [min]="data?.min"
+         [max]="data?.max"
+         [(ngModel)]="range[1]"
+         [step]="step"
+         (ngModelChange)="onChange()">
+  <p-slider class="agr-number-filter-slider"
+            [(ngModel)]="range"
+            [range]="true"
+            [min]="data?.min"
+            [max]="data?.max"
+            [step]="step"
+            (onChange)="onChange()">
+  </p-slider>
+</div>
+

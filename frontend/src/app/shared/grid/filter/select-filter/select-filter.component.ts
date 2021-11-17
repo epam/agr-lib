@@ -8,8 +8,8 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {ColumnSelectFilterValue} from "agr-lib";
+import {debounceTime} from 'rxjs/operators';
+import {ColumnSelectFilterData} from "agr-lib";
 
 @Component({
   selector: 'agr-select-filter',
@@ -17,12 +17,11 @@ import {ColumnSelectFilterValue} from "agr-lib";
   styleUrls: ['./select-filter.component.scss']
 })
 export class SelectFilterComponent implements OnInit, OnChanges {
-  @Input() data: any[] = [];
-  @Input() values: ColumnSelectFilterValue[];
-  @Output() selected = new EventEmitter<ColumnSelectFilterValue[]>();
+  @Input() data: ColumnSelectFilterData[];
+  @Output() changeFilter = new EventEmitter<ColumnSelectFilterData[]>();
   selectedAll =false;
   filterText = '';
-  filteredOptions: ColumnSelectFilterValue[] = [];
+  filteredOptions: ColumnSelectFilterData[] = [];
   private textStream = new Subject<string>();
   private subscription: Subscription;
 
@@ -30,7 +29,7 @@ export class SelectFilterComponent implements OnInit, OnChanges {
     this.subscription = this.textStream.pipe(
       debounceTime(350),
     ).subscribe((text) => {
-      this.filteredOptions = (this.values || []).filter((item) => {
+      this.filteredOptions = (this.data || []).filter((item) => {
         if (!item.label && text) {
           return false;
         }
@@ -41,7 +40,7 @@ export class SelectFilterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (Array.isArray(this.values)) {
+    if (Array.isArray(this.data)) {
       this.textStream.next(this.filterText);
     }
   }
@@ -59,7 +58,7 @@ export class SelectFilterComponent implements OnInit, OnChanges {
   }
 
   private emitSelected(){
-    this.selected.emit(this.filteredOptions.filter(option => option.selected).map(option => option.value))
+    this.changeFilter.emit(this.filteredOptions.filter(option => option.selected).map(option => option.value))
   }
 
   private calculateAll() {
