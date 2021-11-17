@@ -13,6 +13,12 @@
     <ng-template pTemplate="header">
       <tr>
         <th colspan="2">
+          <input type="text"
+                 [(ngModel)]="filterText" (ngModelChange)="changeText()">
+        </th>
+      </tr>
+      <tr>
+        <th colspan="2">
           <p-checkbox class="agr-filter-checkbox"
                       styleClass="agr-filter-checkbox"
                       [binary]="true"
@@ -21,12 +27,7 @@
           Select All
         </th>
       </tr>
-      <tr>
-        <th colspan="2">
-          <input type="text" class="sqr-input"
-                 [(ngModel)]="filterText" (ngModelChange)="changeText()">
-        </th>
-      </tr>
+
     </ng-template>
     <ng-template pTemplate="body" let-rowData>
       <tr>
@@ -36,8 +37,8 @@
                       [(ngModel)]="rowData.selected"
                       (ngModelChange)="onSelect()"></p-checkbox>
         </td>
-        <td [title]="rowData.label">
-          {{rowData.label}}
+        <td [title]="rowData.data.label">
+          {{rowData.data.label}}
         </td>
       </tr>
     </ng-template>

@@ -18,31 +18,36 @@ import {ColumnSelectFilterData} from "agr-lib";
 })
 export class SelectFilterComponent implements OnInit, OnChanges {
   @Input() data: ColumnSelectFilterData[];
+  @Input() values:string[];
   @Output() changeFilter = new EventEmitter<ColumnSelectFilterData[]>();
   selectedAll =false;
   filterText = '';
-  filteredOptions: ColumnSelectFilterData[] = [];
+  filteredOptions: {data:ColumnSelectFilterData,selected?:boolean}[] = [];
   private textStream = new Subject<string>();
   private subscription: Subscription;
-
+  private wrappedData:{data:ColumnSelectFilterData,selected?:boolean}[];
   ngOnInit() {
     this.subscription = this.textStream.pipe(
       debounceTime(350),
     ).subscribe((text) => {
-      this.filteredOptions = (this.data || []).filter((item) => {
-        if (!item.label && text) {
-          return false;
-        }
-        return text ? item.label.toLowerCase().indexOf(text.toLowerCase()) >= 0 : true;
+      this.filteredOptions = (this.wrappedData || []).filter((item) => {
+        return text ? item.data.label.toLowerCase().indexOf(text.toLowerCase()) >= 0 : true;
       });
       this.calculateAll();
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (Array.isArray(this.data)) {
-      this.textStream.next(this.filterText);
-    }
+    const data = this.data??[];
+    const values = this.values??[];
+    this.wrappedData = data.map(item=>{
+      const wrap = {
+        data:item,
+        selected: values.some(value=>value===item.value)
+      }
+      return wrap;
+    })
+    this.textStream.next(this.filterText);
   }
 
   onSelectAll() {
@@ -58,7 +63,7 @@ export class SelectFilterComponent implements OnInit, OnChanges {
   }
 
   private emitSelected(){
-    this.changeFilter.emit(this.filteredOptions.filter(option => option.selected).map(option => option.value))
+    this.changeFilter.emit(this.filteredOptions.filter(option => option.selected).map(option => option.data.value))
   }
 
   private calculateAll() {

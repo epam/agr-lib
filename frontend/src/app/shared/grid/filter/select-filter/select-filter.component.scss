@@ -1,6 +1,6 @@
 @import "variables";
 :host{
-  padding: 16px 0 0 0;
+  padding: 8px 0 0 0;
   display: flex;
   height: 100%;
   width:100%;
@@ -24,16 +24,16 @@
 
     th{
       height: 32px;
+      input{
+        height: 24px;
+        width: 100%;
+      }
     }
 
   }
   tr:nth-last-child(1){
     th{
       border-bottom: 1px solid $color-primary;
-      .sqr-input{
-        height: 24px;
-        width: 100%;
-      }
     }
   }
 }

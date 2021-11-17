@@ -275,29 +275,17 @@ export class AgrEngine<T> {
       const label = this.getColumnDisplayValue(row, column.columnDef) ?? '';
       const tempValue = this.getColumnValue(row, column.columnDef);
       const values = Array.isArray(tempValue) ? tempValue : [tempValue];
-      //TODO Make grid options skipEmptyValues and column property  allows empty
-      if (!column.columnDef.skipEmptyValues) {
-        mapValues.set('', {label: '', value: '', selected: this.isSelectedFilterValue(column, '')});
-      }
       for (const value of values) {
-        if (column.columnDef.skipEmptyValues && this.isEmptyValue(value)) {
+        if (this.isEmptyValue(value)) {
           continue;
         }
         mapValues.set(value, {
           label,
-          value: value,
-          selected: this.isSelectedFilterValue(column, value)
+          value: value
         });
       }
     }
     return sortBy([...mapValues.values()], 'label');
-  }
-
-  private isSelectedFilterValue(column: Column, value: any) {
-    if (!this.filterColumnsData.has(column.getColumnId())) {
-      return false;
-    }
-    return (this.filterColumnsData.get(column.getColumnId()).filter.value as string[]).includes(value)
   }
 
   getNumberFilterData(column: Column): ColumnNumberFilterData {
@@ -370,9 +358,9 @@ export class AgrEngine<T> {
         // Re-init value of logicResult depends on  logic condition from first filter: OR or AND
         if (!wasInit) {
           wasInit = true;
-          logicResult = (columnDef.filter as ColumnFilter).condition !== 'OR';
+          logicResult = columnDef.filter.condition !== 'OR';
         }
-        switch ((columnDef.filter as ColumnFilter).condition) {
+        switch (columnDef.filter.condition) {
           case 'OR':
             logicResult ||= this.filterByColumn(columnDef, row);
             break;
@@ -387,49 +375,45 @@ export class AgrEngine<T> {
 
   protected filterByColumn(columnDef: ColumnDef, row): boolean {
     const values = this.getValueAsArray(row, columnDef);
-    switch (columnDef.filterType) {
-      case ColumnFilterTypes.number:
-        return this.filterNumberColumn(values, columnDef.filter.value as ColumnNumberFilterData);
-      case ColumnFilterTypes.date:
-        return this.filterDateColumn(values, columnDef.filter.value as ColumnDateFilterData);
-      // case ColumnFilterType.custom:
-      //   return this.filterCustomColumn(row, filter);
-      default:
-        return this.filterSelectColumn(values, (columnDef.filter.value as string[]));
-    }
-  }
-
-  protected filterSelectColumn(columnValues: any[], filterValue: string[]): boolean {
-    for (const value of columnValues) {
-      const isIncluded = filterValue.includes(value);
-      if (isIncluded) {
+    let columnResult = false;
+    for (const value of values) {
+      if (columnDef.filter.showEmpty && this.isEmptyValue(value)) {
+        return true;
+      }
+      switch (columnDef.filterType) {
+        case ColumnFilterTypes.number:
+          columnResult = this.filterNumberColumn(value, columnDef.filter.value as ColumnNumberFilterData);
+          break;
+        case ColumnFilterTypes.date:
+          columnResult = this.filterDateColumn(value, columnDef.filter.value as ColumnDateFilterData);
+          break;
+        // case ColumnFilterType.custom:
+        //   return this.filterCustomColumn(row, filter);
+        default:
+          columnResult = this.filterSelectColumn(value, (columnDef.filter.value as string[]));
+      }
+      if (columnResult) {
         return true;
       }
     }
     return false;
   }
 
-  protected filterNumberColumn(columnValues: number[], filterValue: ColumnNumberFilterData): boolean {
-    for (const value of columnValues) {
-      if (value >= filterValue.min && value <= filterValue.max) {
-        return true;
-      }
-    }
-    return false;
+  protected filterSelectColumn(value, filterValue: string[]): boolean {
+    return filterValue.includes(value);
   }
 
-  protected filterDateColumn(columnValues: any[], filterValue: ColumnDateFilterData): boolean {
+  protected filterNumberColumn(value, filterValue: ColumnNumberFilterData): boolean {
+    return value >= filterValue.min && value <= filterValue.max;
+  }
+
+  protected filterDateColumn(value, filterValue: ColumnDateFilterData): boolean {
     const filterAsDate = {
       startDate: this.toDate(filterValue.startDate),
       endDate: this.toDate(filterValue.endDate),
     };
-    for (const value of columnValues) {
-      const valueAsDate = this.toDate(value);
-      if (valueAsDate.getTime() >= filterAsDate.startDate.getTime() && valueAsDate.getTime() <= filterAsDate.endDate.getTime()) {
-        return true;
-      }
-    }
-    return false;
+    const valueAsDate = this.toDate(value);
+    return valueAsDate.getTime() >= filterAsDate.startDate.getTime() && valueAsDate.getTime() <= filterAsDate.endDate.getTime()
   }
 
   /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -450,7 +434,7 @@ export class AgrEngine<T> {
 
   private toDate(value: string | Date): Date {
     const date = new Date(value);
-    date.setHours(0,0,0,0);
+    date.setHours(0, 0, 0, 0);
     return date;
   }
 }

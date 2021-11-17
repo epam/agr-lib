@@ -19,7 +19,6 @@ export interface ColumnFilter{
 export interface ColumnSelectFilterData {
   label: string;
   value: any;
-  selected?:boolean;
 }
 
 export interface ColumnNumberFilterData {

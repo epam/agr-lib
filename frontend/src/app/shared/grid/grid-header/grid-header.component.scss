@@ -34,17 +34,25 @@
   color: red;
 }
 
-.agr-filter-condition{
-  display: flex;
-  width: 100%;
-  align-items: center;
+.agr-filter-header{
   padding: 16px 8px 0 8px;
-  .agr-filter-clear-btn {
-    margin-left: auto;
+  .agr-filter-condition{
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    .agr-filter-clear-btn {
+      margin-left: auto;
+      font-size: $font-size-xs;
+      background-color: #FFFFFF;
+    }
+  }
+  .agr-show-empty{
     font-size: $font-size-xs;
-    background-color: #FFFFFF;
+    margin-top:8px;
   }
 }
+
 
 
 

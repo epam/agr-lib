@@ -4,11 +4,11 @@ import {
   ColumnSortOrder,
   ColumnFilterTypes,
   ColumnSelectFilterData,
+  ColumnNumberFilterData,
   ColumnDateFilterData,
   ColumnFilterDataType, ColumnFilterValueType
 } from "agr-lib";
 import {AgrGridFilterSortService} from "../agr-grid-filter-sort.service";
-import {ColumnNumberFilterData} from "agr-lib/lib/column/column-filter.types";
 
 @Component({
   selector: 'agr-grid-header',
@@ -24,6 +24,7 @@ export class GridHeaderComponent implements OnInit {
   opened: boolean;
   conditions: { label: string, value: string }[];
   condition: any;
+  showEmpty: boolean;
 
   constructor(public filterSortService: AgrGridFilterSortService) {
   }
@@ -48,14 +49,13 @@ export class GridHeaderComponent implements OnInit {
   }
 
   changeFilter(filterValue: any) {
-    console.log(filterValue)
-    this.filterSortService.switchFilter(this.column, {value: filterValue, condition: this.condition.value});
+    this.filterSortService.switchFilter(this.column,
+      {value: filterValue, condition: this.condition.value, showEmpty:this.showEmpty});
   }
 
-  changeLogic() {
+  changeFilterExtra() {
     if (this.column.columnDef.filter) {
-      this.filterSortService.switchFilter(this.column,
-        {value: this.column.columnDef.filter.value, condition: this.condition.value});
+      this.changeFilter(this.column.columnDef.filter.value);
     }
   }
 
@@ -71,17 +71,18 @@ export class GridHeaderComponent implements OnInit {
       'OR_GROUP': 'OR(Group)'
     }
     this.conditions = this.filterSortService.getListFilterConditions().map((condition) => {
-      const obj = {
+      return  {
         label: mapHash[condition],
         value: condition
-      }
-      return obj;
+      };
     });
     if (this.column.columnDef.filter) {
       this.condition = this.conditions
-        .find((condition) => condition.value === this.column.columnDef.filter.condition)
+        .find((condition) => condition.value === this.column.columnDef.filter.condition);
+      this.showEmpty = this.column.columnDef.filter.showEmpty;
     } else {
       this.condition = this.conditions.find((condition) => condition.value === 'AND');
+      this.showEmpty = false;
     }
     this.filterData = this.filterSortService.getColumnFilterData(this.column);
     console.log(this.filterData);
@@ -104,4 +105,5 @@ export class GridHeaderComponent implements OnInit {
   asDateValue(filterValue: ColumnFilterValueType):ColumnDateFilterData {
     return (filterValue as ColumnDateFilterData)
   }
+
 }

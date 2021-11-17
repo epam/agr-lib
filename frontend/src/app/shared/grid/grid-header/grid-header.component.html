@@ -25,22 +25,32 @@
   (onShow)="open()"
   (onHide)="close()">
   <ng-template pTemplate>
-    <div class="agr-filter-condition">
-      <p-dropdown [(ngModel)]="condition"
-                  [options]="conditions"
-                  [autoDisplayFirst]="false"
-                  optionLabel="label"
-                  dataKey="value"
-                  (ngModelChange)="changeLogic()"
-                  styleClass="agr-filter-dropdown"
-                  panelStyleClass="agr-filter-dropdown">
-      </p-dropdown>
-      <button class="agr-btn agr-filter-clear-btn"
-              (click)="clearFilter()">
-        <i class="mdi mdi-trash-can-outline"></i>
-        Clear
-      </button>
+    <div class="agr-filter-header">
+      <div class="agr-filter-condition">
+        <p-dropdown [(ngModel)]="condition"
+                    [options]="conditions"
+                    [autoDisplayFirst]="false"
+                    optionLabel="label"
+                    dataKey="value"
+                    (ngModelChange)="changeFilterExtra()"
+                    styleClass="agr-filter-dropdown"
+                    panelStyleClass="agr-filter-dropdown">
+        </p-dropdown>
+        <button class="agr-btn agr-filter-clear-btn"
+                (click)="clearFilter()">
+          <i class="mdi mdi-trash-can-outline"></i>
+          Clear
+        </button>
+      </div>
+      <div class="agr-show-empty">
+        <p-checkbox [binary]="true"
+                    styleClass="agr-filter-checkbox"
+                    [(ngModel)]="showEmpty"
+                    label="Show Empty"
+                    (ngModelChange)="changeFilterExtra()"></p-checkbox>
+      </div>
     </div>
+
     <ng-container [ngSwitch]="column.columnDef.filterType">
       <ng-container *ngSwitchCase="ColumnFilterTypes.number">
         <agr-number-filter [data]="asNumberData(filterData)"
