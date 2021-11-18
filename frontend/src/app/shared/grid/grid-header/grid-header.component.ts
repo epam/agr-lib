@@ -106,4 +106,8 @@ export class GridHeaderComponent implements OnInit {
     return (filterValue as ColumnDateFilterData)
   }
 
+  asSelectValue(filterValue: ColumnFilterValueType):string[] {
+    return (filterValue as string[])
+  }
+
 }

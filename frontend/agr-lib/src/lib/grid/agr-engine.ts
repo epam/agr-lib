@@ -1,5 +1,5 @@
-import orderBy from 'lodash-es/orderBy';
-import sortBy from 'lodash-es/sortBy';
+import orderBy from 'lodash-es/orderBy.js';
+import sortBy from 'lodash-es/sortBy.js';
 import {ColumnDef} from "../column/column-def";
 import {Column} from "../column/column";
 import {ColumnSortOrder, ColumnSortOrderType, ColumnTypes} from "../column/column.types";
@@ -33,7 +33,7 @@ export class AgrEngine<T> {
   _originalData: T[] = [];
   options: AgrEngineOptions;
   private sortColumnsData = new Map<string, ColumnDef>();
-  private filterColumnsData = new Map<string, ColumnDef>();
+  private filterColumnsData = new Map<string, ColumnDef|ColumnDef[]>();
 
   get data(): T[] {
     return this._data
@@ -247,15 +247,26 @@ export class AgrEngine<T> {
       return;
     }
     column.columnDef.filter = filter;
-    this.filterColumnsData.set(column.getColumnId(), column.columnDef);
+    if (column.columnDef.filter.condition==='OR_GROUP'){
+      this.filterColumnsData.delete(column.getColumnId());
+      const columnId = column.parent?column.parent.getColumnId():column.getColumnId();
+      if (!this.filterColumnsData.has(columnId)){
+        this.filterColumnsData.set(columnId,[]);
+      }
+      (this.filterColumnsData.get(columnId) as ColumnDef[]).push(column.columnDef);
+    } else {
+      this.filterColumnsData.set(column.getColumnId(), column.columnDef);
+    }
     this.filter();
   }
 
 //TODO Test
-  removeFilter(column: Column) {
+  removeFilter(column: Column, skipFilter = false) {
     this.filterColumnsData.delete(column.getColumnId());
     column.columnDef.filter = null;
-    this.filter();
+    if (!skipFilter){
+      this.filter();
+    }
   }
 
 //TODO Test
@@ -366,19 +377,33 @@ export class AgrEngine<T> {
     let data = [...this._originalData];
     data = data.filter((row) => {
       let logicResult = true;
-      let wasInit = false;
+      let wasReInit=false ;
       for (const columnDef of this.filterColumnsData.values()) {
-        // Re-init value of logicResult depends on  logic condition from first filter: OR or AND
-        if (!wasInit) {
-          wasInit = true;
-          logicResult = columnDef.filter.condition !== 'OR';
-        }
-        switch (columnDef.filter.condition) {
-          case 'OR':
-            logicResult ||= this.filterByColumn(columnDef, row);
-            break;
-          default:
-            logicResult &&= this.filterByColumn(columnDef, row);
+        if (Array.isArray(columnDef)){
+          let groupLogicResult = false;
+          if (!wasReInit){
+            logicResult = true;
+            wasReInit = true;
+          }
+          for (const childColumnDef of columnDef){
+            groupLogicResult||=this.filterByColumn(childColumnDef, row);
+          }
+          logicResult&&=groupLogicResult;
+        } else {
+          // Re-init value of logicResult depends on  logic condition from first filter: OR or AND
+          if (!wasReInit) {
+            wasReInit = true;
+            logicResult = columnDef.filter.condition !== 'OR';
+          }
+          switch (columnDef.filter.condition) {
+            case 'OR':
+              logicResult ||= this.filterByColumn(columnDef, row);
+              break;
+            case 'OR_GROUP':
+              break;
+            default:
+              logicResult &&= this.filterByColumn(columnDef, row);
+          }
         }
       }
       return logicResult;
