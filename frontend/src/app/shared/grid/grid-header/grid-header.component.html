@@ -67,6 +67,7 @@
       </ng-container>
       <ng-container *ngSwitchDefault>
         <agr-select-filter [data]="asSelectData(filterData)"
+                           [values]="asSelectValue(column.columnDef?.filter?.value)"
                            (changeFilter)="changeFilter($event)"></agr-select-filter>
       </ng-container>
     </ng-container>

@@ -87,8 +87,11 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         },
         {
           title: '14:00',
-          field: 'in14',
-          width: 50
+          field: 'tempIn14',
+          width: 50,
+          filterType:ColumnFilterTypes.number,
+          filterable: true,
+          step:0.1
         },
         {
           title: '18:00',
