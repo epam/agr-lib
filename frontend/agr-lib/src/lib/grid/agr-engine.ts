@@ -1,5 +1,6 @@
 import orderBy from 'lodash-es/orderBy.js';
 import sortBy from 'lodash-es/sortBy.js';
+import cloneDeep from 'lodash-es/cloneDeep.js';
 import {ColumnDef} from "../column/column-def";
 import {Column} from "../column/column";
 import {ColumnSortOrder, ColumnSortOrderType, ColumnTypes} from "../column/column.types";
@@ -35,7 +36,8 @@ export class AgrEngine<T> {
   options: AgrEngineOptions;
   private sortColumnsData = new Map<string, ColumnDef>();
   private filterColumnsData = new Map<string, ColumnDef | ColumnDef[]>();
-
+  private draggedColumn: Column;
+  private originalColumnDefs:ColumnDef[];
   get data(): T[] {
     return this._data
   }
@@ -53,7 +55,9 @@ export class AgrEngine<T> {
       ...options
     }
     //TODO May be need deep clone that encapsulate
+    this.originalColumnDefs = columnDefs;
     this.columnDefs = columnDefs;
+    // this.columnDefs = cloneDeep(columnDefs);
     this.createColumns(columnDefs);
   }
 
@@ -146,21 +150,21 @@ export class AgrEngine<T> {
         }
       }
     }
-    for (const row of header){
+    for (const row of header) {
       this.header.push([]);
       this.frozenHeader.push([]);
-      for(const columnStack of row){
-        columnStack.pinned?this.frozenHeader[columnStack.rowIndex].push(columnStack.column)
-          :this.header[columnStack.rowIndex].push(columnStack.column);
+      for (const columnStack of row) {
+        columnStack.pinned ? this.frozenHeader[columnStack.rowIndex].push(columnStack.column)
+          : this.header[columnStack.rowIndex].push(columnStack.column);
       }
-      const helperColumn = new Column({title:'r',field:'r'});
-      this.frozenHeader[this.frozenHeader.length-1].push(helperColumn);
+      const helperColumn = new Column({title: 'r', field: 'r'});
+      this.frozenHeader[this.frozenHeader.length - 1].push(helperColumn);
       // if (this.frozenHeader[this.frozenHeader.length-1].length===0){
       //   // this.frozenHeader[this.frozenHeader.length-1].push(new Column({title:'',field:''}))
       // }
     }
-    for (const columnStack of body){
-      columnStack.pinned?this.frozenBody.push(columnStack.column):this.body.push(columnStack.column);
+    for (const columnStack of body) {
+      columnStack.pinned ? this.frozenBody.push(columnStack.column) : this.body.push(columnStack.column);
     }
     console.log('frozen', this.frozenHeader);
     console.log('header', this.header);
@@ -500,5 +504,27 @@ export class AgrEngine<T> {
     const date = new Date(value);
     date.setHours(0, 0, 0, 0);
     return date;
+  }
+
+  dragStartColumn(column: Column) {
+    this.draggedColumn = column;
+  }
+
+  dropColumn(column: Column) {
+    if (!this.draggedColumn || this.draggedColumn.parent !== column.parent
+      || this.draggedColumn.getColumnId() === column.getColumnId()) {
+      this.draggedColumn = null;
+      return;
+    }
+    const columns = column.parent?column.parent.columnDef.columns:this.columnDefs;
+    let dragIndex = columns.indexOf(this.draggedColumn.columnDef);
+    let dropIndex = columns.indexOf(column.columnDef);
+    if (dropIndex >= columns.length) {
+      dropIndex %= columns.length;
+      dragIndex %= columns.length;
+    }
+    columns.splice(dropIndex, 0, columns.splice(dragIndex, 1)[0]);
+    this.createColumns(this.columnDefs)
+    this.draggedColumn = null;
   }
 }

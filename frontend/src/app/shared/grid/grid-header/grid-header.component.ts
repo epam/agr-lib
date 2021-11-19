@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {
   Column,
   ColumnSortOrder,
@@ -26,7 +26,8 @@ export class GridHeaderComponent implements OnInit {
   condition: any;
   showEmpty: boolean;
 
-  constructor(public filterSortService: AgrGridFilterSortService) {
+  constructor(public filterSortService: AgrGridFilterSortService,
+              private cdr:ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -36,7 +37,7 @@ export class GridHeaderComponent implements OnInit {
   }
 
   sort($event: MouseEvent) {
-    this.filterSortService.switchSort(this.column, $event.shiftKey)
+    this.filterSortService.switchSort(this.column, $event.shiftKey);
   }
 
   open() {

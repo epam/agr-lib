@@ -29,7 +29,10 @@
           [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0}"
           pResizableColumn
           pReorderableColumn
-          agrDragColumn>
+          agrDragColumn
+          [dragDisabled]="column.columnDef.dragDisabled"
+          (dragStartEvent)="dragStartColumn(column)"
+          (dropEvent)="dropColumn(column)">
         <ng-container [ngSwitch]="index">
           <ng-container *ngSwitchCase="0">
             <agr-grid-section-header

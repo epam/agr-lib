@@ -35,11 +35,15 @@ export class DragColumnDirective implements AfterViewInit, OnDestroy {
 
 
   private onDragStart($event:unknown) {
-    this.dragStartEvent.emit($event);
+    this.zone.run(()=>{
+      this.dragStartEvent.emit($event);
+    })
   }
 
   private onDrop($event:unknown) {
-    this.dropEvent.emit($event);
+    this.zone.run(()=>{
+      this.dropEvent.emit($event);
+    })
   }
 
   private bindEvents() {

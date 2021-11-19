@@ -8,24 +8,27 @@ export function SectionGridColumnDefs(): ColumnDef[] {
       field: 'identity_group',
       collapsible: true,
       pin:true,
+      dragDisabled:true,
       columns: [
         {
           title: '#',
           field: 'index_number',
           width: 64,
-          hideInCollapse:true
+          hideInCollapse:true,
+          draggable:true,
         },
         {
           title: 'Name',
           field: 'firstName',
           width: 100,
           sortable:true,
-          filterable:true,
+          filterable:true
         },
         {
           title: 'Last Name',
           field: 'lastName',
-          width: 100
+          width: 100,
+          draggable:true,
         },
         {
           title: 'Birth Date',

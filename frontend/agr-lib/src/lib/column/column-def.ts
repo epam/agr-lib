@@ -21,11 +21,11 @@ export interface ColumnDef {
   step?:number;//step for number filter
   pin?:boolean;
   pinned?:boolean;
-
+  dragDisabled?:boolean;
   data?:unknown;
 
 
-  draggable?: boolean;
+
   editable?: boolean;
   getValue?(row: any, index?: any): any;
 
