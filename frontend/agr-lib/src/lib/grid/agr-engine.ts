@@ -241,6 +241,9 @@ export class AgrEngine<T> {
             break;
           default:
             columnValue = this.getColumnValue(item, columnDef) ?? '';
+            if (typeof columnValue === 'string') {
+              columnValue = columnValue.toLowerCase();
+            }
         }
         return columnValue;
       });

@@ -15,7 +15,6 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           field: 'index_number',
           width: 64,
           hideInCollapse:true,
-          draggable:true,
         },
         {
           title: 'Name',
@@ -28,7 +27,6 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: 'Last Name',
           field: 'lastName',
           width: 100,
-          draggable:true,
         },
         {
           title: 'Birth Date',
