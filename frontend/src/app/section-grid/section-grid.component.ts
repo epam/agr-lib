@@ -32,8 +32,6 @@ export class SectionGridComponent implements OnInit {
   }
 
   dropColumn(column: Column) {
-    this.zone.run(()=>{
-      this.grid.gridEngine.dropColumn(column);
-    })
+    this.grid.gridEngine.dropColumn(column);
   }
 }
