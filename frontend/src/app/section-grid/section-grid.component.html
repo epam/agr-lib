@@ -4,15 +4,21 @@
          [scrollable]="true"
          [style]="{width:'100%'}"
          scrollHeight="flex"
+         [frozenWidth]="frozenWidth"
          [virtualScroll]="true"
          [virtualRowHeight]="25"
          [reorderableColumns]="true"
          [resizableColumns]="true"
          columnResizeMode="expand">
   <ng-template pTemplate="colgroup">
-   <colgroup>
-     <col *ngFor="let column of grid.gridEngine.body" [style.width]="column.width"/>
-   </colgroup>
+    <colgroup>
+      <col *ngFor="let column of grid.gridEngine.body" [style.width]="column.width"/>
+    </colgroup>
+  </ng-template>
+  <ng-template pTemplate="frozencolgroup">
+    <colgroup>
+      <col *ngFor="let column of grid.gridEngine.frozenBody" [style.width]="column.width"/>
+    </colgroup>
   </ng-template>
 
   <ng-template pTemplate="header">
@@ -24,29 +30,67 @@
           pResizableColumn
           pReorderableColumn
           agrDragColumn>
-          <ng-container [ngSwitch]="index">
-            <ng-container *ngSwitchCase="0">
-              <agr-grid-section-header
-                [title]="column.columnDef.title"
-                [collapsible]="column.columnDef.collapsible"
-                [collapsed]="column.columnDef.collapsed"
-                (collapse)="toggleCollapse(column)">
-              </agr-grid-section-header>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              <agr-grid-header [column]="column"></agr-grid-header>
-<!--              <button *ngIf="column.columnDef.collapsible" (click)="toggleCollapse(column)">Coll</button>-->
-            </ng-container>
-
+        <ng-container [ngSwitch]="index">
+          <ng-container *ngSwitchCase="0">
+            <agr-grid-section-header
+              [title]="column.columnDef.title"
+              [collapsible]="column.columnDef.collapsible"
+              [collapsed]="column.columnDef.collapsed"
+              [pin]="column.columnDef.pin"
+              [pinned]="column.columnDef.pinned"
+              (collapse)="toggleCollapse(column)"
+              (pinChange)="togglePin(column)">
+            </agr-grid-section-header>
           </ng-container>
+          <ng-container *ngSwitchDefault>
+            <agr-grid-header [column]="column"></agr-grid-header>
+          </ng-container>
+        </ng-container>
       </th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body"  let-rowData>
+  <ng-template pTemplate="frozenheader">
+    <tr *ngFor="let rowHeader of grid.gridEngine.frozenHeader;index as index;last as last"
+        [ngClass]="{'agr-tr-height':index!=0}">
+      <th *ngFor="let column of rowHeader;last as last"
+          [attr.colspan]="column.colSpan"
+          [attr.rowspan]="column.rowSpan"
+          [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0}"
+          pResizableColumn
+          pReorderableColumn
+          agrDragColumn>
+        <ng-container [ngSwitch]="index">
+          <ng-container *ngSwitchCase="0">
+            <agr-grid-section-header
+              [title]="column.columnDef.title"
+              [collapsible]="column.columnDef.collapsible"
+              [collapsed]="column.columnDef.collapsed"
+              [pin]="column.columnDef.pin"
+              [pinned]="column.columnDef.pinned"
+              (collapse)="toggleCollapse(column)"
+              (pinChange)="togglePin(column)">
+            </agr-grid-section-header>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <agr-grid-header [column]="column"></agr-grid-header>
+          </ng-container>
+        </ng-container>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData>
     <tr>
       <td *ngFor="let column of grid.gridEngine.body;last as last"
           [ngClass]="{'agr-end-section':column.isLast}">
-        {{grid.gridEngine.getColumnValue(rowData,column.columnDef)}}
+        {{grid.gridEngine.getColumnValue(rowData, column.columnDef)}}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="frozenbody" let-rowData>
+    <tr>
+      <td *ngFor="let column of grid.gridEngine.frozenBody;last as last"
+          [ngClass]="{'agr-end-section':column.isLast}">
+        {{grid.gridEngine.getColumnValue(rowData, column.columnDef)}}
       </td>
     </tr>
   </ng-template>

@@ -20,6 +20,7 @@ export interface ColumnDef {
   filterType?:ColumnFilterType;
   step?:number;//step for number filter
   pin?:boolean;
+  pinned?:boolean;
 
   data?:unknown;
 

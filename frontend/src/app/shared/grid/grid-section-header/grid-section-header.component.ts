@@ -13,6 +13,7 @@ export class GridSectionHeaderComponent implements OnInit {
   @Input() pin:boolean;
   @Input() pinned:boolean;
   @Output() collapse = new EventEmitter<boolean>();
+  @Output() pinChange = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit(): void {
