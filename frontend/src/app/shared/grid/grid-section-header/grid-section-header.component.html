@@ -12,6 +12,8 @@
       </button>
     </ng-container>
     <button class="mdi mdi-pin mdi-rotate-45"
-            *ngIf="pin"></button>
+            *ngIf="pin"
+            [ngClass]="{'agr-active':pinned}"
+            (click)="pinChange.emit(!pinned)"></button>
   </div>
 </div>

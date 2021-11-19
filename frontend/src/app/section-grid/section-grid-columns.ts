@@ -7,6 +7,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
       title: 'Identity',
       field: 'identity_group',
       collapsible: true,
+      pin:true,
       columns: [
         {
           title: '#',

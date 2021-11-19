@@ -10,6 +10,7 @@ import {AgrGridService} from "../shared/grid/agr-grid.service";
   // providers:[]
 })
 export class SectionGridComponent implements OnInit {
+  frozenWidth = '0px';
 
   constructor(public grid:SectionGridService) { }
 
@@ -18,5 +19,10 @@ export class SectionGridComponent implements OnInit {
 
   toggleCollapse(column: Column) {
     this.grid.gridEngine.toggleCollapse(column);
+  }
+
+  togglePin(column: Column) {
+    this.grid.gridEngine.togglePin(column);
+    this.frozenWidth = column.columnDef.pinned?'464px':'0px';
   }
 }

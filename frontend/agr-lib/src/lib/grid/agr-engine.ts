@@ -16,6 +16,7 @@ interface ColumnStack {
   parent?: Column
   rowIndex: number;
   collapsed?: boolean;
+  pinned?: boolean;
   visited?: boolean;
 }
 
@@ -33,7 +34,7 @@ export class AgrEngine<T> {
   _originalData: T[] = [];
   options: AgrEngineOptions;
   private sortColumnsData = new Map<string, ColumnDef>();
-  private filterColumnsData = new Map<string, ColumnDef|ColumnDef[]>();
+  private filterColumnsData = new Map<string, ColumnDef | ColumnDef[]>();
 
   get data(): T[] {
     return this._data
@@ -68,11 +69,14 @@ export class AgrEngine<T> {
     this.body = [];
     this.frozenHeader = []
     this.frozenBody = []
+    let header = [];
+    let body = [];
     let stack: ColumnStack[] = columnsDefinition.map((columnDef) => {
       return {
         column: new Column(columnDef, null),
         rowIndex: 0,
-        collapsed: columnDef.collapsed
+        collapsed: columnDef.collapsed,
+        pinned: columnDef.pinned
       };
     })
     let count = 0
@@ -81,9 +85,8 @@ export class AgrEngine<T> {
         return;
       }
       let current = stack[0];
-      if ((this.header.length === 0 && current.rowIndex === 0) || this.header.length < current.rowIndex + 1) {
-        this.header.push([]);
-        this.frozenHeader.push([]);
+      if ((header.length === 0 && current.rowIndex === 0) || header.length < current.rowIndex + 1) {
+        header.push([]);
       }
       if (Array.isArray(current.column.columnDef.columns)
         && current.column.columnDef.columns.length > 0 && !current.visited) {
@@ -100,7 +103,8 @@ export class AgrEngine<T> {
             return {
               column,
               rowIndex: current.rowIndex + 1,
-              collapsed: current.collapsed || columnDef.collapsed
+              collapsed: current.collapsed || columnDef.collapsed,
+              pinned: current.pinned || columnDef.pinned
             };
           })
         stack = [
@@ -110,11 +114,10 @@ export class AgrEngine<T> {
         continue;
       }
       current = stack.shift();
-      this.header[current.rowIndex].push(current.column)
-      if (Array.isArray(current.column.columns)
-        && current.column.columns.length > 0) {
-      } else {
-        this.body.push(current.column);
+      header[current.rowIndex].push(current)
+      if (!Array.isArray(current.column.columns)
+        || current.column.columns.length === 0) {
+        body.push(current);
         let parent = current.column.parent;
         while (parent) {
           parent.colSpan++;
@@ -123,19 +126,19 @@ export class AgrEngine<T> {
       }
     }
     let rowSpan = 1;
-    for (let rowIndex = this.header.length - 2; rowIndex >= 0; rowIndex--) {
+    for (let rowIndex = header.length - 2; rowIndex >= 0; rowIndex--) {
       rowSpan++;
-      for (const column of this.header[rowIndex]) {
-        if (!Array.isArray(column.columns) || column.columns.length === 0) {
-          column.rowSpan = rowSpan;
+      for (const columnStack of header[rowIndex]) {
+        if (!Array.isArray(columnStack.column.columns) || columnStack.column.columns.length === 0) {
+          columnStack.column.rowSpan = rowSpan;
         }
 
       }
     }
-    if (this.options.sectionMode && this.header.length > 0) {
-      for (const column of this.header[0]) {
-        column.isLast = true;
-        let children = column.columns;
+    if (this.options.sectionMode && header.length > 0) {
+      for (const columnStack of header[0]) {
+        columnStack.column.isLast = true;
+        let children = columnStack.column.columns;
         while (children) {
           const lastChild = children[children.length - 1];
           lastChild.isLast = true;
@@ -143,6 +146,24 @@ export class AgrEngine<T> {
         }
       }
     }
+    for (const row of header){
+      this.header.push([]);
+      this.frozenHeader.push([]);
+      for(const columnStack of row){
+        columnStack.pinned?this.frozenHeader[columnStack.rowIndex].push(columnStack.column)
+          :this.header[columnStack.rowIndex].push(columnStack.column);
+      }
+      const helperColumn = new Column({title:'r',field:'r'});
+      this.frozenHeader[this.frozenHeader.length-1].push(helperColumn);
+      // if (this.frozenHeader[this.frozenHeader.length-1].length===0){
+      //   // this.frozenHeader[this.frozenHeader.length-1].push(new Column({title:'',field:''}))
+      // }
+    }
+    for (const columnStack of body){
+      columnStack.pinned?this.frozenBody.push(columnStack.column):this.body.push(columnStack.column);
+    }
+    console.log('frozen', this.frozenHeader);
+    console.log('header', this.header);
   }
 
 
@@ -157,6 +178,11 @@ export class AgrEngine<T> {
 //TODO Test
   toggleCollapse(column: Column) {
     column.columnDef.collapsed = !column.columnDef.collapsed;
+    this.createColumns(this.columnDefs);
+  }
+
+  togglePin(column: Column) {
+    column.columnDef.pinned = !column.columnDef.pinned;
     this.createColumns(this.columnDefs);
   }
 
@@ -247,11 +273,11 @@ export class AgrEngine<T> {
       return;
     }
     column.columnDef.filter = filter;
-    if (column.columnDef.filter.condition==='OR_GROUP'){
+    if (column.columnDef.filter.condition === 'OR_GROUP') {
       this.filterColumnsData.delete(column.getColumnId());
-      const columnId = column.parent?column.parent.getColumnId():column.getColumnId();
-      if (!this.filterColumnsData.has(columnId)){
-        this.filterColumnsData.set(columnId,[]);
+      const columnId = column.parent ? column.parent.getColumnId() : column.getColumnId();
+      if (!this.filterColumnsData.has(columnId)) {
+        this.filterColumnsData.set(columnId, []);
       }
       (this.filterColumnsData.get(columnId) as ColumnDef[]).push(column.columnDef);
     } else {
@@ -264,7 +290,7 @@ export class AgrEngine<T> {
   removeFilter(column: Column, skipFilter = false) {
     this.filterColumnsData.delete(column.getColumnId());
     column.columnDef.filter = null;
-    if (!skipFilter){
+    if (!skipFilter) {
       this.filter();
     }
   }
@@ -377,18 +403,18 @@ export class AgrEngine<T> {
     let data = [...this._originalData];
     data = data.filter((row) => {
       let logicResult = true;
-      let wasReInit=false ;
+      let wasReInit = false;
       for (const columnDef of this.filterColumnsData.values()) {
-        if (Array.isArray(columnDef)){
+        if (Array.isArray(columnDef)) {
           let groupLogicResult = false;
-          if (!wasReInit){
+          if (!wasReInit) {
             logicResult = true;
             wasReInit = true;
           }
-          for (const childColumnDef of columnDef){
-            groupLogicResult||=this.filterByColumn(childColumnDef, row);
+          for (const childColumnDef of columnDef) {
+            groupLogicResult ||= this.filterByColumn(childColumnDef, row);
           }
-          logicResult&&=groupLogicResult;
+          logicResult &&= groupLogicResult;
         } else {
           // Re-init value of logicResult depends on  logic condition from first filter: OR or AND
           if (!wasReInit) {
