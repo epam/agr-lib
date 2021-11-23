@@ -38,13 +38,16 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         },
         {
           title: 'National ID',
-          field: 'nationalId',
-          width: 50
+          field: 'nationalID',
+          width: 50,
+          // getValue(row: any, index?: any): any {
+          //   row.nationalID;
+          // }
         },
         {
-          title: 'Date',
-          field: 'date',
-          width: 50
+          title: 'Measurement Date',
+          field: 'measurementDate',
+          width: 100
         },
       ],
     },
@@ -60,7 +63,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         },
         {
           title: 'State/Province',
-          field: 'state-province',
+          field: 'state',
           width: 100
         },
         {
@@ -85,7 +88,10 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           width: 50,
           filterType:ColumnFilterTypes.number,
           filterable: true,
-          step:0.1
+          step:0.1,
+          getDisplayValue(row: any, index?: any): string {
+            return row.temperature0900;
+          }
         },
         {
           title: '14:00',
@@ -93,16 +99,26 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           width: 50,
           filterType:ColumnFilterTypes.number,
           filterable: true,
-          step:0.1
+          step:0.1,
+          getDisplayValue(row: any, index?: any): string {
+            return row.temperature1400;
+          }
         },
         {
           title: '18:00',
-          field: 'in18',
-          width: 50
-        }, {
+          field: 'tempIn18',
+          width: 50,
+          getDisplayValue(row: any, index?: any): string {
+            return row.temperature1800;
+          }
+        },
+        {
           title: '21:00',
-          field: 'in21',
-          width: 50
+          field: 'tempIn21',
+          width: 50,
+          getDisplayValue(row: any, index?: any): string {
+            return row.temperature2100;
+          }
         },
       ]
     },
@@ -118,14 +134,13 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           columns: [
             {
               title: 'Systolic',
-              field: 'bIn9S',
+              field: 'bloodPressureSystolic0900',
               hideInCollapse:true
             },
             {
               title: 'Diastolic',
-              field: 'bIn9D',
+              field: 'bloodPressureDiastolic0900',
               hideInCollapse:true
-
             }
           ]
         },
@@ -135,11 +150,11 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           columns: [
             {
               title: 'Systolic',
-              field: 'bIn14S'
+              field: 'bloodPressureSystolic1400'
             },
             {
               title: 'Diastolic',
-              field: 'bIn14D'
+              field: 'bloodPressureDiastolic1400'
             }
           ]
         },
@@ -149,11 +164,11 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           columns: [
             {
               title: 'Systolic',
-              field: 'bIn18S'
+              field: 'bloodPressureSystolic1800'
             },
             {
               title: 'Diastolic',
-              field: 'bIn18D'
+              field: 'bloodPressureDiastolic1800'
             }
           ]
         },
@@ -163,11 +178,11 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           columns: [
             {
               title: 'Systolic',
-              field: 'bIn21S'
+              field: 'bloodPressureSystolic2100'
             },
             {
               title: 'Diastolic',
-              field: 'bIn21D'
+              field: 'bloodPressureDiastolic2100'
             }
           ]
         }
@@ -179,19 +194,19 @@ export function SectionGridColumnDefs(): ColumnDef[] {
       columns: [
         {
           title: '9:00',
-          field: 'pIn9'
+          field: 'pulse0900'
         },
         {
           title: '14:00',
-          field: 'pIn14'
+          field: 'pulse0900'
         },
         {
           title: '18:00',
-          field: 'pIn18'
+          field: 'pulse0900'
         },
         {
           title: '21:00',
-          field: 'pIn21'
+          field: 'pulse0900'
         }
       ]
     },
@@ -201,7 +216,8 @@ export function SectionGridColumnDefs(): ColumnDef[] {
       columns:[
         {
           title: 'Hemoglobin',
-          field: 'hemoglobin'
+          field: 'hemoglobin',
+          width: 100
         },
         {
           title: 'WBC',
@@ -233,11 +249,11 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         },
         {
           title: 'Neutrophils',
-          field: 'neytrophils'
+          field: 'neutrophils'
         },
         {
           title: 'Lymphocytes',
-          field: 'Lymphocytes'
+          field: 'lymphocytes'
         },
         {
           title: 'Monocytes',

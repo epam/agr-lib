@@ -9,6 +9,7 @@ import {SharedModule} from "./shared/shared.module";
 import { SectionGridPageComponent } from './section-grid-page/section-grid-page.component';
 import {OverlayPanelModule, PanelModule, TableModule} from "primeng";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     SharedModule,
     TableModule,
     PanelModule,
