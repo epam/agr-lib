@@ -11,9 +11,10 @@ import {AgrGridFilterSortService} from "../shared/grid/agr-grid-filter-sort.serv
 })
 export class SectionGridPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(public gridService:SectionGridService) { }
 
   ngOnInit(): void {
+    this.gridService.refresh();
   }
 
 }

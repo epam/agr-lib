@@ -85,7 +85,7 @@
     <tr>
       <td *ngFor="let column of grid.gridEngine.body;last as last"
           [ngClass]="{'agr-end-section':column.isLast}">
-        {{grid.gridEngine.getColumnValue(rowData, column.columnDef)}}
+        {{grid.gridEngine.getColumnDisplayValue(rowData, column.columnDef)}}
       </td>
     </tr>
   </ng-template>
