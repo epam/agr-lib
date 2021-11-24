@@ -10,6 +10,7 @@ import {OverlayPanelModule, PanelModule} from "primeng";
 import {LibraryModule} from "./library.module";
 import {NumberFilterComponent} from "./grid/filter/number-filter/number-filter.component";
 import {DateFilterComponent} from "./grid/filter/date-filter/date-filter.component";
+import {GridFooterComponent } from './grid/grid-footer/grid-footer.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import {DateFilterComponent} from "./grid/filter/date-filter/date-filter.compone
     GridHeaderComponent,
     SelectFilterComponent,
     NumberFilterComponent,
-    DateFilterComponent
+    DateFilterComponent,
+    GridFooterComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,8 @@ import {DateFilterComponent} from "./grid/filter/date-filter/date-filter.compone
     GridHeaderComponent,
     SelectFilterComponent,
     NumberFilterComponent,
-    DateFilterComponent
+    DateFilterComponent,
+    GridFooterComponent
   ]
 })
 export class SharedModule {

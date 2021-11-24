@@ -23,9 +23,9 @@ export interface ColumnDef {
   pinned?:boolean;
   dragDisabled?:boolean;
   data?:unknown;
-
-
-
+  formula?:string;
+  formulaResult?:number;
+  showFooter?:boolean;
   editable?: boolean;
   getValue?(row: any, index?: any): any;
 

@@ -97,4 +97,26 @@
       </td>
     </tr>
   </ng-template>
+  <ng-template pTemplate="footer">
+    <tr>
+      <td *ngFor="let column of grid.gridEngine.body;last as last"
+          class="agr-grid-footer"
+          [ngClass]="{'agr-end-section':column.isLast}">
+          <agr-grid-footer class="agr-grid-footer"
+                           *ngIf="column.columnDef.showFooter"
+                           [column]="column"></agr-grid-footer>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="frozenfooter">
+    <tr>
+      <td *ngFor="let column of grid.gridEngine.body;last as last"
+          class="agr-grid-footer"
+          [ngClass]="{'agr-end-section':column.isLast}">
+        <agr-grid-footer class="agr-grid-footer"
+                         *ngIf="column.columnDef.showFooter"
+                         [column]="column"></agr-grid-footer>
+      </td>
+    </tr>
+  </ng-template>
 </p-table>

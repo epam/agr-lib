@@ -13,6 +13,8 @@ export abstract class AgrGridFilterSortService {
   abstract switchFilter(column: Column, filter:ColumnFilter)
   abstract removeFilter(column:Column)
   abstract getListFilterConditions():string[];
+  abstract getFormulas():string[];
+  abstract changeFormula(column: Column, formula: string);
 
 }
 

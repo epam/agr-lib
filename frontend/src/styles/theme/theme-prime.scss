@@ -222,6 +222,7 @@ body .ui-corner-all {
 body .ui-multiselect, body .ui-dropdown {
   //background: #ffffff;
   border: 1px solid $color-secondary-gray;
+  min-width: 0;
   //transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -738,5 +739,12 @@ body .agr-rule-form-dropdown-panel {
     .agr-color-swatch--selected {
       box-shadow: 0 0 0 1px white, 0 0 0 3px $color-primary;
     }
+  }
+}
+
+body {
+  .ui-dropdown.agr-grid-footer{
+    width:100%;
+    background-color: $color-gray0;
   }
 }

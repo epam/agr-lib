@@ -253,11 +253,10 @@ $cell-height: 24;
           }
         }
 
-        td.agr-product-cell {
-          //padding: 0;
-          sqr-product-cell {
-            height: 100%;
-          }
+        td.agr-grid-footer{
+          padding: 0;
+          background-color: $color-table-bg;
+          border: none;
         }
 
         td.agr-allocationGap-section__cell {

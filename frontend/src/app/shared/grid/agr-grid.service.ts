@@ -28,4 +28,12 @@ export class AgrGridService<T> {
   getListFilterConditions(){
     return this.gridEngine.getListFilterConditions();
   }
+
+  getFormulas(){
+    return this.gridEngine.getFormulas();
+  }
+
+  changeFormula(column: Column, formula: string){
+    this.gridEngine.changeFormula(column,formula);
+  }
 }
