@@ -1,0 +1,15 @@
+<div class="agr-footer-formula-group"
+  [class.agr-footer-formula-active]="column.columnDef.formulaResult||column.columnDef.formulaResult==0">
+  <div class="agr-footer-formula agr-ellipsis" [title]="column.columnDef.formula">
+    {{column.columnDef.formula}}
+  </div>
+  <div class="agr-footer-formula-value agr-ellipsis" [title]="column.columnDef.formulaResult">
+    {{column.columnDef.formulaResult}}
+  </div>
+</div>
+<i class="agr-footer-chevron mdi mdi-menu-down"
+   [class.agr-footer-formula-active]="column.columnDef.formulaResult||column.columnDef.formulaResult==0"
+   (click)="show(menu, $event)"></i>
+<p-menu [model]="options" #menu
+        [popup]="true"
+        [appendTo]="'body'"></p-menu>

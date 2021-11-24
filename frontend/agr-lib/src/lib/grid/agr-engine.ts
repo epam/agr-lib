@@ -3,7 +3,13 @@ import sortBy from 'lodash-es/sortBy.js';
 import cloneDeep from 'lodash-es/cloneDeep.js';
 import {ColumnDef} from "../column/column-def";
 import {Column} from "../column/column";
-import {ColumnSortOrder, ColumnSortOrderType, ColumnTypes} from "../column/column.types";
+import {
+  ColumnFormulaType,
+  ColumnFormulaTypes,
+  ColumnSortOrder,
+  ColumnSortOrderType,
+  ColumnTypes
+} from "../column/column.types";
 import {
   ColumnDateFilterData,
   ColumnFilter, ColumnFilterDataType,
@@ -37,7 +43,8 @@ export class AgrEngine<T> {
   private sortColumnsData = new Map<string, ColumnDef>();
   private filterColumnsData = new Map<string, ColumnDef | ColumnDef[]>();
   private draggedColumn: Column;
-  private originalColumnDefs:ColumnDef[];
+  private originalColumnDefs: ColumnDef[];
+
   get data(): T[] {
     return this._data
   }
@@ -519,7 +526,7 @@ export class AgrEngine<T> {
       this.draggedColumn = null;
       return;
     }
-    const columns = column.parent?column.parent.columnDef.columns:this.columnDefs;
+    const columns = column.parent ? column.parent.columnDef.columns : this.columnDefs;
     let dragIndex = columns.indexOf(this.draggedColumn.columnDef);
     let dropIndex = columns.indexOf(column.columnDef);
     if (dropIndex >= columns.length) {
@@ -530,4 +537,44 @@ export class AgrEngine<T> {
     this.createColumns(this.columnDefs)
     this.draggedColumn = null;
   }
+
+  getFormulas() {
+    return Object.values(ColumnFormulaTypes);
+  }
+
+  changeFormula(column: Column, formula: string) {
+    column.columnDef.formula = formula;
+    column.columnDef.formulaResult = 0;
+    let columnValue: number;
+    let index = 0;
+    for (const row of this.data) {
+      columnValue = this.getColumnValue(row, column.columnDef)
+      if (this.isEmptyValue(columnValue)) {
+        continue;
+      }
+      if (index === 0) {
+        column.columnDef.formulaResult = +columnValue;
+      }
+      switch (formula) {
+        case ColumnFormulaTypes.sum:
+        case ColumnFormulaTypes.average:
+          if (index!==0){
+            column.columnDef.formulaResult += +columnValue;
+          }
+          break;
+        case ColumnFormulaTypes.max:
+          column.columnDef.formulaResult = Math.max(column.columnDef.formulaResult, columnValue);
+          break;
+        case ColumnFormulaTypes.min:
+          column.columnDef.formulaResult = Math.min(column.columnDef.formulaResult, columnValue);
+          break;
+      }
+      index++;
+    }
+    if (formula === ColumnFormulaTypes.average) {
+      column.columnDef.formulaResult /= this.data.length;
+    }
+  }
+
+
 }

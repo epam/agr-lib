@@ -6,7 +6,7 @@ import {
   MultiSelectModule,
   OverlayPanelModule,
   PanelModule, SidebarModule, SliderModule,
-  TableModule, TabMenuModule, ToastModule, TooltipModule,CheckboxModule
+  TableModule, TabMenuModule, ToastModule, TooltipModule, CheckboxModule, MenuModule
 } from 'primeng';
 
 
@@ -33,5 +33,6 @@ export const LibraryModule = [
   DragDropModule,
   CheckboxModule,
   ColorPickerModule,
-  TooltipModule
+  TooltipModule,
+  MenuModule
 ];

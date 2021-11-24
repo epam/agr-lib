@@ -14,3 +14,12 @@ export const ColumnTypes  = {
 } as const;
 
 export type ColumnType = typeof ColumnTypes[keyof typeof ColumnTypes];
+
+export const ColumnFormulaTypes = {
+  average:'AVG',
+  max:'MAX',
+  min:'MIN',
+  sum:'SUM'
+} as const;
+
+export type ColumnFormulaType = typeof ColumnFormulaTypes[keyof typeof ColumnFormulaTypes];
