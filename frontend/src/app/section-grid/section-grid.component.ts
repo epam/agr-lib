@@ -1,16 +1,28 @@
-import {ChangeDetectorRef, Component, NgZone, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, NgZone, OnInit, ViewChild} from '@angular/core';
 import {SectionGridService} from "./section-grid.service";
-import {Column} from "agr-lib";
+import {Column, ColumnHelper} from "agr-lib";
+import {Table, TableService} from "primeng";
+
+export function tableFactory(component: SectionGridComponent) {
+  return component.primengTable;
+}
 
 @Component({
   selector: 'agr-section-grid',
   templateUrl: './section-grid.component.html',
   styleUrls: ['./section-grid.component.scss'],
-  // providers:[]
+  providers:[    {
+    provide: Table,
+    useFactory: tableFactory,
+    deps: [SectionGridComponent]
+  }]
 })
 export class SectionGridComponent implements OnInit {
+  @ViewChild('primengTable', { static: true }) public primengTable: Table;
   frozenWidth = '0px';
-
+  editValue = {
+    value:''
+  };
   constructor(public grid:SectionGridService,
               public cdr:ChangeDetectorRef,
               private zone:NgZone) { }
@@ -33,5 +45,17 @@ export class SectionGridComponent implements OnInit {
 
   dropColumn(column: Column) {
     this.grid.gridEngine.dropColumn(column);
+  }
+
+  editInit($event: any) {
+    this.editValue.value = ColumnHelper.getColumnValue($event.data,$event.field.columnDef)
+  }
+
+  editComplete($event: any) {
+    console.log('complete',this.editValue)
+  }
+
+  editCancel() {
+
   }
 }

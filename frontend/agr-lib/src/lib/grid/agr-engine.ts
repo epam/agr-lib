@@ -17,6 +17,7 @@ import {
   ColumnNumberFilterData,
   ColumnSelectFilterData
 } from "../column/column-filter.types";
+import {ColumnHelper} from "../column/column-helper";
 
 interface ColumnStack {
   column: Column;
@@ -244,10 +245,10 @@ export class AgrEngine<T> {
         let columnValue;
         switch (columnDef.type) {
           case ColumnTypes.date:
-            columnValue = new Date(this.getColumnValue(item, columnDef)).getTime();
+            columnValue = new Date(ColumnHelper.getColumnValue(item, columnDef)).getTime();
             break;
           default:
-            columnValue = this.getColumnValue(item, columnDef) ?? '';
+            columnValue = ColumnHelper.getColumnValue(item, columnDef) ?? '';
             if (typeof columnValue === 'string') {
               columnValue = columnValue.toLowerCase();
             }
@@ -259,13 +260,13 @@ export class AgrEngine<T> {
     this.data = orderBy(this.data, sorts, orders);
   }
 
-  getColumnValue(row: T, columnDef: ColumnDef): any {
-    return columnDef.getValue ? columnDef.getValue(row) : row[columnDef.field];
-  }
-
-  getColumnDisplayValue(row: T, columnDef: ColumnDef) {
-    return columnDef.getDisplayValue ? columnDef.getDisplayValue(row) : this.getColumnValue(row, columnDef);
-  }
+  // getColumnValue(row: T, columnDef: ColumnDef): any {
+  //   return columnDef.getValue ? columnDef.getValue(row) : row[columnDef.field];
+  // }
+  //
+  // getColumnDisplayValue(row: T, column: Column) {
+  //   return ColumnHelper.getColumnDisplayValue(row,column);
+  // }
 
   setColumnValue(data: any, columnDef: ColumnDef, value: any) {
     columnDef.setValue ? columnDef.setValue(data, value) : (data[columnDef.field] = value);
@@ -336,8 +337,8 @@ export class AgrEngine<T> {
   getSelectFilterValues(column: Column): ColumnSelectFilterData[] {
     const mapValues = new Map<any, ColumnSelectFilterData>();
     for (const row of this._originalData) {
-      const label = this.getColumnDisplayValue(row, column.columnDef) ?? '';
-      const tempValue = this.getColumnValue(row, column.columnDef);
+      const label = ColumnHelper.getColumnDisplayValue(row, column.columnDef) ?? '';
+      const tempValue = ColumnHelper.getColumnValue(row, column.columnDef);
       const values = Array.isArray(tempValue) ? tempValue : [tempValue];
       for (const value of values) {
         if (this.isEmptyValue(value)) {
@@ -506,7 +507,7 @@ export class AgrEngine<T> {
   }
 
   private getValueAsArray(row: T, columnDef: ColumnDef) {
-    const tempValue = this.getColumnValue(row, columnDef);
+    const tempValue = ColumnHelper.getColumnValue(row, columnDef);
     return Array.isArray(tempValue) ? tempValue : [tempValue];
   }
 
@@ -548,7 +549,7 @@ export class AgrEngine<T> {
     let columnValue: number;
     let index = 0;
     for (const row of this.data) {
-      columnValue = this.getColumnValue(row, column.columnDef)
+      columnValue = ColumnHelper.getColumnValue(row, column.columnDef)
       if (this.isEmptyValue(columnValue)) {
         continue;
       }

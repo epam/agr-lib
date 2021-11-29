@@ -1,4 +1,4 @@
-import {ColumnDef, ColumnFilterTypes} from "agr-lib";
+import {ColumnDef, ColumnFilterTypes, ColumnTypes} from "agr-lib";
 
 
 export function SectionGridColumnDefs(): ColumnDef[] {
@@ -21,7 +21,8 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           field: 'firstName',
           width: 100,
           sortable:true,
-          filterable:true
+          filterable:true,
+          editable:true
         },
         {
           title: 'Last Name',
@@ -32,9 +33,14 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: 'Birth Date',
           field: 'birthDate',
           width: 100,
+          type:ColumnTypes.date,
+          editable: true,
           hideInCollapse:true,
           filterType: ColumnFilterTypes.date,
-          filterable: true
+          filterable: true,
+          getValue(row: any, index?: any): any {
+            return new Date(Date.parse(row[this.field]));
+          }
         },
         {
           title: 'National ID',
@@ -86,6 +92,8 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: '9:00',
           field: 'tempIn9',
           width: 50,
+          type:ColumnTypes.number,
+          editable: true,
           filterType:ColumnFilterTypes.number,
           filterable: true,
           step:0.1,
@@ -98,6 +106,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: '14:00',
           field: 'tempIn14',
           width: 50,
+          type:ColumnTypes.number,
           filterType:ColumnFilterTypes.number,
           filterable: true,
           step:0.1,
@@ -110,6 +119,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: '18:00',
           field: 'tempIn18',
           width: 50,
+          type:ColumnTypes.number,
           showFooter:true,
           getValue(row: any, index?: any): string {
             return row.temperature1800;
@@ -119,6 +129,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: '21:00',
           field: 'tempIn21',
           width: 50,
+          type:ColumnTypes.number,
           showFooter:true,
           getValue(row: any, index?: any): string {
             return row.temperature2100;
@@ -139,13 +150,14 @@ export function SectionGridColumnDefs(): ColumnDef[] {
             {
               title: 'Systolic',
               field: 'bloodPressureSystolic0900',
+              type:ColumnTypes.number,
               hideInCollapse:true,
               showFooter:true
             },
             {
               title: 'Diastolic',
               field: 'bloodPressureDiastolic0900',
-              hideInCollapse:true,
+              type:ColumnTypes.number,
               showFooter:true
             }
           ]
@@ -157,11 +169,13 @@ export function SectionGridColumnDefs(): ColumnDef[] {
             {
               title: 'Systolic',
               field: 'bloodPressureSystolic1400',
+              type:ColumnTypes.number,
               showFooter:true
             },
             {
               title: 'Diastolic',
               field: 'bloodPressureDiastolic1400',
+              type:ColumnTypes.number,
               showFooter:true
             }
           ]
@@ -173,11 +187,13 @@ export function SectionGridColumnDefs(): ColumnDef[] {
             {
               title: 'Systolic',
               field: 'bloodPressureSystolic1800',
+              type:ColumnTypes.number,
               showFooter:true
             },
             {
               title: 'Diastolic',
               field: 'bloodPressureDiastolic1800',
+              type:ColumnTypes.number,
               showFooter:true
             }
           ]
@@ -189,11 +205,13 @@ export function SectionGridColumnDefs(): ColumnDef[] {
             {
               title: 'Systolic',
               field: 'bloodPressureSystolic2100',
+              type:ColumnTypes.number,
               showFooter:true
             },
             {
               title: 'Diastolic',
               field: 'bloodPressureDiastolic2100',
+              type:ColumnTypes.number,
               showFooter:true
             }
           ]
@@ -207,21 +225,25 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         {
           title: '9:00',
           field: 'pulse0900',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: '14:00',
           field: 'pulse0900',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: '18:00',
           field: 'pulse0900',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: '21:00',
           field: 'pulse0900',
+          type:ColumnTypes.number,
           showFooter:true
         }
       ]
@@ -234,66 +256,79 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: 'Hemoglobin',
           field: 'hemoglobin',
           width: 100,
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'WBC',
           field: 'wbc',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'MCV',
           field: 'mcv',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'PCV',
           field: 'pcv',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'RBC',
           field: 'rbc',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'MCH',
           field: 'mch',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'MCHC',
           field: 'mchc',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'RDW',
           field: 'rdw',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'Neutrophils',
           field: 'neutrophils',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'Lymphocytes',
           field: 'lymphocytes',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'Monocytes',
           field: 'monocytes',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'Eosinophils',
           field: 'eosinophils',
+          type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: 'Basophils',
           field: 'basophils',
+          type:ColumnTypes.number,
           showFooter:true
         }
       ]

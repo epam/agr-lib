@@ -27,6 +27,8 @@ export interface ColumnDef {
   formulaResult?:number;
   showFooter?:boolean;
   editable?: boolean;
+  editMin?:number;
+  editMax?:number;
   getValue?(row: any, index?: any): any;
 
   getDisplayValue?(row: any, index?: any): string;

@@ -1,4 +1,5 @@
 <p-table class="agr-section-table"
+         #primengTable
          aqrFixTablePrimeng
          [value]="grid.gridEngine.data"
          [scrollable]="true"
@@ -9,7 +10,10 @@
          [virtualRowHeight]="25"
          [reorderableColumns]="true"
          [resizableColumns]="true"
-         columnResizeMode="expand">
+         columnResizeMode="expand"
+         (onEditInit)="editInit($event)"
+         (onEditComplete)="editComplete($event)"
+         (onEditCancel)="editCancel()">
   <ng-template pTemplate="colgroup">
     <colgroup>
       <col *ngFor="let column of grid.gridEngine.body" [style.width]="column.width"/>
@@ -81,42 +85,55 @@
       </th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-rowData>
-    <tr>
-      <td *ngFor="let column of grid.gridEngine.body;last as last"
-          [ngClass]="{'agr-end-section':column.isLast}">
-        {{grid.gridEngine.getColumnDisplayValue(rowData, column.columnDef)}}
-      </td>
-    </tr>
+  <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+    <ng-container
+      *ngTemplateOutlet="body;context:{$implicit:rowData,body:grid.gridEngine.body,rowIndex}"></ng-container>
   </ng-template>
-  <ng-template pTemplate="frozenbody" let-rowData>
-    <tr>
-      <td *ngFor="let column of grid.gridEngine.frozenBody;last as last"
-          [ngClass]="{'agr-end-section':column.isLast}">
-        {{grid.gridEngine.getColumnValue(rowData, column.columnDef)}}
-      </td>
-    </tr>
+  <ng-template pTemplate="frozenbody" let-rowData let-rowIndex="rowIndex">
+    <ng-container
+      *ngTemplateOutlet="body;context:{$implicit:rowData,body:grid.gridEngine.frozenBody,rowIndex}"></ng-container>
   </ng-template>
   <ng-template pTemplate="footer">
-    <tr>
-      <td *ngFor="let column of grid.gridEngine.body;last as last"
-          class="agr-grid-footer"
-          [ngClass]="{'agr-end-section':column.isLast}">
-          <agr-grid-footer class="agr-grid-footer"
-                           *ngIf="column.columnDef.showFooter"
-                           [column]="column"></agr-grid-footer>
-      </td>
-    </tr>
+    <ng-container
+      *ngTemplateOutlet="footer;context:{$implicit:grid.gridEngine.body}"></ng-container>
   </ng-template>
   <ng-template pTemplate="frozenfooter">
-    <tr>
-      <td *ngFor="let column of grid.gridEngine.body;last as last"
-          class="agr-grid-footer"
-          [ngClass]="{'agr-end-section':column.isLast}">
-        <agr-grid-footer class="agr-grid-footer"
-                         *ngIf="column.columnDef.showFooter"
-                         [column]="column"></agr-grid-footer>
-      </td>
-    </tr>
+    <ng-container
+      *ngTemplateOutlet="footer;context:{$implicit:grid.gridEngine.frozenBody}"></ng-container>
   </ng-template>
 </p-table>
+
+<ng-template #body let-rowData let-body="body" let-rowIndex="rowIndex">
+  <tr>
+    <td *ngFor="let column of body;last as last"
+        [ngClass]="{'agr-end-section':column.isLast}"
+        [pEditableColumn]="rowData"
+        [pEditableColumnField]="column"
+        [pEditableColumnRowIndex]="rowIndex"
+        [pEditableColumnDisabled]="!column.columnDef.editable">
+      <p-cellEditor>
+        <ng-template pTemplate="input">
+          <agr-grid-cell-editor [row]="rowData"
+                                [column]="column" [value]="editValue">
+          </agr-grid-cell-editor>
+        </ng-template>
+        <ng-template pTemplate="output">
+          <agr-grid-cell [row]="rowData"
+                         [column]="column"></agr-grid-cell>
+        </ng-template>
+      </p-cellEditor>
+    </td>
+  </tr>
+</ng-template>
+
+<ng-template #footer let-body>
+  <tr>
+    <td *ngFor="let column of body;last as last"
+        class="agr-grid-footer"
+        [ngClass]="{'agr-end-section':column.isLast}">
+      <agr-grid-footer class="agr-grid-footer"
+                       *ngIf="column.columnDef.showFooter"
+                       [column]="column"></agr-grid-footer>
+    </td>
+  </tr>
+</ng-template>

@@ -1,45 +1,15 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {AgrGridService} from "../shared/grid/agr-grid.service";
 import {SectionGridColumnDefs} from "./section-grid-columns";
 import {MedicalRecord} from "./medicalRecord";
 import {BusinessService} from "../business.service";
 
-// import {SectionGridColumnDefs} from "./section-grid-columns";
 
 @Injectable()
 export class SectionGridService extends AgrGridService<MedicalRecord> {
-
   constructor(private businessService:BusinessService) {
     super();
     this.gridEngine.setColumnDefs(SectionGridColumnDefs());
-    // this.gridEngine.data = [
-    //   {
-    //     index_number: 1,
-    //     firstName: 'Test2',
-    //     tempIn9: 36.6,
-    //     tempIn14: 37.7,
-    //     birthDate:'2021-11-11'
-    //   },
-    //   {
-    //     index_number: 2,
-    //     firstName: '',
-    //     tempIn9: 36.6,
-    //     tempIn14: 38.6,
-    //     birthDate:'2021-11-11'
-    //   },
-    //   {
-    //     index_number: 3,
-    //     firstName: 'Test1',
-    //     tempIn9: 37.6,
-    //     birthDate:'2021-11-15'
-    //   },
-    //   {
-    //     index_number: 4,
-    //     firstName: 'Test1',
-    //     // tempIn9: 38.6,
-    //     birthDate:'2021-11-19'
-    //   }
-    // ]
   }
 
   refresh(){

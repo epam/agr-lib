@@ -8,11 +8,11 @@ export class MedicalEntity{
   firstName:string;
   @Column({name:'last_name'})
   lastName:string;
-  @Column({name:'birth_date'})
-  birthDate:string;
+  @Column({name:'birth_date',type:'date'})
+  birthDate:Date;
   @Column({name:'national_id'})
   nationalID:string;
-  @Column({name:'measurement_date'})
+  @Column({name:'measurement_date', type:'date'})
   measurementDate:string;
   @Column()
   country:string;
