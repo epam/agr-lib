@@ -140,8 +140,10 @@ body .ui-widget {
 
 
 .agr-date-cell-calendar {
-  .agr-input.ui-inputtext {
+  .ui-inputtext {
     width: 100%;
+    height: 100%;
+    padding: 0 2px;
   }
 }
 

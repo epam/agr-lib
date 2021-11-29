@@ -11,6 +11,7 @@ export const ColumnTypes  = {
   date : 'date',
   number : 'number',
   text : 'text',
+  reference:'reference'
 } as const;
 
 export type ColumnType = typeof ColumnTypes[keyof typeof ColumnTypes];

@@ -1,0 +1,6 @@
+<div class="agr-grid-cell-left">
+  <ng-content select="[grid-cell-left]"></ng-content>
+</div>
+<div class="agr-grid-cell-value"
+  [class.agr-grid-cell-number]="column.columnDef.type==columnTypes.number">
+  {{columnHelper.getColumnDisplayValue(row,column.columnDef)}}</div>

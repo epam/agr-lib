@@ -146,8 +146,10 @@ $cell-height: 24;
           border-radius: 0;
           padding: $cell-padding*1px;
           background-color: white;
-
           //background-clip: padding-box;
+        }
+        td{
+          padding: 0;
         }
 
         th {
