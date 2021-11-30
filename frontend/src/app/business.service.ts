@@ -18,6 +18,6 @@ export class BusinessService {
   }
 
   updateSimpleTable(id:string,updateInfo:Partial<MedicalRecord>){
-    return this.repositoryService.updateSimpleTable(id,updateInfo);
+    return this.repositoryService.updateSimpleTable(id,MapperService.updateSimpleTable(updateInfo));
   }
 }
