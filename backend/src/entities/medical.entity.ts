@@ -1,6 +1,10 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
-@Entity('medical')
+@Entity('medical',{
+  orderBy:{
+    id:'ASC'
+  }
+})
 export class MedicalEntity{
   @PrimaryGeneratedColumn()
   id:number;
