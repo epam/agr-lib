@@ -52,7 +52,7 @@ export class SectionGridComponent implements OnInit {
   }
 
   editComplete($event: any) {
-    console.log('complete',this.editValue)
+    this.grid.update($event.data,$event.field,this.editValue.value);
   }
 
   editCancel() {
