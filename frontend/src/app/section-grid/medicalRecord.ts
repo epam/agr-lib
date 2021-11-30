@@ -1,4 +1,5 @@
 export interface MedicalRecord{
+  id?:string;
   index_number?:number;
   firstName?:string;
   lastName?:string

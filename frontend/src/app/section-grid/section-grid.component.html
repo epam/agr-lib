@@ -106,7 +106,7 @@
 <ng-template #body let-rowData let-body="body" let-rowIndex="rowIndex">
   <tr>
     <td *ngFor="let column of body;last as last"
-        [ngClass]="{'agr-end-section':column.isLast}"
+        [ngClass]="{'agr-end-section':column.isLast,'agr-editable-cell':column.columnDef.editable}"
         [pEditableColumn]="rowData"
         [pEditableColumnField]="column"
         [pEditableColumnRowIndex]="rowIndex"

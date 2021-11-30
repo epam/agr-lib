@@ -173,13 +173,13 @@ $cell-height: 24;
         }
 
         td.agr-editable-cell.ui-editable-column {
-          .agr-input {
+          input {
             height: ($cell-height - $cell-padding)*1px;
-            font-size: $font-size-xs;
+            font-size: inherit;
             font-family: inherit;
           }
 
-          .agr-input:focus {
+          input:focus {
             outline: none;
           }
 

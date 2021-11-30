@@ -16,4 +16,8 @@ export class BusinessService {
     return this.repositoryService.getSimpleTable()
       .pipe(map((data)=>MapperService.simpleTable(data)))
   }
+
+  updateSimpleTable(id:string,updateInfo:Partial<MedicalRecord>){
+    return this.repositoryService.updateSimpleTable(id,updateInfo);
+  }
 }

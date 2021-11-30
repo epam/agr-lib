@@ -11,6 +11,10 @@ export class ColumnHelper {
       ColumnHelper.getColumnValue(data, columnDef);
   }
 
+  static setColumnValue(data:unknown,columnDef:ColumnDef,value:unknown){
+    columnDef.setValue ? columnDef.setValue(data, value) : data[columnDef.field] = value;
+  }
+
   // static createColumnsFromDef(columnsDef: ColumnDef[]): Column[] {
   //   const columns: Column[] = [];
   //   for (const columnDef of columnsDef) {
