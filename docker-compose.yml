@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:13
+    restart: always
+    hostname: db
+    environment:
+      POSTGRES_PASSWORD: Pass2word
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - agr
+    ports:
+      - "5432:5432"
+  admin:
+    image: dpage/pgadmin4
+    hostname: admin
+    environment:
+      PGADMIN_DISABLE_POSTFIX: "true"
+      PGADMIN_DEFAULT_PASSWORD: "test"
+      PGADMIN_DEFAULT_EMAIL: "test@test.test"
+    ports:
+      - "8080:80"
+    networks:
+      - agr
+    volumes:
+      - ./backend/share:/var/lib/pgadmin
+  be:
+    image: node:14
+    working_dir: /app
+    hostname: be
+    init: true
+    environment:
+      TYPEORM_HOST: "db"
+      TYPEORM_DATABASE: "agr-data"
+    ports:
+      - 3000:3000
+    networks:
+      - agr
+    volumes:
+      - ./backend:/app
+    command: "npm run start:debug"
+  fe:
+    image: node:14
+    hostname: fe
+    init: true
+    working_dir: /app
+    ports:
+      - 4200:4200
+    networks:
+      - agr
+    volumes:
+      - ./frontend:/app
+    command: "npm run startCloud"
+volumes:
+  postgres:
+  pgadmin:
+networks:
+  agr:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/24

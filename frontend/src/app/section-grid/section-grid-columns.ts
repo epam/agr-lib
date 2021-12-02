@@ -53,7 +53,15 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         {
           title: 'Measurement Date',
           field: 'measurementDate',
-          width: 100
+          type:ColumnTypes.date,
+          editable: true,
+          hideInCollapse:true,
+          filterType: ColumnFilterTypes.date,
+          filterable: true,
+          width: 100,
+          getValue(row: any, index?: any): any {
+            return new Date(Date.parse(row[this.field]));
+          },
         },
       ],
     },
@@ -90,7 +98,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
       columns: [
         {
           title: '9:00',
-          field: 'tempIn9',
+          field: 'temperature0900',
           width: 50,
           type:ColumnTypes.number,
           editable: true,
@@ -104,7 +112,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         },
         {
           title: '14:00',
-          field: 'tempIn14',
+          field: 'temperature1400',
           width: 50,
           type:ColumnTypes.number,
           filterType:ColumnFilterTypes.number,
@@ -117,7 +125,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         },
         {
           title: '18:00',
-          field: 'tempIn18',
+          field: 'temperature1800',
           width: 50,
           type:ColumnTypes.number,
           showFooter:true,
@@ -127,7 +135,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         },
         {
           title: '21:00',
-          field: 'tempIn21',
+          field: 'temperature2100',
           width: 50,
           type:ColumnTypes.number,
           showFooter:true,
@@ -230,19 +238,19 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         },
         {
           title: '14:00',
-          field: 'pulse0900',
+          field: 'pulse1400',
           type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: '18:00',
-          field: 'pulse0900',
+          field: 'pulse1800',
           type:ColumnTypes.number,
           showFooter:true
         },
         {
           title: '21:00',
-          field: 'pulse0900',
+          field: 'pulse2100',
           type:ColumnTypes.number,
           showFooter:true
         }

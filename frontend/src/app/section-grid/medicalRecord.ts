@@ -1,10 +1,8 @@
-export interface MedicalRecord{
+export class MedicalRecord{
   id?:string;
   index_number?:number;
   firstName?:string;
   lastName?:string
-  tempIn9?:number,
-  tempIn14?:number,
   birthDate?:string|Date;
   nationalId?:string;
   measurementDate?:string|Date;
