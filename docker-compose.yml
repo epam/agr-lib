@@ -41,17 +41,19 @@ services:
       - ./backend:/app
     command: "npm run start:debug"
   fe:
-    image: node:14
+    image: nginx:stable
     hostname: fe
-    init: true
+#    init: true
     working_dir: /app
     ports:
-      - 4200:4200
+      - 80:80
     networks:
       - agr
     volumes:
-      - ./frontend:/app
-    command: "npm run startCloud"
+      - ./frontend/dist/frontend:/var/www/html/public
+      - ./frontend/config/nginx-cloud/conf.d/:/etc/nginx/conf.d/
+      - ./frontend/config/nginx-cloud/.htpasswd:/etc/nginx/.htpasswd
+#    command: "npm run startCloud"
 volumes:
   postgres:
   pgadmin:
