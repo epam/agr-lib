@@ -9,7 +9,7 @@ export class Column {
   collapsed: boolean;
   isLast:boolean;
   constructor(public columnDef: ColumnDef, public parent?: Column) {
-    this.width = columnDef.width?(columnDef.width+'px'):'50px';
+    this.width = columnDef.width?(columnDef.width+'px'):'100px';
   }
   getColumnId(){
     return this.columnDef.id??this.columnDef.field;
