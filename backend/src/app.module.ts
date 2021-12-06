@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {MedicalEntity} from "./entities/medical.entity";
 import {getConnectionOptions} from "typeorm";
+import { FinancialModule } from './financial/financial.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import {getConnectionOptions} from "typeorm";
           autoLoadEntities: true,
         }),
     }),
-    TypeOrmModule.forFeature([MedicalEntity])
+    TypeOrmModule.forFeature([MedicalEntity]),
+    FinancialModule
   ],
 
   controllers: [AppController],
