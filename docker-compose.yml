@@ -14,6 +14,7 @@ services:
       - "5432:5432"
   admin:
     image: dpage/pgadmin4
+    restart: always
     hostname: admin
     environment:
       PGADMIN_DISABLE_POSTFIX: "true"
@@ -27,6 +28,7 @@ services:
       - ./backend/share:/var/lib/pgadmin
   be:
     image: node:14
+    restart: always
     working_dir: /app
     hostname: be
     init: true
@@ -42,6 +44,7 @@ services:
     command: "npm run start:debug"
   fe:
     image: nginx:stable
+    restart: always
     hostname: fe
 #    init: true
     working_dir: /app
