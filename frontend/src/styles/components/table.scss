@@ -1,89 +1,5 @@
 @import "../variables";
 
-.agr-table {
-  .ui-table {
-    .ui-table-thead {
-      & > tr {
-        & > th {
-          font-size: $font-size-xs;
-          color: $color-semi-bold;
-          text-align: left;
-          font-weight: normal;
-          background-color: white;
-          border: none;
-          height: 24px;
-        }
-      }
-    }
-
-    .ui-table-tbody {
-      & > tr {
-        & > td {
-          text-align: left;
-          font-weight: normal;
-          background-color: white;
-          border: none;
-          height: 24px;
-          font-size: $font-size-s;
-          color: $color-default !important;
-          padding-top: 0;
-          padding-bottom: 0;
-        }
-
-        & > td.agr-number-cell {
-          text-align: right;
-        }
-      }
-    }
-  }
-}
-
-.agr-table2 {
-  width: 100%;
-  border-collapse: collapse;
-
-  table {
-    border-collapse: collapse;
-  }
-
-  tr:nth-child(even) td {
-    background-color: rgba($color-gray0, 0.4);
-  }
-
-  tr {
-    th {
-      font-size: $font-size-s;
-      color: $color-semi-bold;
-      text-align: left;
-      font-weight: normal;
-    }
-
-    td {
-      text-align: left;
-      font-weight: normal;
-      font-size: $font-size-s;
-      color: $color-default;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    th, td {
-      border: none;
-      //border-right: 1px solid $color-secondary-gray;
-      border-radius: 0;
-      padding: 4px;
-      background-color: white;
-      height: 24px;
-      //background-clip: padding-box;
-    }
-
-    td.agr-number-cell {
-      text-align: right;
-    }
-  }
-}
-
 $cell-padding: 4;
 $cell-height: 24;
 .agr-section-table {
@@ -100,20 +16,6 @@ $cell-height: 24;
       .ui-table-tbody {
         & > tr:nth-child(even) {
           background-color: rgba($color-gray0, 0.4);
-        }
-
-        tr.agr-row-spacer {
-          height: 4px;
-          // Background made through the inner shadow since tr has no background property
-          box-shadow: inset 0 0 100px 100px $color-table-bg;
-
-          &--m {
-            height: 12px;
-          }
-
-          &--l {
-            height: 24px;
-          }
         }
       }
     }
@@ -142,7 +44,7 @@ $cell-height: 24;
 
         th, td {
           border: none;
-          border-right: 1px solid $color-secondary-gray;
+          border-right: 1px solid #151635;
           border-radius: 0;
           padding: $cell-padding*1px;
           background-color: white;
@@ -158,18 +60,6 @@ $cell-height: 24;
           text-align: left;
           font-weight: normal;
           border-bottom: 1px solid $color-gray0;
-        }
-
-        td.agr-cell-overflow-visible {
-          overflow: visible;
-        }
-
-        td.agr-number-cell,
-        td.agr-cell-text-right {
-          text-align: right;
-        }
-        td.agr-cell-text-center {
-          text-align: center;
         }
 
         td.agr-editable-cell.ui-editable-column {
@@ -197,24 +87,6 @@ $cell-height: 24;
               height: 18px;
             }
           }
-        }
-
-        td.agr-positive-value {
-          background-color: $color-positive-value;
-          color: black;
-        }
-
-        td.agr-negative-value {
-          background-color: $color-negative-value;
-        }
-
-        td.agr-cell-bold {
-          font-weight: bold;
-        }
-
-        td.agr-empty-cell {
-          border: none;
-          background-color: $color-table-bg;
         }
 
         th.agr-end-section, td.agr-end-section {
@@ -261,64 +133,146 @@ $cell-height: 24;
           border: none;
         }
 
-        td.agr-allocationGap-section__cell {
+        th.agr-main-section {
+          border-bottom: 2px solid $color-primary;
+        }
+      }
+    }
+    .ui-table-tfoot{
+      tr{
+        td{
+          background-color: $color-table-bg;
+          font-family: $font-family-semi-bold;
+        }
+      }
+    }
+
+  }
+}
+.agr-section-table-dark {
+  .ui-widget-overlay {
+    background-color: #FFFFFF !important
+  }
+
+  .ui-table {
+    .ui-table-virtual-scrollable-body {
+      .ui-table-tbody {
+        & > tr:nth-child(even) {
+          background-color: #151635;
+        }
+      }
+    }
+
+    .ui-table-thead, .ui-table-tbody, .ui-table-tfoot {
+      tr:nth-child(even) td {
+        background-color: #151635;
+      }
+
+      tr {
+
+        td {
+          text-align: left;
+          font-weight: normal;
+          font-size: $font-size-s;
+          color: white;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          height: $cell-height*1px;
+
+          &.u-bold {
+            font-weight: 600;
+          }
+        }
+
+        th, td {
+          background-color: #151635;
+          border-color: #151635;
+          //background-clip: padding-box;
+        }
+
+        th {
+          font-size: $font-size-s;
+          color: white;
+          text-align: left;
+          font-weight: normal;
+          border-bottom: 1px solid #151635;
+        }
+
+        td.agr-editable-cell.ui-editable-column {
+          input {
+            height: ($cell-height - $cell-padding)*1px;
+            font-size: inherit;
+            font-family: inherit;
+          }
+
+          input:focus {
+            outline: none;
+          }
+
+          .ui-dropdown {
+            height: ($cell-height - $cell-padding)*1px;
+            font-size: $font-size-xs;
+            font-family: inherit;
+            width: 100%;
+            min-width: 0;
+
+            .ui-dropdown-label {
+              font-size: inherit;
+              font-family: inherit;
+              min-height: 0;
+              height: 18px;
+            }
+          }
+        }
+
+        th.agr-end-section, td.agr-end-section {
+          border-right: 24px solid #14112F !important;
+        }
+
+        th.agr-grid-section {
+          background-color: #151635;
           padding: 0;
         }
 
-        td.agr-dozes-section_summary__cell {
-          padding: 0;
+        th:last-child, td:last-child {
+          border-right: none;
+        }
 
-          div {
-            height: 100%;
-            width: 100%;
+        .ui-chkbox {
+          height: 16px;
+          width: 16px;
+
+          .ui-chkbox-box {
+            height: 16px;
+            width: 16px;
+
+            .ui-chkbox-icon {
+              font-size: 12px;
+              font-weight: 600;
+            }
           }
+
+          .ui-chkbox-box.ui-state-active {
+            background-color: $color-primary;
+            border-color: $color-primary;
+          }
+
+          .ui-chkbox-box.ui-state-active:not(.ui-state-disabled):hover {
+            background-color: rgba($color-primary, .7);
+            border-color: rgba($color-primary, .7);
+          }
+        }
+
+        td.agr-grid-footer{
+          padding: 0;
+          background-color: $color-table-bg;
+          border: none;
         }
 
         th.agr-main-section {
           border-bottom: 2px solid $color-primary;
         }
-
-        th.agr-total-section {
-          border-bottom: 2px solid $color-primary;
-        }
-
-        th.agr-doses-section {
-          border-bottom: 2px solid $color-primary;
-        }
-
-        th.agr-allocation-gap-section {
-          border-bottom: 2px solid $color-primary;
-        }
-
-        th.agr-commitment-percent-section {
-          border-bottom: 2px solid $color-primary;
-        }
-
-        th.agr-commitment-doses-section {
-          border-bottom: 2px solid $color-secondary-blue;
-        }
-
-        th.agr-cumulative-allocated-section {
-          border-bottom: 2px solid $color-secondary-mint;
-        }
-
-        td.agr-comment {
-          position: relative;
-        }
-
-        td.agr-comment:before {
-          content: '';
-          position: absolute;
-          top: 0;
-          right: 0;
-          border-left: 6px solid transparent;
-          border-top: 6px solid $color-primary;
-        }
-
-        td.agr-contract-zero-penalty,td.agr-contract-no-move-dose {
-          color: $color-secondary-light-gray;
-        }
-
       }
     }
     .ui-table-tfoot{
@@ -333,219 +287,6 @@ $cell-height: 24;
   }
 }
 
-
-.agr-contract-table {
-  tr {
-    th.agr-section {
-      .agr-contract-section__main {
-        .agr-section__header-label {
-          background-color: $color-secondary-light-gray;
-        }
-      }
-
-      .agr-contract-section__volume {
-        .agr-section__header-label {
-          background-color: $color-secondary-yellow;
-        }
-      }
-
-      .agr-contract-section__commitment, .agr-contract-section__incremental {
-        .agr-section__header-label {
-          background-color: $color-secondary-mint;
-        }
-      }
-
-      .agr-contract-section__price {
-        .agr-section__header-label {
-          background-color: $color-secondary-blue;
-        }
-      }
-    }
-
-    th.agr-contract-section--main-header {
-      border-bottom: 1px solid $color-secondary-light-gray !important;
-    }
-
-    th.agr-contract-section--volume-header {
-      border-bottom: 1px solid $color-secondary-yellow !important;
-    }
-
-    th.agr-contract-section--price-header {
-      border-bottom: 1px solid $color-secondary-blue !important;
-    }
-
-    th.agr-contract-section__commitment-header, th.agr-contract-section__incremental-header,
-    th.agr-contract-section__move-doses-header{
-      border-top: 1px solid rgba(#E5E5E5, 0.4) !important;
-      border-bottom: 1px solid $color-secondary-mint !important;
-    }
-  }
-
-  tr:nth-child(even) td {
-    background-color: rgba($color-gray0, 0.4);
-  }
-}
-
-.agr-allocation-table {
-
-  tr {
-
-    //th.agr-main-section {
-    //  border-bottom: 2px solid $color-primary;
-    //}
-    //
-    //th.agr-total-section {
-    //  border-bottom: 2px solid $color-primary;
-    //}
-    //
-    //th.agr-doses-section {
-    //  border-bottom: 2px solid $color-primary;
-    //}
-    //
-    //th.agr-allocation-gap-section {
-    //  border-bottom: 2px solid $color-primary;
-    //}
-    //
-    //th.agr-commitment-percent-section {
-    //  border-bottom: 2px solid $color-primary;
-    //}
-    //
-    //th.agr-commitment-doses-section {
-    //  border-bottom: 2px solid $color-secondary-blue;
-    //}
-    //
-    //th.agr-cumulative-allocated-section {
-    //  border-bottom: 2px solid $color-secondary-mint;
-    //}
-    //
-    //th.agr-main-section__header, th.agr-doses-section__header,
-    //th.agr-allocationGap-section__header,
-    //th.agr-commitmentDozes-section__header,
-    //th.agr-commitment-percent-section__header,
-    //th.agr-cumulativeAllocated-section__header {
-    //  border-bottom: 2px solid $color-secondary-gray;
-    //}
-    //
-    //td.agr-allocationGap-section__cell, td.agr-dozes-section_summary__cell {
-    //  padding: 0;
-    //}
-    //
-    //td.agr-dozes-section_summary__cell {
-    //  div {
-    //    height: 100%;
-    //    width: 100%;
-    //  }
-    //}
-    td.agr-allocation-summary-header {
-      cursor: pointer;
-      text-align: right;
-    }
-
-    td.agr-doses-in-time{
-      background-color: $color-secondary-gray!important;
-    }
-
-    td.agr-doses-not-in-time{
-      background-color: #EDF9DF!important;
-    }
-  }
-
-  .agr-section__header {
-    &-label {
-      text-align: left;
-      color: black;
-      font-family: $font-family-semi-bold;
-      font-weight: 600;
-      min-width: 0;
-      padding-left: 0;
-    }
-  }
-}
-
-.agr-sap-customer-table {
-  .ui-table .ui-table-tbody, .ui-table .ui-table-thead {
-    tr {
-      th.agr-main-section {
-        border-bottom: 2px solid $color-primary;
-      }
-
-      th.agr-address-section {
-        border-bottom: 2px solid $color-secondary-yellow;
-      }
-    }
-  }
-
-}
-
-.agr-supply-table {
-  .ui-table-virtual-scrollable-body {
-    .ui-table-tbody {
-      & > tr:nth-child(even) {
-        background-color: #FFFFFF !important
-      }
-
-      tr:nth-child(even).agr-baseline-row {
-        background-color: $color-secondary-gray !important;
-      }
-
-    }
-  }
-
-  .ui-table .ui-table-tbody, .ui-table .ui-table-thead {
-    tr {
-      th.agr-section {
-        border-bottom: 2px solid $color-primary;
-      }
-    }
-
-    //tr:nth-child(even) td {
-    //  background-color: #FFFFFF!important;
-    //}
-    tr.agr-baseline-row {
-      td {
-        background-color: $color-secondary-gray !important;
-      }
-    }
-
-    tr {
-      td.agr-no-date {
-        background-color: $color-secondary-orange !important;
-      }
-    }
-  }
-
-}
-
-.agr-ship-to-planning-table {
-  .ui-table .ui-table-tbody, .ui-table .ui-table-thead {
-    tr.agr-level-1 td {
-      font-family: $font-family-semi-bold;
-      background-color: $color-secondary-light-gray;
-    }
-
-    tr.agr-level-2 td {
-      font-family: $font-family-semi-bold;
-      background-color: $color-secondary-gray;
-    }
-
-    tr.agr-level-2 td.agr-negative-value {
-      background-color: rgba($color-primary, 0.2);
-    }
-
-    tr {
-      td.agr-actions-cell {
-        background-color: inherit;
-      }
-      td.agr-ship-to-planning-summary-header {
-        cursor: pointer;
-        text-align: right;
-      }
-      td.summary-total{
-        font-family: $font-family-semi-bold;
-      }
-    }
-  }
-}
 
 .agr-table-filter {
   padding: 16px;
@@ -571,13 +312,14 @@ $cell-height: 24;
 }
 
 
-.agr-forecast-table{
+.agr-financial-table{
   .ui-table .ui-table-tbody, .ui-table .ui-table-thead {
+    tr:nth-child(even) td {
+      background-color: white;
+    }
     tr {
-      td{
-        .agr-btn-icon{
-          background-color: inherit;
-        }
+      td.agr-row-level-1{
+        background-color: $color-secondary-light-gray;
       }
     }
   }

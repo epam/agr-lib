@@ -18,7 +18,28 @@ export class RepositoryService {
   }
 
   updateSimpleTable(id:string,body: any) {
-    console.log(body)
     return this.fetcher.patch(`/api/simple-table/${id}`, body, this.options)
   }
+
+  getAccountTypes(){
+    return this.fetcher.get('/api/financial/account-types', this.options)
+  }
+
+  getAccounts(){
+    return this.fetcher.get('/api/financial/accounts', this.options)
+  }
+
+  getFinancialUsers(){
+    return this.fetcher.get('/api/financial/financial-users', this.options)
+  }
+
+  getTransactionTypes(){
+    return this.fetcher.get('/api/financial/transaction-types', this.options)
+  }
+
+  getTransactions(){
+    return this.fetcher.get('/api/financial/transactions', this.options)
+  }
+
+
 }

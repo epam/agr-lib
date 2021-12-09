@@ -1,0 +1,144 @@
+<p-table class="agr-section-table agr-financial-table"
+         #primengTable
+         aqrFixTablePrimeng
+         [value]="grid.gridEngine.data"
+         [scrollable]="true"
+         [style]="{width:'100%'}"
+         scrollHeight="flex"
+         [frozenWidth]="frozenWidth"
+         [virtualScroll]="true"
+         [virtualRowHeight]="25"
+         [reorderableColumns]="true"
+         [resizableColumns]="true"
+         columnResizeMode="expand"
+         (onEditInit)="editInit($event)"
+         (onEditComplete)="editComplete($event)"
+         (onEditCancel)="editCancel()">
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col *ngFor="let column of grid.gridEngine.body" [style.width]="column.width"/>
+    </colgroup>
+  </ng-template>
+  <ng-template pTemplate="frozencolgroup">
+    <colgroup>
+      <col *ngFor="let column of grid.gridEngine.frozenBody" [style.width]="column.width"/>
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr *ngFor="let rowHeader of grid.gridEngine.header;index as index;last as last">
+      <th *ngFor="let column of rowHeader;last as last"
+          [attr.colspan]="column.colSpan"
+          [attr.rowspan]="column.rowSpan"
+          [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0}"
+          pResizableColumn
+          pReorderableColumn
+          agrDragColumn
+          [dragDisabled]="column.columnDef.dragDisabled"
+          (dragStartEvent)="dragStartColumn(column)"
+          (dropEvent)="dropColumn(column)">
+        <ng-container [ngSwitch]="index">
+          <ng-container *ngSwitchCase="0">
+            <agr-grid-section-header
+              [title]="column.columnDef.title"
+              [collapsible]="column.columnDef.collapsible"
+              [collapsed]="column.columnDef.collapsed"
+              [pin]="column.columnDef.pin"
+              [pinned]="column.columnDef.pinned"
+              (collapse)="toggleCollapse(column)"
+              (pinChange)="togglePin(column)">
+            </agr-grid-section-header>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <agr-grid-header [column]="column"></agr-grid-header>
+          </ng-container>
+        </ng-container>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="frozenheader">
+    <tr *ngFor="let rowHeader of grid.gridEngine.frozenHeader;index as index;last as last"
+        [ngClass]="{'agr-tr-height':index!=0}">
+      <th *ngFor="let column of rowHeader;last as last"
+          [attr.colspan]="column.colSpan"
+          [attr.rowspan]="column.rowSpan"
+          [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0}"
+          pResizableColumn
+          pReorderableColumn
+          agrDragColumn>
+        <ng-container [ngSwitch]="index">
+          <ng-container *ngSwitchCase="0">
+            <agr-grid-section-header
+              [title]="column.columnDef.title"
+              [collapsible]="column.columnDef.collapsible"
+              [collapsed]="column.columnDef.collapsed"
+              [pin]="column.columnDef.pin"
+              [pinned]="column.columnDef.pinned"
+              (collapse)="toggleCollapse(column)"
+              (pinChange)="togglePin(column)">
+            </agr-grid-section-header>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <agr-grid-header [column]="column"></agr-grid-header>
+          </ng-container>
+        </ng-container>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+    <ng-container
+      *ngTemplateOutlet="body;context:{$implicit:rowData,body:grid.gridEngine.body,rowIndex}"></ng-container>
+  </ng-template>
+  <ng-template pTemplate="frozenbody" let-rowData let-rowIndex="rowIndex">
+    <ng-container
+      *ngTemplateOutlet="body;context:{$implicit:rowData,body:grid.gridEngine.frozenBody,rowIndex}"></ng-container>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <ng-container
+      *ngTemplateOutlet="footer;context:{$implicit:grid.gridEngine.body}"></ng-container>
+  </ng-template>
+  <ng-template pTemplate="frozenfooter">
+    <ng-container
+      *ngTemplateOutlet="footer;context:{$implicit:grid.gridEngine.frozenBody}"></ng-container>
+  </ng-template>
+</p-table>
+
+<ng-template #body let-rowData let-body="body" let-rowIndex="rowIndex">
+  <tr>
+    <td *ngFor="let column of body;last as last"
+        [ngClass]="{'agr-end-section':column.isLast,'agr-editable-cell':column.columnDef.editable,
+        'agr-row-level-1':rowData.rowLevel==1}"
+        [pEditableColumn]="rowData"
+        [pEditableColumnField]="column"
+        [pEditableColumnRowIndex]="rowIndex"
+        [pEditableColumnDisabled]="!column.columnDef.editable">
+      <p-cellEditor>
+        <ng-template pTemplate="input">
+          <agr-grid-cell-editor [row]="rowData"
+                                [column]="column" [value]="editValue">
+          </agr-grid-cell-editor>
+        </ng-template>
+        <ng-template pTemplate="output">
+          <agr-grid-cell [row]="rowData"
+                         [column]="column">
+            <i *ngIf="rowData.rowLevel===0||rowData.rowLevel===1"
+               class="mdi mdi-chevron-down agr-chevron"
+               grid-cell-left ></i>
+          </agr-grid-cell>
+        </ng-template>
+      </p-cellEditor>
+    </td>
+  </tr>
+</ng-template>
+
+<ng-template #footer let-body>
+  <tr>
+    <td *ngFor="let column of body;last as last"
+        class="agr-grid-footer"
+        [ngClass]="{'agr-end-section':column.isLast}">
+      <agr-grid-footer class="agr-grid-footer"
+                       *ngIf="column.columnDef.showFooter"
+                       [column]="column"></agr-grid-footer>
+    </td>
+  </tr>
+</ng-template>
