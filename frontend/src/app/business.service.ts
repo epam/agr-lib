@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {RepositoryService} from "./repository.service";
 import {map} from "rxjs/operators";
 import {MapperService} from "./mapper.service";
@@ -10,14 +10,36 @@ import {Observable} from "rxjs";
 })
 export class BusinessService {
 
-  constructor(private repositoryService:RepositoryService) { }
+  constructor(private repositoryService: RepositoryService) {
+  }
 
-  getSimpleTable():Observable<MedicalRecord[]>{
+  getSimpleTable(): Observable<MedicalRecord[]> {
     return this.repositoryService.getSimpleTable()
-      .pipe(map((data)=>MapperService.simpleTable(data)))
+      .pipe(map((data) => MapperService.simpleTable(data)))
   }
 
-  updateSimpleTable(id:string,updateInfo:Partial<MedicalRecord>){
-    return this.repositoryService.updateSimpleTable(id,MapperService.updateSimpleTable(updateInfo));
+  updateSimpleTable(id: string, updateInfo: Partial<MedicalRecord>) {
+    return this.repositoryService.updateSimpleTable(id, MapperService.updateSimpleTable(updateInfo));
   }
+
+  getAccountTypes() {
+    return this.repositoryService.getAccountTypes();
+  }
+
+  getAccounts() {
+    return this.repositoryService.getAccounts();
+  }
+
+  getFinancialUsers() {
+    return this.repositoryService.getFinancialUsers();
+  }
+
+  getTransactionTypes() {
+    return this.repositoryService.getTransactionTypes();
+  }
+
+  getTransactions() {
+    return this.repositoryService.getTransactions();
+  }
+
 }

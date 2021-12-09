@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {GroupGridComponent} from "./group-grid/group-grid.component";
 import {SectionGridPageComponent} from "./section-grid-page/section-grid-page.component";
+import {FinancialPageComponent} from "./financial-page/financial-page.component";
 
 const routes: Routes = [
   {
@@ -10,7 +10,7 @@ const routes: Routes = [
   },
   {
     path:'group-grid',
-    component:GroupGridComponent
+    component:FinancialPageComponent
   },
   {
     path:'**',

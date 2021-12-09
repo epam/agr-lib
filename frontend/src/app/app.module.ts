@@ -10,13 +10,17 @@ import { SectionGridPageComponent } from './section-grid-page/section-grid-page.
 import {OverlayPanelModule, PanelModule, TableModule} from "primeng";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {HttpClientModule} from "@angular/common/http";
+import { FinancialPageComponent } from './financial-page/financial-page.component';
+import { FinancialGridComponent } from './financial-grid/financial-grid.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SectionGridComponent,
     GroupGridComponent,
-    SectionGridPageComponent
+    SectionGridPageComponent,
+    FinancialPageComponent,
+    FinancialGridComponent
   ],
   imports: [
     BrowserModule,
