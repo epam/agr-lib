@@ -174,8 +174,8 @@ export class AgrEngine<T> {
     for (const columnStack of body) {
       columnStack.pinned ? this.frozenBody.push(columnStack.column) : this.body.push(columnStack.column);
     }
-    console.log('frozen', this.frozenHeader);
-    console.log('header', this.header);
+    // console.log('frozen', this.frozenHeader);
+    // console.log('header', this.header);
   }
 
 
@@ -359,6 +359,9 @@ export class AgrEngine<T> {
     for (const row of this._originalData) {
       const values = this.getValueAsArray(row, column.columnDef);
       for (const value of values) {
+        if (isNaN(value)) {
+          continue;
+        }
         if (!wasInit) {
           wasInit = true;
           filterData = {
@@ -427,7 +430,9 @@ export class AgrEngine<T> {
             wasReInit = true;
           }
           for (const childColumnDef of columnDef) {
-            groupLogicResult ||= this.filterByColumn(childColumnDef, row);
+            groupLogicResult ||= (this.filterByColumn(childColumnDef, row) ||
+              this.filterChild((row as any).children, childColumnDef) ||
+              this.filterParent(row, childColumnDef));
           }
           logicResult &&= groupLogicResult;
         } else {
@@ -438,12 +443,14 @@ export class AgrEngine<T> {
           }
           switch (columnDef.filter.condition) {
             case 'OR':
-              logicResult ||= this.filterByColumn(columnDef, row);
-              break;
-            case 'OR_GROUP':
+              logicResult ||= (this.filterByColumn(columnDef, row) ||
+                this.filterChild((row as any).children, columnDef) ||
+                this.filterParent(row, columnDef));
               break;
             default:
-              logicResult &&= this.filterByColumn(columnDef, row);
+              logicResult &&= (this.filterByColumn(columnDef, row) ||
+                this.filterChild((row as any).children, columnDef) ||
+                this.filterParent(row, columnDef));
           }
         }
       }
@@ -474,6 +481,29 @@ export class AgrEngine<T> {
       if (columnResult) {
         return true;
       }
+    }
+    return false;
+  }
+
+  filterChild(children: any[], columnDef: ColumnDef) {
+    if (children) {
+      for (const child of children) {
+        const logicResult = this.filterByColumn(columnDef, child) || this.filterChild(child.children, columnDef);
+        if (logicResult) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  filterParent(row, columnDef: ColumnDef) {
+    let parent = row.parent;
+    while (parent) {
+      if (this.filterByColumn(columnDef, parent)) {
+        return true;
+      }
+      parent = parent.parent;
     }
     return false;
   }
@@ -559,7 +589,7 @@ export class AgrEngine<T> {
       switch (formula) {
         case ColumnFormulaTypes.sum:
         case ColumnFormulaTypes.average:
-          if (index!==0){
+          if (index !== 0) {
             column.columnDef.formulaResult += +columnValue;
           }
           break;
