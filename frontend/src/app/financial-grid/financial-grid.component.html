@@ -105,7 +105,7 @@
 
 <ng-template #body let-rowData let-body="body" let-rowIndex="rowIndex">
   <tr>
-    <td *ngFor="let column of body;last as last"
+    <td *ngFor="let column of body;last as last;"
         [ngClass]="{'agr-end-section':column.isLast,'agr-editable-cell':column.columnDef.editable,
         'agr-row-level-1':rowData.rowLevel==1}"
         [pEditableColumn]="rowData"
@@ -121,8 +121,9 @@
         <ng-template pTemplate="output">
           <agr-grid-cell [row]="rowData"
                          [column]="column">
-            <i *ngIf="rowData.rowLevel===0||rowData.rowLevel===1"
-               class="mdi mdi-chevron-down agr-chevron"
+            <i *ngIf="column.columnDef.field==='firstName'&&(rowData.rowLevel===0||rowData.rowLevel===1)"
+               class="mdi agr-chevron"
+               [ngClass]="{'mdi-chevron-down':!rowData.collapsed,'mdi-chevron-right':rowData.collapsed}"
                grid-cell-left ></i>
           </agr-grid-cell>
         </ng-template>
