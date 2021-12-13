@@ -1,39 +1,41 @@
-import { Injectable } from '@angular/core';
-import {AgrEngine, Column, ColumnSelectFilterData} from 'agr-lib';
-import {ColumnFilter} from "agr-lib/lib/column/column-filter.types";
+import {Injectable} from '@angular/core';
+import {AgrEngine, Column} from 'agr-lib';
+import {ColumnFilter} from "agr-lib/lib/types/column-filter.types";
 
 @Injectable()
 export class AgrGridService<T> {
-  gridEngine:AgrEngine<T> = new AgrEngine<T>([],{sectionMode:true});
-  data:any[]
+  gridEngine: AgrEngine<T> = new AgrEngine<T>([], {sectionMode: true});
+  data: any[]
+
   constructor() {
 
   }
 
-  getColumnFilterData(column: Column){
+  getColumnFilterData(column: Column) {
     return this.gridEngine.getColumnFilterData(column)
   }
 
-  switchSort(column:Column, multiple?:boolean){
-    this.gridEngine.switchSort(column,multiple);
+  switchSort(column: Column, multiple?: boolean) {
+    this.gridEngine.switchSort(column, multiple);
   }
 
-  switchFilter(column: Column, filter:ColumnFilter){
-    this.gridEngine.switchFilter(column,filter);
+  switchFilter(column: Column, filter: ColumnFilter) {
+    this.gridEngine.switchFilter(column, filter);
   }
 
-  removeFilter(column:Column){
+  removeFilter(column: Column) {
     this.gridEngine.removeFilter(column);
   }
-  getListFilterConditions(){
+
+  getListFilterConditions() {
     return this.gridEngine.getListFilterConditions();
   }
 
-  getFormulas(){
+  getFormulas() {
     return this.gridEngine.getFormulas();
   }
 
-  changeFormula(column: Column, formula: string){
-    this.gridEngine.changeFormula(column,formula);
+  changeFormula(column: Column, formula: string) {
+    this.gridEngine.changeFormula(column, formula);
   }
 }

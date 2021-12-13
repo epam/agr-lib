@@ -1,7 +1,7 @@
 <p-table class="agr-section-table agr-financial-table"
          #primengTable
          aqrFixTablePrimeng
-         [value]="grid.gridEngine.data"
+         [value]="grid.gridEngine.rows"
          [scrollable]="true"
          [style]="{width:'100%'}"
          scrollHeight="flex"
@@ -108,22 +108,23 @@
     <td *ngFor="let column of body;last as last;"
         [ngClass]="{'agr-end-section':column.isLast,'agr-editable-cell':column.columnDef.editable,
         'agr-row-level-1':rowData.rowLevel==1}"
-        [pEditableColumn]="rowData"
+        [pEditableColumn]="rowData.data"
         [pEditableColumnField]="column"
         [pEditableColumnRowIndex]="rowIndex"
         [pEditableColumnDisabled]="!column.columnDef.editable">
       <p-cellEditor>
         <ng-template pTemplate="input">
-          <agr-grid-cell-editor [row]="rowData"
+          <agr-grid-cell-editor [row]="rowData.data"
                                 [column]="column" [value]="editValue">
           </agr-grid-cell-editor>
         </ng-template>
         <ng-template pTemplate="output">
-          <agr-grid-cell [row]="rowData"
+          <agr-grid-cell [row]="column.columnDef.field==='index_number'?rowIndex:rowData.data"
                          [column]="column">
-            <i *ngIf="column.columnDef.field==='firstName'&&(rowData.rowLevel===0||rowData.rowLevel===1)"
+            <i *ngIf="column.columnDef.field==='index_number'&&(rowData.rowLevel===0||rowData.rowLevel===1)"
                class="mdi agr-chevron"
                [ngClass]="{'mdi-chevron-down':!rowData.collapsed,'mdi-chevron-right':rowData.collapsed}"
+               (click)="grid.gridEngine.toggleCollapseRow(rowData)"
                grid-cell-left ></i>
           </agr-grid-cell>
         </ng-template>

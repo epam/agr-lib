@@ -1,7 +1,7 @@
 import {AgrEngine} from "./agr-engine";
-import {ColumnDef} from "../column/column-def";
+import {ColumnDef} from "../types/column-def";
 import { expect } from 'chai';
-import {ColumnFilterTypes} from "../column/column-filter.types";
+import {ColumnFilterTypes} from "../types/column-filter.types";
 function getData(){
   return [
     {field1_1:37,field1_2:40},

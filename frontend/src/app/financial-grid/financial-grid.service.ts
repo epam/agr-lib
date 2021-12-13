@@ -44,26 +44,19 @@ export class FinancialGridService extends AgrGridService<any> {
     for(const user of this.financialUsers){
       data.push(user);
       user.children = [];
-      user.rowLevel = 0;
       for (const account of this.accounts){
         if (account.userId!==user.id){
           continue;
         }
-        data.push(account);
         account.children = [];
-        account.parent = user;
-        account.rowLevel = 1;
         account.accountType = hashAccountTypes[account.accountTypeId];
         user.children.push(account);
         for (const transaction of this.transactions){
           if (transaction.accountId!==account.id){
             continue;
           }
-          data.push(transaction);
           account.children.push(transaction);
-          transaction.parent = account;
           transaction.transactionType = hashTransactionTypes[transaction.transactionTypeId]
-          transaction.rowLevel = 2;
         }
 
 
@@ -71,7 +64,6 @@ export class FinancialGridService extends AgrGridService<any> {
 
     }
     this.gridEngine.data = data;
-    console.log(this.accounts);
   }
 
   makeHash(list: any[], key: string) {

@@ -1,5 +1,3 @@
-import {ColumnFilterType} from "./column-filter.types";
-
 export const ColumnSortOrder = {
   asc:'ASC',
   desc:'DESC',
