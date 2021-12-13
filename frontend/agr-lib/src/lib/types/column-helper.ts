@@ -1,4 +1,3 @@
-import {Column} from './column';
 import {ColumnDef} from './column-def';
 
 export class ColumnHelper {

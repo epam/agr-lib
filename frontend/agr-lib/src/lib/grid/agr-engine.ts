@@ -1,23 +1,23 @@
 import orderBy from 'lodash-es/orderBy.js';
 import sortBy from 'lodash-es/sortBy.js';
 import cloneDeep from 'lodash-es/cloneDeep.js';
-import {ColumnDef} from "../column/column-def";
-import {Column} from "../column/column";
+import {ColumnDef} from "../types/column-def";
+import {Column} from "../types/column";
 import {
-  ColumnFormulaType,
   ColumnFormulaTypes,
   ColumnSortOrder,
   ColumnSortOrderType,
   ColumnTypes
-} from "../column/column.types";
+} from "../types/column.types";
 import {
   ColumnDateFilterData,
   ColumnFilter, ColumnFilterDataType,
   ColumnFilterTypes,
   ColumnNumberFilterData,
   ColumnSelectFilterData
-} from "../column/column-filter.types";
-import {ColumnHelper} from "../column/column-helper";
+} from "../types/column-filter.types";
+import {ColumnHelper} from "../types/column-helper";
+import {Row} from "../types/row";
 
 interface ColumnStack {
   column: Column;
@@ -31,11 +31,14 @@ interface ColumnStack {
 export interface AgrEngineOptions {
   unSortColumn?: boolean; //TODO Rename property because unclear what is made
   sectionMode?: boolean;
+  nameRowChildrenProperty?: string;
+  nameRowParentProperty?: string;
 }
 
 export class AgrEngine<T> {
   header: Column[][] = [];
   body: Column[] = [];
+  rows: Row<T>[] = [];
   frozenHeader: Column[][] = [];
   frozenBody: Column[] = [];
   _data: T[] = [];
@@ -52,13 +55,16 @@ export class AgrEngine<T> {
 
   set data(v) {
     this._originalData = v;
+    this.createRows();
     this.filter();
   }
 
   constructor(private columnDefs: ColumnDef[], options?: AgrEngineOptions) {
     this.options = {
       ...{
-        unSortColumn: false
+        unSortColumn: false,
+        nameRowChildrenProperty: 'children',
+        nameRowParentProperty: 'row'
       },
       ...options
     }
@@ -607,5 +613,58 @@ export class AgrEngine<T> {
     }
   }
 
+  private createRows() {
+    this.rows = [];
+    this.createChildRows(this._originalData, null);
+    console.log(this.rows);
+  }
+
+  private createChildRows(children: T[], parent: Row<T>) {
+    if (children) {
+      for (const child of children) {
+        const row = new Row<T>(child, parent);
+        if (parent) {
+          if (!parent.children) {
+            parent.children = [];
+          }
+          parent.children.push(row);
+        }
+        this.rows.push(row);
+        this.createChildRows(child[this.options.nameRowChildrenProperty], row);
+      }
+    }
+  }
+
+  toggleCollapseRow(row: Row<T>) {
+    row.collapsed = !row.collapsed;
+    const index = this.rows.indexOf(row) + 1;
+    if (row.collapsed) {
+      this.rows.splice(index, this.getCountRowChildren(row))
+    } else {
+      console.log(this.flatRowChildren(row).length)
+      this.rows.splice(index, 0, ...this.flatRowChildren(row))
+    }
+    this.rows = [...this.rows];
+  }
+
+  private getCountRowChildren(row: Row<T>): number {
+    let count = row.children ? row.children.length : 0;
+    if (row.children) {
+      for (const child of row.children) {
+        count += child.collapsed ? 0 : this.getCountRowChildren(child);
+      }
+    }
+    return count;
+  }
+
+  private flatRowChildren(row: Row<T>): Row<T>[] {
+    let rows: Row<T>[] = [];
+    if (row.children && !row.collapsed) {
+      for (const child of row.children) {
+        rows.push(...[child], ...this.flatRowChildren(child));
+      }
+    }
+    return rows;
+  }
 
 }
