@@ -136,6 +136,9 @@ $cell-height: 24;
         th.agr-main-section {
           border-bottom: 2px solid $color-primary;
         }
+        th.agr-grid-checkbox, td.agr-grid-checkbox{
+          text-align: center;
+        }
       }
     }
     .ui-table-tfoot{

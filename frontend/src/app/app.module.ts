@@ -12,6 +12,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {HttpClientModule} from "@angular/common/http";
 import { FinancialPageComponent } from './financial-page/financial-page.component';
 import { FinancialGridComponent } from './financial-grid/financial-grid.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { FinancialGridComponent } from './financial-grid/financial-grid.componen
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
     SharedModule,
     TableModule,
     PanelModule,
