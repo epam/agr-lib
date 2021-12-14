@@ -39,22 +39,23 @@ export class AgrEngine<T> {
   header: Column[][] = [];
   body: Column[] = [];
   rows: Row<T>[] = [];
+  private rowsCache: Row<T>[] = [];
   frozenHeader: Column[][] = [];
   frozenBody: Column[] = [];
-  _data: T[] = [];
   _originalData: T[] = [];
   options: AgrEngineOptions;
   private sortColumnsData = new Map<string, ColumnDef>();
   private filterColumnsData = new Map<string, ColumnDef | ColumnDef[]>();
   private draggedColumn: Column;
   private originalColumnDefs: ColumnDef[];
+  selectedAll: boolean;
 
   get data(): T[] {
-    return this._data
+    return this._originalData;
   }
 
-  set data(v) {
-    this._originalData = v;
+  set data(data) {
+    this._originalData = data;
     this.createRows();
     this.filter();
   }
@@ -251,10 +252,10 @@ export class AgrEngine<T> {
         let columnValue;
         switch (columnDef.type) {
           case ColumnTypes.date:
-            columnValue = new Date(ColumnHelper.getColumnValue(item, columnDef)).getTime();
+            columnValue = new Date(ColumnHelper.getColumnValue(item.data, columnDef)).getTime();
             break;
           default:
-            columnValue = ColumnHelper.getColumnValue(item, columnDef) ?? '';
+            columnValue = ColumnHelper.getColumnValue(item.data, columnDef) ?? '';
             if (typeof columnValue === 'string') {
               columnValue = columnValue.toLowerCase();
             }
@@ -263,7 +264,7 @@ export class AgrEngine<T> {
       });
       orders.push(columnDef.sort === ColumnSortOrder.asc ? 'asc' : 'desc');
     }
-    this.data = orderBy(this.data, sorts, orders);
+    this.rows = orderBy(this.rows, sorts, orders);
   }
 
   // getColumnValue(row: T, columnDef: ColumnDef): any {
@@ -342,9 +343,9 @@ export class AgrEngine<T> {
 //TODO Test
   getSelectFilterValues(column: Column): ColumnSelectFilterData[] {
     const mapValues = new Map<any, ColumnSelectFilterData>();
-    for (const row of this._originalData) {
-      const label = ColumnHelper.getColumnDisplayValue(row, column.columnDef) ?? '';
-      const tempValue = ColumnHelper.getColumnValue(row, column.columnDef);
+    for (const row of this.rowsCache) {
+      const label = ColumnHelper.getColumnDisplayValue(row.data, column.columnDef) ?? '';
+      const tempValue = ColumnHelper.getColumnValue(row.data, column.columnDef);
       const values = Array.isArray(tempValue) ? tempValue : [tempValue];
       for (const value of values) {
         if (this.isEmptyValue(value)) {
@@ -362,8 +363,8 @@ export class AgrEngine<T> {
   getNumberFilterData(column: Column): ColumnNumberFilterData {
     let filterData: ColumnNumberFilterData
     let wasInit = false;
-    for (const row of this._originalData) {
-      const values = this.getValueAsArray(row, column.columnDef);
+    for (const row of this.rowsCache) {
+      const values = this.getValueAsArray(row.data, column.columnDef);
       for (const value of values) {
         if (isNaN(value)) {
           continue;
@@ -389,8 +390,8 @@ export class AgrEngine<T> {
   getDateFilterData(column: Column): ColumnDateFilterData {
     let filterData: ColumnDateFilterData
     let wasInit = false;
-    for (const row of this._originalData) {
-      const values = this.getValueAsArray(row, column.columnDef);
+    for (const row of this.rowsCache) {
+      const values = this.getValueAsArray(row.data, column.columnDef);
       for (let value of values) {
         if (!value) {
           continue;
@@ -424,7 +425,7 @@ export class AgrEngine<T> {
   // }
 //TODO Test
   filter() {
-    let data = [...this._originalData];
+    let data = [...this.rowsCache];
     data = data.filter((row) => {
       let logicResult = true;
       let wasReInit = false;
@@ -462,11 +463,12 @@ export class AgrEngine<T> {
       }
       return logicResult;
     });
-    this._data = data;
+    this.rows = data;
+    this.sort();
   }
 
-  protected filterByColumn(columnDef: ColumnDef, row): boolean {
-    const values = this.getValueAsArray(row, columnDef);
+  protected filterByColumn(columnDef: ColumnDef, row: Row<T>): boolean {
+    const values = this.getValueAsArray(row.data, columnDef);
     let columnResult = false;
     for (const value of values) {
       if (columnDef.filter.showEmpty && this.isEmptyValue(value)) {
@@ -491,7 +493,7 @@ export class AgrEngine<T> {
     return false;
   }
 
-  filterChild(children: any[], columnDef: ColumnDef) {
+  filterChild(children: Row<T>[], columnDef: ColumnDef) {
     if (children) {
       for (const child of children) {
         const logicResult = this.filterByColumn(columnDef, child) || this.filterChild(child.children, columnDef);
@@ -503,7 +505,7 @@ export class AgrEngine<T> {
     return false;
   }
 
-  filterParent(row, columnDef: ColumnDef) {
+  filterParent(row: Row<T>, columnDef: ColumnDef) {
     let parent = row.parent;
     while (parent) {
       if (this.filterByColumn(columnDef, parent)) {
@@ -584,8 +586,8 @@ export class AgrEngine<T> {
     column.columnDef.formulaResult = 0;
     let columnValue: number;
     let index = 0;
-    for (const row of this.data) {
-      columnValue = ColumnHelper.getColumnValue(row, column.columnDef)
+    for (const row of this.rows) {
+      columnValue = ColumnHelper.getColumnValue(row.data, column.columnDef)
       if (this.isEmptyValue(columnValue)) {
         continue;
       }
@@ -609,14 +611,13 @@ export class AgrEngine<T> {
       index++;
     }
     if (formula === ColumnFormulaTypes.average) {
-      column.columnDef.formulaResult /= this.data.length;
+      column.columnDef.formulaResult /= this.rows.length;
     }
   }
 
   private createRows() {
-    this.rows = [];
+    this.rowsCache = [];
     this.createChildRows(this._originalData, null);
-    console.log(this.rows);
   }
 
   private createChildRows(children: T[], parent: Row<T>) {
@@ -629,7 +630,7 @@ export class AgrEngine<T> {
           }
           parent.children.push(row);
         }
-        this.rows.push(row);
+        this.rowsCache.push(row);
         this.createChildRows(child[this.options.nameRowChildrenProperty], row);
       }
     }
@@ -641,7 +642,6 @@ export class AgrEngine<T> {
     if (row.collapsed) {
       this.rows.splice(index, this.getCountRowChildren(row))
     } else {
-      console.log(this.flatRowChildren(row).length)
       this.rows.splice(index, 0, ...this.flatRowChildren(row))
     }
     this.rows = [...this.rows];
@@ -667,4 +667,38 @@ export class AgrEngine<T> {
     return rows;
   }
 
+  toggleSelectAll() {
+    for (const row of this.rows) {
+      row.selected = this.selectedAll;
+    }
+  }
+
+  toggleSelect(row: Row<T>) {
+    row.selected = !row.selected
+    this.selectChildren(row,row.selected);
+    this.selectParent(row,row.selected);
+  }
+
+  private selectChildren(row:Row<T>,selected?:boolean){
+    // if (children) {
+    //   for (const child of children) {
+    //     this.selectChildren(child.children,selected);
+    //     child.selected = selected;
+    //   }
+    // }
+  }
+
+  private selectParent(row:Row<T>,selected?:boolean){
+    // while (parent) {
+    //   parent.selected = parent.children.filter(child => child.selected).length === parent.children.length;
+    //   parent = parent.parent;
+    // }
+  }
+
+  resetSelect() {
+    this.selectedAll = false;
+    for (const row of this.rows) {
+      row.selected = false;
+    }
+  }
 }

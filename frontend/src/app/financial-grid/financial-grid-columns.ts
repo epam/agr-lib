@@ -11,6 +11,11 @@ export function financialGridColumnDefs(): ColumnDef[] {
       dragDisabled: true,
       columns: [
         {
+          title:'',
+          field:'checkbox',
+          width:32
+        },
+        {
           title: '#',
           field: 'index_number',
           width: 64,

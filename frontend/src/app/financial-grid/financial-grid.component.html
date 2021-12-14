@@ -30,7 +30,8 @@
       <th *ngFor="let column of rowHeader;last as last"
           [attr.colspan]="column.colSpan"
           [attr.rowspan]="column.rowSpan"
-          [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0}"
+          [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0,
+          'agr-grid-checkbox':column.columnDef.field=='checkbox'}"
           pResizableColumn
           pReorderableColumn
           agrDragColumn
@@ -50,7 +51,13 @@
             </agr-grid-section-header>
           </ng-container>
           <ng-container *ngSwitchDefault>
-            <agr-grid-header [column]="column"></agr-grid-header>
+            <p-checkbox *ngIf="column.columnDef.field=='checkbox';else default"
+                        [binary]="true"
+                        [ngModel]="grid.gridEngine.selectedAll"
+                        (ngModelChange)="grid.gridEngine.toggleSelectAll()"></p-checkbox>
+            <ng-template #default>
+              <agr-grid-header [column]="column"></agr-grid-header>
+            </ng-template>
           </ng-container>
         </ng-container>
       </th>
@@ -62,7 +69,8 @@
       <th *ngFor="let column of rowHeader;last as last"
           [attr.colspan]="column.colSpan"
           [attr.rowspan]="column.rowSpan"
-          [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0}"
+          [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0,
+          'agr-grid-checkbox':column.columnDef.field=='checkbox'}"
           pResizableColumn
           pReorderableColumn
           agrDragColumn>
@@ -79,7 +87,13 @@
             </agr-grid-section-header>
           </ng-container>
           <ng-container *ngSwitchDefault>
-            <agr-grid-header [column]="column"></agr-grid-header>
+            <p-checkbox *ngIf="column.columnDef.field=='checkbox';else default"
+                        [binary]="true"
+                        [ngModel]="grid.gridEngine.selectedAll"
+                        (ngModelChange)="grid.gridEngine.toggleSelectAll()"></p-checkbox>
+            <ng-template #default>
+              <agr-grid-header [column]="column"></agr-grid-header>
+            </ng-template>
           </ng-container>
         </ng-container>
       </th>
@@ -105,9 +119,14 @@
 
 <ng-template #body let-rowData let-body="body" let-rowIndex="rowIndex">
   <tr>
+<!--    <td style="text-align: center">-->
+<!--      <p-checkbox [binary]="true"-->
+<!--                  [(ngModel)]="grid.gridEngine.selectedAll"-->
+<!--                  (ngModelChange)="grid.gridEngine.selectAll()"></p-checkbox>-->
+<!--    </td>-->
     <td *ngFor="let column of body;last as last;"
         [ngClass]="{'agr-end-section':column.isLast,'agr-editable-cell':column.columnDef.editable,
-        'agr-row-level-1':rowData.rowLevel==1}"
+        'agr-row-level-1':rowData.rowLevel==1, 'agr-grid-checkbox':column.columnDef.field=='checkbox'}"
         [pEditableColumn]="rowData.data"
         [pEditableColumnField]="column"
         [pEditableColumnRowIndex]="rowIndex"
@@ -119,14 +138,21 @@
           </agr-grid-cell-editor>
         </ng-template>
         <ng-template pTemplate="output">
-          <agr-grid-cell [row]="column.columnDef.field==='index_number'?rowIndex:rowData.data"
-                         [column]="column">
-            <i *ngIf="column.columnDef.field==='index_number'&&(rowData.rowLevel===0||rowData.rowLevel===1)"
-               class="mdi agr-chevron"
-               [ngClass]="{'mdi-chevron-down':!rowData.collapsed,'mdi-chevron-right':rowData.collapsed}"
-               (click)="grid.gridEngine.toggleCollapseRow(rowData)"
-               grid-cell-left ></i>
-          </agr-grid-cell>
+          <p-checkbox *ngIf="column.columnDef.field=='checkbox';else default"
+                      [binary]="true"
+                      [ngModel]="rowData.selected"
+                      (ngModelChange)="grid.gridEngine.toggleSelect(rowData)"></p-checkbox>
+          <ng-template #default>
+            <agr-grid-cell [row]="column.columnDef.field==='index_number'?rowIndex:rowData.data"
+                           [column]="column">
+              <i *ngIf="column.columnDef.field==='index_number'&&(rowData.rowLevel===0||rowData.rowLevel===1)"
+                 class="mdi agr-chevron"
+                 [ngClass]="{'mdi-chevron-down':!rowData.collapsed,'mdi-chevron-right':rowData.collapsed}"
+                 (click)="grid.gridEngine.toggleCollapseRow(rowData)"
+                 grid-cell-left ></i>
+            </agr-grid-cell>
+          </ng-template>
+
         </ng-template>
       </p-cellEditor>
     </td>
