@@ -427,6 +427,9 @@ export class AgrEngine<T> {
   filter() {
     let data = [...this.rowsCache];
     data = data.filter((row) => {
+      if (this.isCollapsedParent(row)){
+        return false;
+      }
       let logicResult = true;
       let wasReInit = false;
       for (const columnDef of this.filterColumnsData.values()) {
@@ -539,6 +542,17 @@ export class AgrEngine<T> {
     return true;
   }
 
+  private isCollapsedParent(row:Row<T>):boolean{
+    let parent = row.parent;
+    while (parent){
+      if (parent.collapsed){
+        return true;
+      }
+      parent = parent.parent;
+    }
+    return false;
+  }
+
 
   private isEmptyValue(value) {
     return value === '' || value === undefined || value === null;
@@ -638,13 +652,14 @@ export class AgrEngine<T> {
 
   toggleCollapseRow(row: Row<T>) {
     row.collapsed = !row.collapsed;
-    const index = this.rows.indexOf(row) + 1;
-    if (row.collapsed) {
-      this.rows.splice(index, this.getCountRowChildren(row))
-    } else {
-      this.rows.splice(index, 0, ...this.flatRowChildren(row))
-    }
-    this.rows = [...this.rows];
+    this.filter();
+    // const index = this.rows.indexOf(row) + 1;
+    // if (row.collapsed) {
+    //   this.rows.splice(index, this.getCountRowChildren(row))
+    // } else {
+    //   this.rows.splice(index, 0, ...this.flatRowChildren(row))
+    // }
+    // this.rows = [...this.rows];
   }
 
   private getCountRowChildren(row: Row<T>): number {
