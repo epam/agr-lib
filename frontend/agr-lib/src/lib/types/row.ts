@@ -5,7 +5,7 @@ export class Row<T> {
   collapsed?: boolean;
   filteredChildren?: Row<T> [] = []
 
-  constructor(public data: T, public parent: Row<T> = null) {
+  constructor(public data?: T, public parent: Row<T> = null) {
     this.rowLevel = parent ? parent.rowLevel + 1 : 0;
   }
 
