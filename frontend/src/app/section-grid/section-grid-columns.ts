@@ -1,4 +1,5 @@
 import {ColumnDef, ColumnFilterTypes, ColumnTypes} from "agr-lib";
+import {formatDate} from "@angular/common";
 
 
 export function SectionGridColumnDefs(): ColumnDef[] {
@@ -46,8 +47,12 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           filterType: ColumnFilterTypes.date,
           filterable: true,
           sortable:true,
+          getDisplayValue(row: any, index?: any): string {
+            const date = this.getValue(row, index);
+            return date ? formatDate(date, 'dd MMM yyy', 'en_US') : ''
+          },
           getValue(row: any, index?: any): any {
-            return new Date(Date.parse(row[this.field]));
+            return row[this.field]?new Date(Date.parse(row[this.field])):'';
           }
         },
         {

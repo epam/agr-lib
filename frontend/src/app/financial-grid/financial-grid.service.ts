@@ -63,6 +63,7 @@ export class FinancialGridService extends AgrGridService<any> {
       }
 
     }
+    console.log(data)
     this.gridEngine.data = data;
   }
 

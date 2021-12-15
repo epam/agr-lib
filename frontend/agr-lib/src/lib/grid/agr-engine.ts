@@ -40,6 +40,7 @@ export class AgrEngine<T> {
   body: Column[] = [];
   rows: Row<T>[] = [];
   private rowsCache: Row<T>[] = [];
+  private rowsTreeCache: Row<T>[] = [];
   frozenHeader: Column[][] = [];
   frozenBody: Column[] = [];
   _originalData: T[] = [];
@@ -264,7 +265,47 @@ export class AgrEngine<T> {
       });
       orders.push(columnDef.sort === ColumnSortOrder.asc ? 'asc' : 'desc');
     }
-    this.rows = orderBy(this.rows, sorts, orders);
+    const rootRow = new Row<T>();
+    rootRow.filteredChildren =  this.rows.filter(row => row.rowLevel === 0)
+    this.sortChildren(rootRow);
+    this.rows= this.flatRowChildren(rootRow);
+    // this.rows = orderBy(this.rows, sorts, orders);
+  }
+
+  sortChildren(row: Row<T>) {
+    const sorts = [];
+    const orders = [];
+    if (row.filteredChildren){
+      for (const child of row.filteredChildren){
+        for (const columnDef of this.sortColumnsData.values()) {
+          if (columnDef.sortLevel){
+            const sortLevel = Array.isArray(columnDef.sortLevel)?columnDef.sortLevel:[columnDef.sortLevel];
+            if (!sortLevel.includes(child.rowLevel)){
+              continue;
+            }
+          }
+          sorts.push((item) => {
+            let columnValue;
+            switch (columnDef.type) {
+              case ColumnTypes.date:
+                columnValue = new Date(ColumnHelper.getColumnValue(item.data, columnDef)).getTime();
+                break;
+              default:
+                columnValue = ColumnHelper.getColumnValue(item.data, columnDef) ?? '';
+                if (typeof columnValue === 'string') {
+                  columnValue = columnValue.toLowerCase();
+                }
+            }
+            return columnValue;
+          });
+          orders.push(columnDef.sort === ColumnSortOrder.asc ? 'asc' : 'desc');
+        }
+        this.sortChildren(child);
+      }
+    }
+    if (sorts.length>0){
+      row.filteredChildren = orderBy(row.filteredChildren,sorts,orders);
+    }
   }
 
   // getColumnValue(row: T, columnDef: ColumnDef): any {
@@ -429,6 +470,7 @@ export class AgrEngine<T> {
     this.rows = this.rows.filter((row) => {
       let logicResult = true;
       let wasReInit = false;
+      row.filteredChildren = [];
       for (const columnDef of this.filterColumnsData.values()) {
         if (Array.isArray(columnDef)) {
           let groupLogicResult = false;
@@ -461,16 +503,17 @@ export class AgrEngine<T> {
           }
         }
       }
-      if (logicResult) {
+      if (logicResult  && !this.isCollapsedParent(row)) {
         row.addToFilteredChildren();
       } else {
-        row.removeFromFilteredChildren();
         row.selected = false;
+        row.removeFromFilteredChildren();
       }
       return logicResult && !this.isCollapsedParent(row);
     });
     this.sort();
     this.recalculateSelected();
+    console.log(this.rows.length);
   }
 
   protected filterByColumn(columnDef: ColumnDef, row: Row<T>): boolean {
@@ -634,7 +677,9 @@ export class AgrEngine<T> {
 
   private createRows() {
     this.rowsCache = [];
+    this.rowsTreeCache = [];
     this.createChildRows(this._originalData, null);
+    console.log(this.rowsTreeCache);
   }
 
   private createChildRows(children: T[], parent: Row<T>) {
@@ -646,6 +691,8 @@ export class AgrEngine<T> {
         const row = new Row<T>(child, parent);
         if (parent) {
           parent.addChild(row);
+        } else {
+          this.rowsTreeCache.push(row);
         }
         this.rowsCache.push(row);
         this.createChildRows(child[this.options.nameRowChildrenProperty], row);
@@ -656,13 +703,6 @@ export class AgrEngine<T> {
   toggleCollapseRow(row: Row<T>) {
     row.collapsed = !row.collapsed;
     this.filter();
-    // const index = this.rows.indexOf(row) + 1;
-    // if (row.collapsed) {
-    //   this.rows.splice(index, this.getCountRowChildren(row))
-    // } else {
-    //   this.rows.splice(index, 0, ...this.flatRowChildren(row))
-    // }
-    // this.rows = [...this.rows];
   }
 
   private getCountRowChildren(row: Row<T>): number {
@@ -677,9 +717,9 @@ export class AgrEngine<T> {
 
   private flatRowChildren(row: Row<T>): Row<T>[] {
     let rows: Row<T>[] = [];
-    if (row.children && !row.collapsed) {
-      for (const child of row.children) {
-        rows.push(...[child], ...this.flatRowChildren(child));
+    if (row.filteredChildren && !row.collapsed) {
+      for (const child of row.filteredChildren) {
+        rows.push(child, ...this.flatRowChildren(child));
       }
     }
     return rows;
@@ -740,6 +780,6 @@ export class AgrEngine<T> {
   }
 
   private recalculateSelectedAll() {
-    this.selectedAll = this.rows.filter(row=>row.selected).length===this.rows.length;
+    this.selectedAll = this.rows.filter(row => row.selected).length === this.rows.length;
   }
 }
