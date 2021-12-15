@@ -425,11 +425,8 @@ export class AgrEngine<T> {
   // }
 //TODO Test
   filter() {
-    let data = [...this.rowsCache];
-    data = data.filter((row) => {
-      if (this.isCollapsedParent(row)){
-        return false;
-      }
+    this.rows = [...this.rowsCache];
+    this.rows = this.rows.filter((row) => {
       let logicResult = true;
       let wasReInit = false;
       for (const columnDef of this.filterColumnsData.values()) {
@@ -464,10 +461,16 @@ export class AgrEngine<T> {
           }
         }
       }
-      return logicResult;
+      if (logicResult) {
+        row.addToFilteredChildren();
+      } else {
+        row.removeFromFilteredChildren();
+        row.selected = false;
+      }
+      return logicResult && !this.isCollapsedParent(row);
     });
-    this.rows = data;
     this.sort();
+    this.recalculateSelected();
   }
 
   protected filterByColumn(columnDef: ColumnDef, row: Row<T>): boolean {
@@ -542,10 +545,10 @@ export class AgrEngine<T> {
     return true;
   }
 
-  private isCollapsedParent(row:Row<T>):boolean{
+  private isCollapsedParent(row: Row<T>): boolean {
     let parent = row.parent;
-    while (parent){
-      if (parent.collapsed){
+    while (parent) {
+      if (parent.collapsed) {
         return true;
       }
       parent = parent.parent;
@@ -636,13 +639,13 @@ export class AgrEngine<T> {
 
   private createChildRows(children: T[], parent: Row<T>) {
     if (children) {
+      if (parent) {
+        parent.clearChildren();
+      }
       for (const child of children) {
         const row = new Row<T>(child, parent);
         if (parent) {
-          if (!parent.children) {
-            parent.children = [];
-          }
-          parent.children.push(row);
+          parent.addChild(row);
         }
         this.rowsCache.push(row);
         this.createChildRows(child[this.options.nameRowChildrenProperty], row);
@@ -683,37 +686,60 @@ export class AgrEngine<T> {
   }
 
   toggleSelectAll() {
+    this.setSelectedAll(!this.selectedAll);
+  }
+
+  toggleSelect(row: Row<T>) {
+    this.setSelect(row, !row.selected);
+  }
+
+  setSelect(row: Row<T>, selected?: boolean) {
+    row.selected = selected
+    this.selectChildren(row, selected);
+    this.selectParent(row, selected);
+    this.recalculateSelectedAll();
+  }
+
+  private selectChildren(row: Row<T>, selected?: boolean) {
+    if (row.filteredChildren) {
+      for (const child of row.filteredChildren) {
+        this.selectChildren(child, selected);
+        child.selected = selected;
+      }
+    }
+  }
+
+  private selectParent(row: Row<T>, selected?: boolean) {
+    let parent = row.parent;
+    while (parent) {
+      parent.selected = parent.filteredChildren
+        .filter(child => child.selected).length === parent.filteredChildren.length;
+      parent = parent.parent;
+    }
+  }
+
+  resetSelect() {
+    this.setSelectedAll(false);
+  }
+
+  setSelectedAll(selected: boolean) {
+    this.selectedAll = selected;
     for (const row of this.rows) {
       row.selected = this.selectedAll;
     }
   }
 
-  toggleSelect(row: Row<T>) {
-    row.selected = !row.selected
-    this.selectChildren(row,row.selected);
-    this.selectParent(row,row.selected);
-  }
-
-  private selectChildren(row:Row<T>,selected?:boolean){
-    // if (children) {
-    //   for (const child of children) {
-    //     this.selectChildren(child.children,selected);
-    //     child.selected = selected;
-    //   }
-    // }
-  }
-
-  private selectParent(row:Row<T>,selected?:boolean){
-    // while (parent) {
-    //   parent.selected = parent.children.filter(child => child.selected).length === parent.children.length;
-    //   parent = parent.parent;
-    // }
-  }
-
-  resetSelect() {
-    this.selectedAll = false;
+  private recalculateSelected() {
     for (const row of this.rows) {
-      row.selected = false;
+      if (row.filteredChildren.length !== 0) {
+        continue;
+      }
+      this.selectParent(row, row.selected);
     }
+    this.recalculateSelectedAll();
+  }
+
+  private recalculateSelectedAll() {
+    this.selectedAll = this.rows.filter(row=>row.selected).length===this.rows.length;
   }
 }

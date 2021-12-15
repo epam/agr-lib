@@ -11,10 +11,14 @@ export function SectionGridColumnDefs(): ColumnDef[] {
       dragDisabled:true,
       columns: [
         {
+          title:'',
+          field:'checkbox',
+          width:32
+        },
+        {
           title: '#',
           field: 'index_number',
-          width: 64,
-          hideInCollapse:true,
+          width: 64
         },
         {
           title: 'Name',
@@ -52,7 +56,8 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           width: 100,
           sortable:true,
           filterable:true,
-          editable:true
+          editable:true,
+          hideInCollapse:true
           // getValue(row: any, index?: any): any {
           //   row.nationalID;
           // }
