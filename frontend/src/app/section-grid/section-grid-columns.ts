@@ -8,61 +8,63 @@ export function SectionGridColumnDefs(): ColumnDef[] {
       title: 'Identity',
       field: 'identity_group',
       collapsible: true,
-      pin:true,
-      dragDisabled:true,
+      pin: true,
+      dragDisabled: true,
       columns: [
         {
-          title:'',
-          field:'checkbox',
-          width:32
+          title: '',
+          field: 'checkbox',
+          width: 32,
+          skipExport: true
         },
         {
           title: '#',
           field: 'index_number',
-          width: 64
+          width: 64,
+          skipExport: true
         },
         {
           title: 'Name',
           field: 'firstName',
           width: 100,
-          sortable:true,
-          filterable:true,
-          editable:true
+          sortable: true,
+          filterable: true,
+          editable: true
         },
         {
           title: 'Last Name',
           field: 'lastName',
           width: 100,
-          sortable:true,
-          filterable:true,
-          editable:true
+          sortable: true,
+          filterable: true,
+          editable: true
         },
         {
           title: 'Birth Date',
           field: 'birthDate',
           width: 100,
-          type:ColumnTypes.date,
+          type: ColumnTypes.date,
           editable: true,
-          hideInCollapse:true,
+          hideInCollapse: true,
           filterType: ColumnFilterTypes.date,
           filterable: true,
-          sortable:true,
+          sortable: true,
           getDisplayValue(row: any, index?: any): string {
             const date = this.getValue(row, index);
             return date ? formatDate(date, 'dd MMM yyy', 'en_US') : ''
           },
           getValue(row: any, index?: any): any {
-            return row[this.field]?new Date(Date.parse(row[this.field])):'';
+            return row[this.field] ? new Date(Date.parse(row[this.field])) : '';
           }
         },
         {
           title: 'National ID',
           field: 'nationalID',
           width: 100,
-          sortable:true,
-          filterable:true,
-          editable:true,
-          hideInCollapse:true
+          sortable: true,
+          filterable: true,
+          editable: true,
+          hideInCollapse: true
           // getValue(row: any, index?: any): any {
           //   row.nationalID;
           // }
@@ -70,12 +72,12 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         {
           title: 'Measurement Date',
           field: 'measurementDate',
-          type:ColumnTypes.date,
+          type: ColumnTypes.date,
           editable: true,
-          hideInCollapse:true,
+          hideInCollapse: true,
           filterType: ColumnFilterTypes.date,
           filterable: true,
-          sortable:true,
+          sortable: true,
           width: 100,
           getValue(row: any, index?: any): any {
             return new Date(Date.parse(row[this.field]));
@@ -86,39 +88,39 @@ export function SectionGridColumnDefs(): ColumnDef[] {
     {
       title: 'Location',
       field: 'location_group',
-      collapsible:true,
+      collapsible: true,
       columns: [
         {
           title: 'Country',
           field: 'country',
           width: 100,
-          sortable:true,
-          filterable:true,
-          editable:true
+          sortable: true,
+          filterable: true,
+          editable: true
         },
         {
           title: 'State/Province',
           field: 'state',
           width: 100,
-          sortable:true,
-          filterable:true,
-          editable:true
+          sortable: true,
+          filterable: true,
+          editable: true
         },
         {
           title: 'City',
           field: 'city',
           width: 100,
-          sortable:true,
-          filterable:true,
-          editable:true
+          sortable: true,
+          filterable: true,
+          editable: true
         },
         {
           title: 'Address',
           field: 'address',
           width: 100,
-          sortable:true,
-          filterable:true,
-          editable:true
+          sortable: true,
+          filterable: true,
+          editable: true
         },
       ]
     },
@@ -130,13 +132,13 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: '9:00',
           field: 'temperature0900',
           width: 100,
-          type:ColumnTypes.number,
+          type: ColumnTypes.number,
           editable: true,
-          filterType:ColumnFilterTypes.number,
+          filterType: ColumnFilterTypes.number,
           filterable: true,
-          step:0.1,
+          step: 0.1,
           sortable: true,
-          showFooter:true,
+          showFooter: true,
           getValue(row: any, index?: any): string {
             return row.temperature0900;
           }
@@ -145,12 +147,12 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: '14:00',
           field: 'temperature1400',
           width: 100,
-          type:ColumnTypes.number,
-          filterType:ColumnFilterTypes.number,
+          type: ColumnTypes.number,
+          filterType: ColumnFilterTypes.number,
           filterable: true,
-          step:0.1,
+          step: 0.1,
           sortable: true,
-          showFooter:true,
+          showFooter: true,
           getValue(row: any, index?: any): string {
             return row.temperature1400;
           }
@@ -159,13 +161,13 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: '18:00',
           field: 'temperature1800',
           width: 100,
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.1,
-          showFooter:true,
+          step: 0.1,
+          showFooter: true,
           getValue(row: any, index?: any): string {
             return row.temperature1800;
           }
@@ -174,13 +176,13 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           title: '21:00',
           field: 'temperature2100',
           width: 100,
-          type:ColumnTypes.number,
-          showFooter:true,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          showFooter: true,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.1,
+          step: 0.1,
           getValue(row: any, index?: any): string {
             return row.temperature2100;
           }
@@ -190,37 +192,37 @@ export function SectionGridColumnDefs(): ColumnDef[] {
     {
       title: 'Blood pressure',
       field: 'section_blood',
-      collapsible:true,
+      collapsible: true,
       columns: [
         {
           title: '9:00',
           field: 'bIn9',
-          collapsible:true,
+          collapsible: true,
           columns: [
             {
               title: 'Systolic',
               field: 'bloodPressureSystolic0900',
-              type:ColumnTypes.number,
-              sortable:true,
-              filterable:true,
-              editable:true,
+              type: ColumnTypes.number,
+              sortable: true,
+              filterable: true,
+              editable: true,
               filterType: ColumnFilterTypes.number,
-              step:1,
-              hideInCollapse:true,
-              showFooter:true,
-              width:100
+              step: 1,
+              hideInCollapse: true,
+              showFooter: true,
+              width: 100
             },
             {
               title: 'Diastolic',
               field: 'bloodPressureDiastolic0900',
-              type:ColumnTypes.number,
-              sortable:true,
-              filterable:true,
-              editable:true,
+              type: ColumnTypes.number,
+              sortable: true,
+              filterable: true,
+              editable: true,
               filterType: ColumnFilterTypes.number,
-              step:1,
-              showFooter:true,
-              width:100
+              step: 1,
+              showFooter: true,
+              width: 100
             }
           ]
         },
@@ -231,24 +233,24 @@ export function SectionGridColumnDefs(): ColumnDef[] {
             {
               title: 'Systolic',
               field: 'bloodPressureSystolic1400',
-              type:ColumnTypes.number,
-              sortable:true,
-              filterable:true,
-              editable:true,
+              type: ColumnTypes.number,
+              sortable: true,
+              filterable: true,
+              editable: true,
               filterType: ColumnFilterTypes.number,
-              step:1,
-              showFooter:true
+              step: 1,
+              showFooter: true
             },
             {
               title: 'Diastolic',
               field: 'bloodPressureDiastolic1400',
-              type:ColumnTypes.number,
-              sortable:true,
-              filterable:true,
-              editable:true,
+              type: ColumnTypes.number,
+              sortable: true,
+              filterable: true,
+              editable: true,
               filterType: ColumnFilterTypes.number,
-              step:1,
-              showFooter:true
+              step: 1,
+              showFooter: true
             }
           ]
         },
@@ -259,24 +261,24 @@ export function SectionGridColumnDefs(): ColumnDef[] {
             {
               title: 'Systolic',
               field: 'bloodPressureSystolic1800',
-              type:ColumnTypes.number,
-              sortable:true,
-              filterable:true,
-              editable:true,
+              type: ColumnTypes.number,
+              sortable: true,
+              filterable: true,
+              editable: true,
               filterType: ColumnFilterTypes.number,
-              step:1,
-              showFooter:true
+              step: 1,
+              showFooter: true
             },
             {
               title: 'Diastolic',
               field: 'bloodPressureDiastolic1800',
-              type:ColumnTypes.number,
-              sortable:true,
-              filterable:true,
-              editable:true,
+              type: ColumnTypes.number,
+              sortable: true,
+              filterable: true,
+              editable: true,
               filterType: ColumnFilterTypes.number,
-              step:1,
-              showFooter:true
+              step: 1,
+              showFooter: true
             }
           ]
         },
@@ -287,24 +289,24 @@ export function SectionGridColumnDefs(): ColumnDef[] {
             {
               title: 'Systolic',
               field: 'bloodPressureSystolic2100',
-              type:ColumnTypes.number,
-              sortable:true,
-              filterable:true,
-              editable:true,
+              type: ColumnTypes.number,
+              sortable: true,
+              filterable: true,
+              editable: true,
               filterType: ColumnFilterTypes.number,
-              step:1,
-              showFooter:true
+              step: 1,
+              showFooter: true
             },
             {
               title: 'Diastolic',
               field: 'bloodPressureDiastolic2100',
-              type:ColumnTypes.number,
-              sortable:true,
-              filterable:true,
-              editable:true,
+              type: ColumnTypes.number,
+              sortable: true,
+              filterable: true,
+              editable: true,
               filterType: ColumnFilterTypes.number,
-              step:1,
-              showFooter:true
+              step: 1,
+              showFooter: true
             }
           ]
         }
@@ -317,196 +319,196 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         {
           title: '9:00',
           field: 'pulse0900',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:1,
-          showFooter:true
+          step: 1,
+          showFooter: true
         },
         {
           title: '14:00',
           field: 'pulse1400',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:1,
-          showFooter:true
+          step: 1,
+          showFooter: true
         },
         {
           title: '18:00',
           field: 'pulse1800',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:1,
-          showFooter:true
+          step: 1,
+          showFooter: true
         },
         {
           title: '21:00',
           field: 'pulse2100',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:1,
-          showFooter:true
+          step: 1,
+          showFooter: true
         }
       ]
     },
     {
-      title:'Complete Blood Count',
-      field:'section',
-      columns:[
+      title: 'Complete Blood Count',
+      field: 'section',
+      columns: [
         {
           title: 'Hemoglobin',
           field: 'hemoglobin',
           width: 100,
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'WBC',
           field: 'wbc',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'MCV',
           field: 'mcv',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'PCV',
           field: 'pcv',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'RBC',
           field: 'rbc',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'MCH',
           field: 'mch',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'MCHC',
           field: 'mchc',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'RDW',
           field: 'rdw',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'Neutrophils',
           field: 'neutrophils',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'Lymphocytes',
           field: 'lymphocytes',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'Monocytes',
           field: 'monocytes',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'Eosinophils',
           field: 'eosinophils',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         },
         {
           title: 'Basophils',
           field: 'basophils',
-          type:ColumnTypes.number,
-          sortable:true,
-          filterable:true,
-          editable:true,
+          type: ColumnTypes.number,
+          sortable: true,
+          filterable: true,
+          editable: true,
           filterType: ColumnFilterTypes.number,
-          step:0.01,
-          showFooter:true
+          step: 0.01,
+          showFooter: true
         }
       ]
     }

@@ -30,6 +30,7 @@ export interface ColumnDef {
   editable?: boolean;
   editMin?:number;
   editMax?:number;
+  skipExport?:boolean;
   getValue?(row: any, index?: any): any;
 
   getDisplayValue?(row: any, index?: any): string;

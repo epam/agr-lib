@@ -26,6 +26,11 @@ $page-header-height: 56px;
     font-weight: 400;
     color:#006AFF;
   }
+  &-last{
+    flex:1;
+    text-align: right;
+    padding-right: 8px;
+  }
 }
 
 .agr-page-content {

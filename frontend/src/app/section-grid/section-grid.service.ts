@@ -4,6 +4,7 @@ import {SectionGridColumnDefs} from "./section-grid-columns";
 import {MedicalRecord} from "./medicalRecord";
 import {BusinessService} from "../business.service";
 import {Column, ColumnHelper} from "agr-lib";
+import {formatDate} from "@angular/common";
 
 
 @Injectable()
@@ -31,5 +32,7 @@ export class SectionGridService extends AgrGridService<MedicalRecord> {
       .then(()=>{
       })
   }
-
+  export(){
+    this.gridEngine.exportToExcel(`medical_${formatDate(Date.now(), 'd_MMM_y_h:mm:ss_a','en_US')}.xlsx`)
+  }
 }

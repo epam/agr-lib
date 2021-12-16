@@ -3,6 +3,7 @@ import {AgrGridService} from "../shared/grid/agr-grid.service";
 import {financialGridColumnDefs} from "./financial-grid-columns";
 import {combineLatest} from "rxjs";
 import {BusinessService} from "../business.service";
+import {formatDate} from "@angular/common";
 
 @Injectable()
 export class FinancialGridService extends AgrGridService<any> {
@@ -73,5 +74,9 @@ export class FinancialGridService extends AgrGridService<any> {
       obj[item[key]] = item;
     });
     return obj;
+  }
+
+  export(){
+    this.gridEngine.exportToExcel(`financial_${formatDate(Date.now(), 'd_MMM_y_h:mm:ss_a','en_US')}.xlsx`)
   }
 }
