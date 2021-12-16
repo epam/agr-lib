@@ -14,7 +14,7 @@ export interface ColumnDef {
   hideInCollapse?:boolean;
   sortable?:boolean;
   sort?:ColumnSortOrderType|null|''|undefined;
-  sortLevel?:number|number[];
+  rowLevel?:number|number[];
   type?:ColumnType
   filterable?:boolean;
   filter?:ColumnFilter;
