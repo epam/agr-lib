@@ -661,7 +661,7 @@ export class AgrEngine<T> {
     this.rowsCache = [];
     this.rowsTreeCache = [];
     this.createChildRows(this._originalData, null);
-    console.log(this.rowsTreeCache);
+    console.log(this.rowsCache);
   }
 
   private createChildRows(children: T[], parent: Row<T>) {
