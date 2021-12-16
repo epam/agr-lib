@@ -246,30 +246,10 @@ export class AgrEngine<T> {
   }
 
   sort() {
-    const sorts = [];
-    const orders = [];
-    for (const columnDef of this.sortColumnsData.values()) {
-      sorts.push((item) => {
-        let columnValue;
-        switch (columnDef.type) {
-          case ColumnTypes.date:
-            columnValue = new Date(ColumnHelper.getColumnValue(item.data, columnDef)).getTime();
-            break;
-          default:
-            columnValue = ColumnHelper.getColumnValue(item.data, columnDef) ?? '';
-            if (typeof columnValue === 'string') {
-              columnValue = columnValue.toLowerCase();
-            }
-        }
-        return columnValue;
-      });
-      orders.push(columnDef.sort === ColumnSortOrder.asc ? 'asc' : 'desc');
-    }
     const rootRow = new Row<T>();
-    rootRow.filteredChildren =  this.rows.filter(row => row.rowLevel === 0)
+    rootRow.filteredChildren =  this.rows.filter(row => row.rowLevel === 0);
+    this.rows = [];
     this.sortChildren(rootRow);
-    this.rows= this.flatRowChildren(rootRow);
-    // this.rows = orderBy(this.rows, sorts, orders);
   }
 
   sortChildren(row: Row<T>) {
@@ -300,12 +280,14 @@ export class AgrEngine<T> {
           });
           orders.push(columnDef.sort === ColumnSortOrder.asc ? 'asc' : 'desc');
         }
-        this.sortChildren(child);
       }
     }
-    if (sorts.length>0){
-      row.filteredChildren = orderBy(row.filteredChildren,sorts,orders);
+    const orderedRows = sorts.length>0?orderBy(row.filteredChildren,sorts,orders):row.filteredChildren;
+    for (const orderRow of orderedRows){
+      this.rows.push(orderRow);
+      this.sortChildren(orderRow);
     }
+
   }
 
   // getColumnValue(row: T, columnDef: ColumnDef): any {
