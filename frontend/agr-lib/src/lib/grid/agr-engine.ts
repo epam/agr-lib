@@ -258,11 +258,8 @@ export class AgrEngine<T> {
     if (row.filteredChildren) {
       for (const child of row.filteredChildren) {
         for (const columnDef of this.sortColumnsData.values()) {
-          if (columnDef.sortLevel) {
-            const sortLevel = Array.isArray(columnDef.sortLevel) ? columnDef.sortLevel : [columnDef.sortLevel];
-            if (!sortLevel.includes(child.rowLevel)) {
-              continue;
-            }
+          if (!this.processRowByLevel(child,columnDef)){
+            continue;
           }
           sorts.push((item) => {
             let columnValue;
@@ -499,6 +496,9 @@ export class AgrEngine<T> {
   }
 
   protected filterByColumn(columnDef: ColumnDef, row: Row<T>): boolean {
+    if (!this.processRowByLevel(row,columnDef)){
+      return false;
+    }
     const values = this.getValueAsArray(row.data, columnDef);
     let columnResult = false;
     for (const value of values) {
@@ -806,5 +806,13 @@ export class AgrEngine<T> {
       const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
       xlsx.writeFile(workbook, filename);
     });
+  }
+
+  private processRowByLevel(row:Row<T>,columnDef:ColumnDef):boolean{
+    if (!columnDef.rowLevel){
+      return true;
+    }
+    const rowLevel = Array.isArray(columnDef.rowLevel) ? columnDef.rowLevel : [columnDef.rowLevel];
+    return rowLevel.includes(row.rowLevel);
   }
 }

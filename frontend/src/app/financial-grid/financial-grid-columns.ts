@@ -31,7 +31,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           sortable: true,
           filterable: true,
           editable: true,
-          sortLevel: [0]
+          rowLevel: [0]
         },
         {
           title: 'Last Name',
@@ -40,7 +40,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           sortable: true,
           filterable: true,
           editable: true,
-          sortLevel: [0]
+          rowLevel: [0]
         },
         {
           title: 'Account Type',
@@ -49,7 +49,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           sortable: true,
           filterable: true,
           editable: true,
-          sortLevel: [1],
+          rowLevel: [1],
           getValue(row: any, index?: any): any {
             return row[this.field]?.accountType ?? '';
           }
@@ -61,7 +61,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           hideInCollapse: true,
           filterable: true,
           sortable: true,
-          sortLevel: [1]
+          rowLevel: [1]
         },
         {
           title: 'Interest Rate',
@@ -72,7 +72,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           hideInCollapse: true,
           filterable: true,
           sortable: true,
-          sortLevel: [1],
+          rowLevel: [1],
           getDisplayValue(row: any, index?: any): string {
             const value = this.getValue(row,index);
             return value?`${value}%`:'';
@@ -91,7 +91,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           sortable: true,
           filterable: true,
           editable: true,
-          sortLevel: [1],
+          rowLevel: [1],
           getValue(row: any, index?: any): any {
             return isNaN(row[this.field]) ? '' : parseFloat(row[this.field]);
           }
@@ -110,7 +110,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           sortable: true,
           filterable: true,
           editable: true,
-          sortLevel: 2,
+          rowLevel: 2,
           getValue(row: any, index?: any): any {
             return row[this.field]?.transactionType ?? '';
           }
@@ -124,7 +124,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           sortable: true,
           filterable: true,
           editable: true,
-          sortLevel: 2,
+          rowLevel: 2,
           getDisplayValue(row: any, index?: any): string {
             const date = this.getValue(row, index);
             return date ? formatDate(date, 'dd MMM yyy', 'en_US') : ''
@@ -142,7 +142,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           sortable: true,
           filterable: true,
           editable: true,
-          sortLevel: 2,
+          rowLevel: 2,
           getValue(row: any, index?: any): any {
             return isNaN(row[this.field]) ? '' : parseFloat(row[this.field]);
           }
