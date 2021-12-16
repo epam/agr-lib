@@ -482,17 +482,14 @@ export class AgrEngine<T> {
           }
         }
       }
-      if (logicResult && !this.isCollapsedParent(row)) {
+      if (logicResult&& !this.isCollapsedParent(row)){
         row.addToFilteredChildren();
-      } else {
-        row.selected = false;
-        row.removeFromFilteredChildren();
+        return true;
       }
-      return logicResult && !this.isCollapsedParent(row);
+      return false;
     });
     this.sort();
     this.recalculateSelected();
-    console.log(this.rows.length);
   }
 
   protected filterByColumn(columnDef: ColumnDef, row: Row<T>): boolean {
