@@ -64,6 +64,24 @@ export function financialGridColumnDefs(): ColumnDef[] {
           sortLevel: [1]
         },
         {
+          title: 'Interest Rate',
+          field: 'rate',
+          editable: true,
+          type:ColumnTypes.number,
+          filterType: ColumnFilterTypes.number,
+          hideInCollapse: true,
+          filterable: true,
+          sortable: true,
+          sortLevel: [1],
+          getDisplayValue(row: any, index?: any): string {
+            const value = this.getValue(row,index);
+            return value?`${value}%`:'';
+          },
+          getValue(row: any, index?: any): any {
+            return isNaN(row[this.field]) ? '' : parseFloat(row[this.field]);
+          }
+        },
+        {
           title: 'Balance',
           field: 'balance',
           width: 100,
