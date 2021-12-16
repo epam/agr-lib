@@ -1,6 +1,7 @@
 @import "variables";
 .agr-btn {
-  background-color: $color-page-content-bg;
+  //background-color: $color-page-content-bg;
+  background-color: inherit;
   border: none;
   color: black;
   border-radius: 2px;
@@ -16,6 +17,7 @@
 
 .agr-btn:enabled:hover {
   text-decoration: none;
+  background-color: $color-page-content-bg
 }
 
 .agr-btn:enabled:focus {

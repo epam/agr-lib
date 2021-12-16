@@ -4,7 +4,10 @@
       <div class="agr-page-header-caption">Demo</div>
       Finance
     </div>
-    <button (click)="financialGridService.refresh()">Refresh</button>
+    <div class="agr-page-header-last">
+      <button class="agr-btn" (click)="financialGridService.export()">Export</button>
+      <button class="agr-btn" (click)="financialGridService.refresh()">Refresh</button>
+    </div>
   </div>
   <div class="agr-page-content">
     <agr-financial-grid></agr-financial-grid>

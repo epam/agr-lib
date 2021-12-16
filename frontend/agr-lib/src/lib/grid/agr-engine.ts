@@ -247,7 +247,7 @@ export class AgrEngine<T> {
 
   sort() {
     const rootRow = new Row<T>();
-    rootRow.filteredChildren =  this.rows.filter(row => row.rowLevel === 0);
+    rootRow.filteredChildren = this.rows.filter(row => row.rowLevel === 0);
     this.rows = [];
     this.sortChildren(rootRow);
   }
@@ -255,12 +255,12 @@ export class AgrEngine<T> {
   sortChildren(row: Row<T>) {
     const sorts = [];
     const orders = [];
-    if (row.filteredChildren){
-      for (const child of row.filteredChildren){
+    if (row.filteredChildren) {
+      for (const child of row.filteredChildren) {
         for (const columnDef of this.sortColumnsData.values()) {
-          if (columnDef.sortLevel){
-            const sortLevel = Array.isArray(columnDef.sortLevel)?columnDef.sortLevel:[columnDef.sortLevel];
-            if (!sortLevel.includes(child.rowLevel)){
+          if (columnDef.sortLevel) {
+            const sortLevel = Array.isArray(columnDef.sortLevel) ? columnDef.sortLevel : [columnDef.sortLevel];
+            if (!sortLevel.includes(child.rowLevel)) {
               continue;
             }
           }
@@ -282,8 +282,8 @@ export class AgrEngine<T> {
         }
       }
     }
-    const orderedRows = sorts.length>0?orderBy(row.filteredChildren,sorts,orders):row.filteredChildren;
-    for (const orderRow of orderedRows){
+    const orderedRows = sorts.length > 0 ? orderBy(row.filteredChildren, sorts, orders) : row.filteredChildren;
+    for (const orderRow of orderedRows) {
       this.rows.push(orderRow);
       this.sortChildren(orderRow);
     }
@@ -485,7 +485,7 @@ export class AgrEngine<T> {
           }
         }
       }
-      if (logicResult  && !this.isCollapsedParent(row)) {
+      if (logicResult && !this.isCollapsedParent(row)) {
         row.addToFilteredChildren();
       } else {
         row.selected = false;
@@ -763,5 +763,48 @@ export class AgrEngine<T> {
 
   private recalculateSelectedAll() {
     this.selectedAll = this.rows.filter(row => row.selected).length === this.rows.length;
+  }
+
+  exportToExcel(filename: string) {
+    let index = 0;
+    const xlsData = [];
+    // const merge = [];
+    // let rowIndex = 0;
+    // let r = 0;
+    // let c = 0;
+    // for (const column of this.header[0]) {
+    //
+    //     //   let columnIndex = 0;
+    //     //   for (const column of rowHeader){
+    //     //     const colSpan = column.colSpan>1?column.colSpan:1;
+    //     //     const rowSpan = column.rowSpan>1?column.rowSpan:1;
+    //     //     if (column.colSpan>1 || column.rowSpan>1){
+    //     //       merge.push(
+    //     //         { s: {r, c}, e: {r:r+rowSpan-1, c:c+colSpan-1} }
+    //     //       )
+    //     //     }
+    //     //     c = c+colSpan;
+    //     //     columnIndex++;
+    //   rowIndex++;
+    // }
+
+    console.log(this.header[0])
+    for (const row of this.rows) {
+      const xslRow = {
+        "#": ++index
+      }
+      for (const column of this.body) {
+        if (column.columnDef.skipExport) {
+          continue;
+        }
+        xslRow[column.columnDef.title] = ColumnHelper.getColumnValue(row.data, column.columnDef);
+      }
+      xlsData.push(xslRow);
+    }
+    import('xlsx').then(xlsx => {
+      const worksheet = xlsx.utils.json_to_sheet(xlsData);
+      const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
+      xlsx.writeFile(workbook, filename);
+    });
   }
 }

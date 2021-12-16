@@ -14,13 +14,15 @@ export function financialGridColumnDefs(): ColumnDef[] {
         {
           title: '',
           field: 'checkbox',
-          width: 32
+          width: 32,
+          skipExport:true
         },
         {
           title: '#',
           field: 'index_number',
           width: 64,
           hideInCollapse: true,
+          skipExport:true
         },
         {
           title: 'Name',

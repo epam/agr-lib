@@ -4,7 +4,10 @@
       <div class="agr-page-header-caption">Demo</div>
       Life Science
     </div>
-
+    <div class="agr-page-header-last">
+      <button class="agr-btn" (click)="gridService.export()">Export</button>
+      <button class="agr-btn" (click)="gridService.refresh()">Refresh</button>
+    </div>
   </div>
   <div class="agr-page-content">
     <agr-section-grid></agr-section-grid>
