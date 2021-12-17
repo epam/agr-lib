@@ -1,10 +1,7 @@
 @import "variables";
 :host{
-  padding: 8px 0 0 0;
-  display: flex;
   height: 100%;
   width:100%;
-  flex-direction: column;
 }
 
 .agr-filter-values{
@@ -41,15 +38,9 @@
   margin-right: 12px;
 }
 
-.agr-filter-content{
-  padding: 0;
-  margin-top: 8px;
-  flex: 1;
-}
-
 .agr-grid-filter{
 
-  .sqr-table-filter-header{
+  .agr-table-filter-header{
     padding: 0 8px;
   }
 

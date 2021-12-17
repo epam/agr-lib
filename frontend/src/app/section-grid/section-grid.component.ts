@@ -58,4 +58,8 @@ export class SectionGridComponent implements OnInit {
   editCancel() {
 
   }
+
+  trackBy(index:number,row){
+    return row.data.id;
+  }
 }

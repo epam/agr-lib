@@ -11,6 +11,7 @@
          [reorderableColumns]="true"
          [resizableColumns]="true"
          columnResizeMode="expand"
+         [rowTrackBy]="trackBy"
          (onEditInit)="editInit($event)"
          (onEditComplete)="editComplete($event)"
          (onEditCancel)="editCancel()">

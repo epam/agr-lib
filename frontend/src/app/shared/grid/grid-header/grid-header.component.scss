@@ -52,6 +52,16 @@
     margin-top:8px;
   }
 }
+.agr-filter{
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  .agr-filter-content{
+    flex: 1;
+    height: 100%;
+  }
+}
 
 
 
