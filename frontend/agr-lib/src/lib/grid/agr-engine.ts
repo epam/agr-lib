@@ -255,28 +255,26 @@ export class AgrEngine<T> {
   sortChildren(row: Row<T>) {
     const sorts = [];
     const orders = [];
-    if (row.filteredChildren) {
-      for (const child of row.filteredChildren) {
-        for (const columnDef of this.sortColumnsData.values()) {
-          if (!this.processRowByLevel(child,columnDef)){
-            continue;
-          }
-          sorts.push((item) => {
-            let columnValue;
-            switch (columnDef.type) {
-              case ColumnTypes.date:
-                columnValue = new Date(ColumnHelper.getColumnValue(item.data, columnDef)).getTime();
-                break;
-              default:
-                columnValue = ColumnHelper.getColumnValue(item.data, columnDef) ?? '';
-                if (typeof columnValue === 'string') {
-                  columnValue = columnValue.toLowerCase();
-                }
-            }
-            return columnValue;
-          });
-          orders.push(columnDef.sort === ColumnSortOrder.asc ? 'asc' : 'desc');
+    if (Array.isArray(row.filteredChildren) && row.filteredChildren.length>0) {
+      for (const columnDef of this.sortColumnsData.values()) {
+        if (!this.processRowByLevel(row.filteredChildren[0], columnDef)) {
+          continue;
         }
+        sorts.push((item) => {
+          let columnValue;
+          switch (columnDef.type) {
+            case ColumnTypes.date:
+              columnValue = new Date(ColumnHelper.getColumnValue(item.data, columnDef)).getTime();
+              break;
+            default:
+              columnValue = ColumnHelper.getColumnValue(item.data, columnDef) ?? '';
+              if (typeof columnValue === 'string') {
+                columnValue = columnValue.toLowerCase();
+              }
+          }
+          return columnValue;
+        });
+        orders.push(columnDef.sort === ColumnSortOrder.asc ? 'asc' : 'desc');
       }
     }
     const orderedRows = sorts.length > 0 ? orderBy(row.filteredChildren, sorts, orders) : row.filteredChildren;
@@ -482,7 +480,7 @@ export class AgrEngine<T> {
           }
         }
       }
-      if (logicResult&& !this.isCollapsedParent(row)){
+      if (logicResult && !this.isCollapsedParent(row)) {
         row.addToFilteredChildren();
         return true;
       }
@@ -493,7 +491,7 @@ export class AgrEngine<T> {
   }
 
   protected filterByColumn(columnDef: ColumnDef, row: Row<T>): boolean {
-    if (!this.processRowByLevel(row,columnDef)){
+    if (!this.processRowByLevel(row, columnDef)) {
       return false;
     }
     const values = this.getValueAsArray(row.data, columnDef);
@@ -805,8 +803,8 @@ export class AgrEngine<T> {
     });
   }
 
-  private processRowByLevel(row:Row<T>,columnDef:ColumnDef):boolean{
-    if (!columnDef.rowLevel){
+  private processRowByLevel(row: Row<T>, columnDef: ColumnDef): boolean {
+    if (!columnDef.rowLevel) {
       return true;
     }
     const rowLevel = Array.isArray(columnDef.rowLevel) ? columnDef.rowLevel : [columnDef.rowLevel];
