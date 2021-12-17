@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
+    "startRemote": "ng serve --proxy-config proxy-remote.conf.json",
     "startCloud": "ng serve --host 0.0.0.0 --disable-host-check --proxy-config proxy-cloud.conf.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
