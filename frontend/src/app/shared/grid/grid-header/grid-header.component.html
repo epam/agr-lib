@@ -25,51 +25,56 @@
   (onShow)="open()"
   (onHide)="close()">
   <ng-template pTemplate>
-    <div class="agr-filter-header">
-      <div class="agr-filter-condition">
-        <p-dropdown [(ngModel)]="condition"
-                    [options]="conditions"
-                    [autoDisplayFirst]="false"
-                    optionLabel="label"
-                    dataKey="value"
-                    (ngModelChange)="changeFilterExtra()"
-                    styleClass="agr-filter-dropdown"
-                    panelStyleClass="agr-filter-dropdown">
-        </p-dropdown>
-        <button class="agr-btn agr-filter-clear-btn"
-                (click)="clearFilter()">
-          <i class="mdi mdi-trash-can-outline"></i>
-          Clear
-        </button>
+    <div class="agr-filter">
+      <div class="agr-filter-header">
+        <div class="agr-filter-condition">
+          <p-dropdown [(ngModel)]="condition"
+                      [options]="conditions"
+                      [autoDisplayFirst]="false"
+                      optionLabel="label"
+                      dataKey="value"
+                      (ngModelChange)="changeFilterExtra()"
+                      styleClass="agr-filter-dropdown"
+                      panelStyleClass="agr-filter-dropdown">
+          </p-dropdown>
+          <button class="agr-btn agr-filter-clear-btn"
+                  (click)="clearFilter()">
+            <i class="mdi mdi-trash-can-outline"></i>
+            Clear
+          </button>
+        </div>
+        <div class="agr-show-empty">
+          <p-checkbox [binary]="true"
+                      styleClass="agr-filter-checkbox"
+                      [(ngModel)]="showEmpty"
+                      label="Show Empty"
+                      (ngModelChange)="changeFilterExtra()"></p-checkbox>
+        </div>
       </div>
-      <div class="agr-show-empty">
-        <p-checkbox [binary]="true"
-                    styleClass="agr-filter-checkbox"
-                    [(ngModel)]="showEmpty"
-                    label="Show Empty"
-                    (ngModelChange)="changeFilterExtra()"></p-checkbox>
+      <div class="agr-filter-content">
+        <ng-container [ngSwitch]="column.columnDef.filterType">
+          <ng-container *ngSwitchCase="ColumnFilterTypes.number">
+            <agr-number-filter [data]="asNumberData(filterData)"
+                               [values]="asNumberValue(column.columnDef?.filter?.value)"
+                               [step]="column.columnDef.step"
+                               (changeFilter)="changeFilter($event)">
+            </agr-number-filter>
+          </ng-container>
+          <ng-container *ngSwitchCase="ColumnFilterTypes.date">
+            <agr-date-filter [data]="asDateData(filterData)"
+                             [values]="asDateValue(column.columnDef?.filter?.value)"
+                             (changeFilter)="changeFilter($event)">
+            </agr-date-filter>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <agr-select-filter [data]="asSelectData(filterData)"
+                               [values]="asSelectValue(column.columnDef?.filter?.value)"
+                               (changeFilter)="changeFilter($event)"></agr-select-filter>
+          </ng-container>
+        </ng-container>
       </div>
+
     </div>
 
-    <ng-container [ngSwitch]="column.columnDef.filterType">
-      <ng-container *ngSwitchCase="ColumnFilterTypes.number">
-        <agr-number-filter [data]="asNumberData(filterData)"
-                           [values]="asNumberValue(column.columnDef?.filter?.value)"
-                           [step]="column.columnDef.step"
-                           (changeFilter)="changeFilter($event)">
-        </agr-number-filter>
-      </ng-container>
-      <ng-container *ngSwitchCase="ColumnFilterTypes.date">
-        <agr-date-filter [data]="asDateData(filterData)"
-                         [values]="asDateValue(column.columnDef?.filter?.value)"
-                         (changeFilter)="changeFilter($event)">
-        </agr-date-filter>
-      </ng-container>
-      <ng-container *ngSwitchDefault>
-        <agr-select-filter [data]="asSelectData(filterData)"
-                           [values]="asSelectValue(column.columnDef?.filter?.value)"
-                           (changeFilter)="changeFilter($event)"></agr-select-filter>
-      </ng-container>
-    </ng-container>
   </ng-template>
 </p-overlayPanel>
