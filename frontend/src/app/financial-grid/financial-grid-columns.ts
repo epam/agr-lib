@@ -18,9 +18,9 @@ export function financialGridColumnDefs(): ColumnDef[] {
           skipExport: true
         },
         {
-          title: '#',
+          title: '',
           field: 'index_number',
-          width: 64,
+          width: 24,
           hideInCollapse: true,
           skipExport: true
         },

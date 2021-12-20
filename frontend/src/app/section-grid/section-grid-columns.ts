@@ -19,7 +19,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         },
         {
           title: '#',
-          field: 'index_number',
+          field: 'index',
           width: 64,
           skipExport: true
         },
