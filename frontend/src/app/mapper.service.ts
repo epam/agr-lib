@@ -41,8 +41,4 @@ export class MapperService {
       return item;
     })
   }
-
-  static updateAccountTable(data){
-    return data;
-  }
 }

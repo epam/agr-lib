@@ -7,6 +7,8 @@ import {FinancialUsersEntity} from "../entities/financial-users.entity";
 import {TransactionsEntity} from "../entities/transactions.entity";
 import {UpdateAccountDto} from "./dto/create-account.dto";
 import {InjectRepository} from "@nestjs/typeorm";
+import {UpdateUserDto} from "./dto/create-user.dto";
+import {UpdateTransactionDto} from "./dto/create-transaction.dto";
 
 @Injectable()
 export class FinancialService {
@@ -36,5 +38,13 @@ export class FinancialService {
 
   updateAccount(id: string, update: UpdateAccountDto) {
     return this.accountRepository.update(id, update);
+  }
+
+  updateUser(id: string, update: UpdateUserDto) {
+    return this.entityManager.update<FinancialUsersEntity>(FinancialUsersEntity, id, update);
+  }
+
+  updateTransaction(id: string, update: UpdateTransactionDto) {
+    return this.entityManager.update<TransactionsEntity>(TransactionsEntity, id, update);
   }
 }
