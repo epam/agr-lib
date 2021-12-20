@@ -4,11 +4,12 @@ import {financialGridColumnDefs} from "./financial-grid-columns";
 import {combineLatest} from "rxjs";
 import {BusinessService} from "../business.service";
 import {formatDate} from "@angular/common";
+import {Column, ColumnHelper} from "agr-lib";
 
 @Injectable()
 export class FinancialGridService extends AgrGridService<any> {
   private accounts;
-  private accountTypes;
+  accountTypes;
   private financialUsers;
   private transactionTypes;
   private transactions;
@@ -74,6 +75,17 @@ export class FinancialGridService extends AgrGridService<any> {
       obj[item[key]] = item;
     });
     return obj;
+  }
+
+  update(row: any, column: Column, update: any) {
+    ColumnHelper.setColumnValue(row, column.columnDef, update);
+    return this.businessService.updateAccountTable(row.id, {
+      'accountTypeId': update.id
+    })
+      .toPromise()
+      .then(() => {
+        this.gridEngine.filter();
+      })
   }
 
   export(){

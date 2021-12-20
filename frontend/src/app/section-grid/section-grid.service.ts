@@ -24,15 +24,16 @@ export class SectionGridService extends AgrGridService<MedicalRecord> {
   }
 
   update(row: any, column: Column, update: any) {
-    ColumnHelper.setColumnValue(row,column.columnDef,update);
+    ColumnHelper.setColumnValue(row, column.columnDef, update);
     return this.businessService.updateSimpleTable(row.id, {
       [column.columnDef.field]: update
     })
       .toPromise()
-      .then(()=>{
+      .then(() => {
       })
   }
-  export(){
-    this.gridEngine.exportToExcel(`medical_${formatDate(Date.now(), 'd_MMM_y_h:mm:ss_a','en_US')}.xlsx`)
+
+  export() {
+    this.gridEngine.exportToExcel(`medical_${formatDate(Date.now(), 'd_MMM_y_h:mm:ss_a', 'en_US')}.xlsx`)
   }
 }
