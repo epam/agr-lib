@@ -131,7 +131,7 @@
         [pEditableColumn]="rowData.data"
         [pEditableColumnField]="column"
         [pEditableColumnRowIndex]="rowIndex"
-        [pEditableColumnDisabled]="!column.columnDef.editable">
+        [pEditableColumnDisabled]="!grid.gridEngine.editableColumn(column,rowData)">
       <p-cellEditor>
         <ng-template pTemplate="input">
           <agr-grid-cell-editor [row]="rowData.data"

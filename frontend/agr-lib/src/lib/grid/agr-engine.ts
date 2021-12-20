@@ -255,7 +255,7 @@ export class AgrEngine<T> {
   sortChildren(row: Row<T>) {
     const sorts = [];
     const orders = [];
-    if (Array.isArray(row.filteredChildren) && row.filteredChildren.length>0) {
+    if (Array.isArray(row.filteredChildren) && row.filteredChildren.length > 0) {
       for (const columnDef of this.sortColumnsData.values()) {
         if (!this.processRowByLevel(row.filteredChildren[0], columnDef)) {
           continue;
@@ -809,5 +809,18 @@ export class AgrEngine<T> {
     }
     const rowLevel = Array.isArray(columnDef.rowLevel) ? columnDef.rowLevel : [columnDef.rowLevel];
     return rowLevel.includes(row.rowLevel);
+  }
+
+  editableColumn(column: Column, row: Row<T>) {
+    if (typeof column.columnDef.editable === 'function') {
+      return column.columnDef.editable.apply(null, [{columnDef: column.columnDef, row}])
+    }
+    if (column.columnDef.editable === 'byRowLevel') {
+      const rowLevels = Array.isArray(column.columnDef.rowLevel) ? column.columnDef.rowLevel :
+        [column.columnDef.rowLevel]
+      return rowLevels.includes(row.rowLevel)
+    }
+
+    return column.columnDef.editable;
   }
 }

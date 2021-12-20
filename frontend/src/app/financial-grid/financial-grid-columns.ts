@@ -1,4 +1,4 @@
-import {ColumnDef, ColumnFilterTypes, ColumnTypes} from "agr-lib";
+import {CellData, ColumnDef, ColumnFilterTypes, ColumnTypes} from "agr-lib";
 import {formatDate} from "@angular/common";
 
 
@@ -30,7 +30,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           width: 100,
           sortable: true,
           filterable: true,
-          editable: true,
+          editable: 'byRowLevel',
           rowLevel: [0]
         },
         {
@@ -39,7 +39,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           width: 100,
           sortable: true,
           filterable: true,
-          editable: true,
+          editable: 'byRowLevel',
           rowLevel: [0]
         },
         {
@@ -49,7 +49,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           type: ColumnTypes.reference,
           sortable: true,
           filterable: true,
-          editable: true,
+          editable: 'byRowLevel',
           rowLevel: [1],
           getDisplayValue(row: any, index?: any): any {
             return row[this.field]?.accountType ?? '';
@@ -58,7 +58,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
         {
           title: 'Account Number',
           field: 'accountNumber',
-          editable: true,
+          editable: 'byRowLevel',
           hideInCollapse: true,
           filterable: true,
           sortable: true,
@@ -67,7 +67,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
         {
           title: 'Interest Rate',
           field: 'rate',
-          editable: true,
+          editable: 'byRowLevel',
           type: ColumnTypes.number,
           filterType: ColumnFilterTypes.number,
           hideInCollapse: true,
@@ -91,7 +91,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           step: 0.01,
           sortable: true,
           filterable: true,
-          editable: true,
+          editable: 'byRowLevel',
           rowLevel: [1],
           getValue(row: any, index?: any): any {
             return isNaN(row[this.field]) ? '' : parseFloat(row[this.field]);
@@ -110,7 +110,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           width: 100,
           sortable: true,
           filterable: true,
-          editable: true,
+          editable: 'byRowLevel',
           rowLevel: 2,
           getValue(row: any, index?: any): any {
             return row[this.field]?.transactionType ?? '';
@@ -124,7 +124,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           filterType: ColumnFilterTypes.date,
           sortable: true,
           filterable: true,
-          editable: true,
+          editable: 'byRowLevel',
           rowLevel: 2,
           getDisplayValue(row: any, index?: any): string {
             const date = this.getValue(row, index);
@@ -142,7 +142,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           filterType: ColumnFilterTypes.number,
           sortable: true,
           filterable: true,
-          editable: true,
+          editable: 'byRowLevel',
           rowLevel: 2,
           getValue(row: any, index?: any): any {
             return isNaN(row[this.field]) ? '' : parseFloat(row[this.field]);
