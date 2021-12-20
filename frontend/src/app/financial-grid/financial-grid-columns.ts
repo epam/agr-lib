@@ -108,6 +108,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           title: 'Transaction Name',
           field: 'transactionType',
           width: 100,
+          type:'reference',
           sortable: true,
           filterable: true,
           editable: 'byRowLevel',

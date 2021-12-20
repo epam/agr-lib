@@ -1,6 +1,8 @@
 import {Body, Controller, Get, Param, Patch} from '@nestjs/common';
 import {FinancialService} from "./financial.service";
 import {UpdateAccountDto} from "./dto/create-account.dto";
+import {UpdateUserDto} from "./dto/create-user.dto";
+import {UpdateTransactionDto} from "./dto/create-transaction.dto";
 
 @Controller('/api/financial')
 export class FinancialController {
@@ -33,7 +35,17 @@ export class FinancialController {
   }
 
   @Patch('account/:id')
-  putSimpleTable(@Param('id') id:string, @Body() body:UpdateAccountDto) {
-    return this.financialService.updateAccount(id,body);
+  patchAccount(@Param('id') id: string, @Body() body: UpdateAccountDto) {
+    return this.financialService.updateAccount(id, body);
+  }
+
+  @Patch('user/:id')
+  patchUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    return this.financialService.updateUser(id, body);
+  }
+
+  @Patch('transaction/:id')
+  patchTransaction(@Param('id') id: string, @Body() body: UpdateTransactionDto) {
+    return this.financialService.updateTransaction(id, body);
   }
 }

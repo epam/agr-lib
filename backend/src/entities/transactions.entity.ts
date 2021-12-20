@@ -1,6 +1,10 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
-@Entity('fin_transactions')
+@Entity('fin_transactions',{
+  orderBy:{
+    id:'ASC'
+  }
+})
 export class TransactionsEntity {
   @PrimaryGeneratedColumn()
   id: number;

@@ -23,6 +23,7 @@ export class FinancialGridComponent implements OnInit {
   };
   reference:any[] = [];
   @ViewChild('primengTable', { static: true }) public primengTable: Table;
+  referenceLabel: string;
 
   constructor(public grid: FinancialGridService) {
   }
@@ -51,10 +52,16 @@ export class FinancialGridComponent implements OnInit {
     switch ($event.field.columnDef.field){
       case 'accountType':
         this.reference = this.grid.accountTypes;
-        this.editValue.value = this.reference.find(item=>item.id == $event.data.accountType.id);
+        this.referenceLabel = 'accountType';
+        this.editValue.value = this.reference.find(item=>item.id == $event.data.data.accountType.id);
+        break;
+      case 'transactionType':
+        this.reference = this.grid.transactionTypes;
+        this.referenceLabel = 'transactionType';
+        this.editValue.value = this.reference.find(item=>item.id == $event.data.data.transactionType.id);
         break;
       default:
-        this.editValue.value = ColumnHelper.getColumnValue($event.data,$event.field.columnDef)
+        this.editValue.value = ColumnHelper.getColumnValue($event.data.data,$event.field.columnDef)
     }
   }
 

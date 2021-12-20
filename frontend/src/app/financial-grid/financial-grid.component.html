@@ -128,16 +128,17 @@
         [ngClass]="{'agr-end-section':column.isLast,'agr-editable-cell':column.columnDef.editable,
         'agr-row-level-0':rowData.rowLevel==0,'agr-row-level-1':rowData.rowLevel==1,
         'agr-grid-checkbox':column.columnDef.field=='checkbox'}"
-        [pEditableColumn]="rowData.data"
+        [pEditableColumn]="rowData"
         [pEditableColumnField]="column"
         [pEditableColumnRowIndex]="rowIndex"
         [pEditableColumnDisabled]="!grid.gridEngine.editableColumn(column,rowData)">
       <p-cellEditor>
         <ng-template pTemplate="input">
-          <agr-grid-cell-editor [row]="rowData.data"
+          <agr-grid-cell-editor [row]="rowData"
                                 [column]="column"
                                 [value]="editValue"
-                                [reference]="reference" referenceLabel="accountType">
+                                [reference]="reference"
+                                [referenceLabel]="referenceLabel">
           </agr-grid-cell-editor>
         </ng-template>
         <ng-template pTemplate="output">

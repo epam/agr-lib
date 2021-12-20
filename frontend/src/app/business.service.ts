@@ -43,8 +43,15 @@ export class BusinessService {
     return this.repositoryService.getTransactions();
   }
 
-  updateAccountTable(id: string, updateInfo:any) {
-    return this.repositoryService.updateAccountTable(id, MapperService.updateAccountTable(updateInfo));
+  updateAccount(id: string, updateInfo:any) {
+    return this.repositoryService.updateAccount(id, updateInfo);
   }
 
+  updateTransaction(id: string, updateInfo:any) {
+    return this.repositoryService.updateTransaction(id, updateInfo);
+  }
+
+  updateUser(id: string, updateInfo:any) {
+    return this.repositoryService.updateUser(id, updateInfo);
+  }
 }
