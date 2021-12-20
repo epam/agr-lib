@@ -11,7 +11,15 @@ export class MapperService {
   }
 
   static simpleTable(data) {
-    return data;
+    const properties = ['temperature0900','temperature1400','temperature1800','temperature2100',
+    'hemoglobin','wbc','mcv','pcv','rbc','mch','mchc','rdw','neutrophils','lymphocytes','monocytes','eosinophils',
+      'basophils']
+    return data.map((item)=>{
+      for (const prop of properties){
+        item[prop]=parseFloat(item[prop]);
+      }
+      return item;
+    });
   }
 
   static updateSimpleTable(updateInfo: Partial<MedicalRecord>) {

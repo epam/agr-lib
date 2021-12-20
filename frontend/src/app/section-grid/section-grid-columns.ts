@@ -139,9 +139,9 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           step: 0.1,
           sortable: true,
           showFooter: true,
-          getValue(row: any, index?: any): string {
-            return row.temperature0900;
-          }
+          // getValue(row: any, index?: any): string {
+          //   return row.temperature0900;
+          // }
         },
         {
           title: '14:00',
