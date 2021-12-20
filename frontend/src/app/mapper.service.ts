@@ -11,12 +11,13 @@ export class MapperService {
   }
 
   static simpleTable(data) {
-    const properties = ['temperature0900','temperature1400','temperature1800','temperature2100',
-    'hemoglobin','wbc','mcv','pcv','rbc','mch','mchc','rdw','neutrophils','lymphocytes','monocytes','eosinophils',
+    const properties = ['temperature0900', 'temperature1400', 'temperature1800', 'temperature2100',
+      'hemoglobin', 'wbc', 'mcv', 'pcv', 'rbc', 'mch', 'mchc', 'rdw', 'neutrophils', 'lymphocytes', 'monocytes', 'eosinophils',
       'basophils']
-    return data.map((item)=>{
-      for (const prop of properties){
-        item[prop]=parseFloat(item[prop]);
+    return data.map((item, index) => {
+      for (const prop of properties) {
+        item.index = index+1;
+        item[prop] = parseFloat(item[prop]);
       }
       return item;
     });
@@ -35,9 +36,9 @@ export class MapperService {
     return clone;
   }
 
-  static getAccounts(data){
-    return data.map((item)=>{
-      item.rate = (parseFloat(item.rate)*100).toFixed(1);
+  static getAccounts(data) {
+    return data.map((item) => {
+      item.rate = (parseFloat(item.rate) * 100).toFixed(1);
       return item;
     })
   }
