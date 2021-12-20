@@ -1,5 +1,5 @@
 import {CellData, ColumnDef, ColumnFilterTypes, ColumnTypes} from "agr-lib";
-import {formatDate} from "@angular/common";
+import {formatDate, formatNumber} from "@angular/common";
 
 
 export function financialGridColumnDefs(): ColumnDef[] {
@@ -93,6 +93,9 @@ export function financialGridColumnDefs(): ColumnDef[] {
           filterable: true,
           editable: 'byRowLevel',
           rowLevel: [1],
+          getDisplayValue(row: any, index?: any): string {
+            return  isNaN(row[this.field]) ? '':`${formatNumber(this.getValue(row,index), 'en_US', '1.2-2')}`;
+          },
           getValue(row: any, index?: any): any {
             return isNaN(row[this.field]) ? '' : parseFloat(row[this.field]);
           }
@@ -145,6 +148,9 @@ export function financialGridColumnDefs(): ColumnDef[] {
           filterable: true,
           editable: 'byRowLevel',
           rowLevel: 2,
+          getDisplayValue(row: any, index?: any): string {
+            return  isNaN(row[this.field]) ? '':`${formatNumber(this.getValue(row,index), 'en_US', '1.2-2')}`;
+          },
           getValue(row: any, index?: any): any {
             return isNaN(row[this.field]) ? '' : parseFloat(row[this.field]);
           }
