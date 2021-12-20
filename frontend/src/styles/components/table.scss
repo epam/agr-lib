@@ -324,6 +324,10 @@ $cell-height: 24;
       td.agr-row-level-1{
         background-color: $color-secondary-light-gray;
       }
+      td.agr-row-level-0{
+        background-color: $color-gray2;
+        color: white;
+      }
     }
   }
 }

@@ -126,7 +126,8 @@
 <!--    </td>-->
     <td *ngFor="let column of body;last as last;"
         [ngClass]="{'agr-end-section':column.isLast,'agr-editable-cell':column.columnDef.editable,
-        'agr-row-level-1':rowData.rowLevel==1, 'agr-grid-checkbox':column.columnDef.field=='checkbox'}"
+        'agr-row-level-0':rowData.rowLevel==0,'agr-row-level-1':rowData.rowLevel==1,
+        'agr-grid-checkbox':column.columnDef.field=='checkbox'}"
         [pEditableColumn]="rowData.data"
         [pEditableColumnField]="column"
         [pEditableColumnRowIndex]="rowIndex"
