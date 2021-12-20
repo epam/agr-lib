@@ -13,7 +13,6 @@ export class AppController {
 
   @Patch(':id')
   putSimpleTable(@Param('id') id:string, @Body() body:UpdateMedicalDto) {
-    console.log(body)
     return this.appService.updateSimpleTable(id,body);
   }
 }

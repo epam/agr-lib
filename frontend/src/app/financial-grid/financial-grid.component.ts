@@ -21,6 +21,7 @@ export class FinancialGridComponent implements OnInit {
   editValue = {
     value:''
   };
+  reference:any[] = [];
   @ViewChild('primengTable', { static: true }) public primengTable: Table;
 
   constructor(public grid: FinancialGridService) {
@@ -47,11 +48,18 @@ export class FinancialGridComponent implements OnInit {
   }
 
   editInit($event: any) {
-    this.editValue.value = ColumnHelper.getColumnValue($event.data,$event.field.columnDef)
+    switch ($event.field.columnDef.field){
+      case 'accountType':
+        this.reference = this.grid.accountTypes;
+        this.editValue.value = this.reference.find(item=>item.id == $event.data.accountType.id);
+        break;
+      default:
+        this.editValue.value = ColumnHelper.getColumnValue($event.data,$event.field.columnDef)
+    }
   }
 
   editComplete($event: any) {
-    // this.grid.update($event.data,$event.field,this.editValue.value);
+    this.grid.update($event.data,$event.field,this.editValue.value);
   }
 
   editCancel() {

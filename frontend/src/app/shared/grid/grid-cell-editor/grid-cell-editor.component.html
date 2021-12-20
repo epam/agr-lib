@@ -14,5 +14,16 @@
               [showOtherMonths]="false"
               [showIcon]="false"
               [showWeek]="true"></p-calendar>
+  <p-dropdown *ngSwitchCase="columnTypes.reference"
+              [options]="reference"
+              [filter]="false"
+              [autoDisplayFirst]="false"
+              [(ngModel)]="value.value"
+              defaultLabel=""
+              [showClear]="false"
+              appendTo="body"
+              optionLabel="{{referenceLabel}}"
+              dataKey="{{referenceId}}"></p-dropdown>
+
   <input  *ngSwitchDefault [(ngModel)]="value.value">
 </ng-container>

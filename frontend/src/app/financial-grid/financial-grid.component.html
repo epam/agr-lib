@@ -135,7 +135,9 @@
       <p-cellEditor>
         <ng-template pTemplate="input">
           <agr-grid-cell-editor [row]="rowData.data"
-                                [column]="column" [value]="editValue">
+                                [column]="column"
+                                [value]="editValue"
+                                [reference]="reference" referenceLabel="accountType">
           </agr-grid-cell-editor>
         </ng-template>
         <ng-template pTemplate="output">

@@ -10,6 +10,9 @@ export class GridCellEditorComponent implements OnInit {
   @Input() row: unknown;
   @Input() column: Column;
   @Input() value:any;
+  @Input() reference:any[];
+  @Input() referenceId = 'id'
+  @Input() referenceLabel = 'label'
   columnTypes=ColumnTypes;
   constructor() {
   }

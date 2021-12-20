@@ -41,5 +41,7 @@ export class RepositoryService {
     return this.fetcher.get('/api/financial/transactions', this.options)
   }
 
-
+  updateAccountTable(id:string,body:any){
+    return this.fetcher.patch(`/api/financial/account/${id}`, body, this.options)
+  }
 }
