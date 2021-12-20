@@ -26,4 +26,11 @@ export class MapperService {
     })
     return clone;
   }
+
+  static getAccounts(data){
+    return data.map((item)=>{
+      item.rate = (parseFloat(item.rate)*100).toFixed(1);
+      return item;
+    })
+  }
 }

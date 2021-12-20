@@ -27,7 +27,8 @@ export class BusinessService {
   }
 
   getAccounts() {
-    return this.repositoryService.getAccounts();
+    return this.repositoryService.getAccounts()
+      .pipe(map((data) => MapperService.getAccounts(data)))
   }
 
   getFinancialUsers() {
