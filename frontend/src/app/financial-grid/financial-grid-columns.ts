@@ -53,6 +53,9 @@ export function financialGridColumnDefs(): ColumnDef[] {
           rowLevel: [1],
           getDisplayValue(row: any, index?: any): any {
             return row[this.field]?.accountType ?? '';
+          },
+          getValue(row: any, index?: any): any {
+            return row[this.field]?.accountType ?? '';
           }
         },
         {
