@@ -74,7 +74,6 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           field: 'measurementDate',
           type: ColumnTypes.date,
           editable: true,
-          hideInCollapse: true,
           filterType: ColumnFilterTypes.date,
           filterable: true,
           sortable: true,
@@ -104,7 +103,8 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           width: 100,
           sortable: true,
           filterable: true,
-          editable: true
+          editable: true,
+          hideInCollapse:true
         },
         {
           title: 'City',
@@ -120,13 +120,15 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           width: 100,
           sortable: true,
           filterable: true,
-          editable: true
+          editable: true,
+          hideInCollapse:true
         },
       ]
     },
     {
       title: 'Temperature',
       field: 'temperature_section',
+      collapsible:true,
       columns: [
         {
           title: '9:00',
@@ -139,6 +141,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           step: 0.1,
           sortable: true,
           showFooter: true,
+          hideInCollapse:true,
           // getValue(row: any, index?: any): string {
           //   return row.temperature0900;
           // }
@@ -168,6 +171,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           filterType: ColumnFilterTypes.number,
           step: 0.1,
           showFooter: true,
+          hideInCollapse:true,
           getValue(row: any, index?: any): string {
             return row.temperature1800;
           }
@@ -183,6 +187,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           editable: true,
           filterType: ColumnFilterTypes.number,
           step: 0.1,
+          hideInCollapse:true,
           getValue(row: any, index?: any): string {
             return row.temperature2100;
           }
@@ -197,7 +202,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         {
           title: '9:00',
           field: 'bIn9',
-          collapsible: true,
+          hideInCollapse:true,
           columns: [
             {
               title: 'Systolic',
@@ -222,6 +227,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
               filterType: ColumnFilterTypes.number,
               step: 1,
               showFooter: true,
+              hideInCollapse:true,
               width: 100
             }
           ]
@@ -257,6 +263,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         {
           title: '18:00',
           field: 'bIn18',
+          hideInCollapse:true,
           columns: [
             {
               title: 'Systolic',
@@ -267,6 +274,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
               editable: true,
               filterType: ColumnFilterTypes.number,
               step: 1,
+              hideInCollapse:true,
               showFooter: true
             },
             {
@@ -278,6 +286,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
               editable: true,
               filterType: ColumnFilterTypes.number,
               step: 1,
+              hideInCollapse:true,
               showFooter: true
             }
           ]
@@ -285,6 +294,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
         {
           title: '21:00',
           field: 'bIn21',
+          hideInCollapse:true,
           columns: [
             {
               title: 'Systolic',
@@ -295,6 +305,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
               editable: true,
               filterType: ColumnFilterTypes.number,
               step: 1,
+              hideInCollapse:true,
               showFooter: true
             },
             {
@@ -306,6 +317,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
               editable: true,
               filterType: ColumnFilterTypes.number,
               step: 1,
+              hideInCollapse:true,
               showFooter: true
             }
           ]
@@ -315,6 +327,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
     {
       title: 'Pulse',
       field: 'section_pulse',
+      collapsible:true,
       columns: [
         {
           title: '9:00',
@@ -325,6 +338,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           editable: true,
           filterType: ColumnFilterTypes.number,
           step: 1,
+          hideInCollapse:true,
           showFooter: true
         },
         {
@@ -347,6 +361,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           editable: true,
           filterType: ColumnFilterTypes.number,
           step: 1,
+          hideInCollapse:true,
           showFooter: true
         },
         {
@@ -358,6 +373,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           editable: true,
           filterType: ColumnFilterTypes.number,
           step: 1,
+          hideInCollapse:true,
           showFooter: true
         }
       ]
@@ -365,6 +381,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
     {
       title: 'Complete Blood Count',
       field: 'section',
+      collapsible:true,
       columns: [
         {
           title: 'Hemoglobin',
@@ -464,6 +481,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           editable: true,
           filterType: ColumnFilterTypes.number,
           step: 0.01,
+          hideInCollapse:true,
           showFooter: true
         },
         {
@@ -475,6 +493,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           editable: true,
           filterType: ColumnFilterTypes.number,
           step: 0.01,
+          hideInCollapse:true,
           showFooter: true
         },
         {
@@ -486,6 +505,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           editable: true,
           filterType: ColumnFilterTypes.number,
           step: 0.01,
+          hideInCollapse:true,
           showFooter: true
         },
         {
@@ -497,6 +517,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           editable: true,
           filterType: ColumnFilterTypes.number,
           step: 0.01,
+          hideInCollapse:true,
           showFooter: true
         },
         {
@@ -508,6 +529,7 @@ export function SectionGridColumnDefs(): ColumnDef[] {
           editable: true,
           filterType: ColumnFilterTypes.number,
           step: 0.01,
+          hideInCollapse:true,
           showFooter: true
         }
       ]

@@ -30,6 +30,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           width: 100,
           sortable: true,
           filterable: true,
+          hideInCollapse:true,
           editable: 'byRowLevel',
           rowLevel: [0]
         },
@@ -51,6 +52,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           filterable: true,
           editable: 'byRowLevel',
           rowLevel: [1],
+          hideInCollapse:true,
           getDisplayValue(row: any, index?: any): any {
             return row[this.field]?.accountType ?? '';
           },
@@ -62,7 +64,6 @@ export function financialGridColumnDefs(): ColumnDef[] {
           title: 'Account Number',
           field: 'accountNumber',
           editable: 'byRowLevel',
-          hideInCollapse: true,
           filterable: true,
           sortable: true,
           rowLevel: [1]
@@ -119,6 +120,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           filterable: true,
           editable: 'byRowLevel',
           rowLevel: 2,
+          hideInCollapse:true,
           getValue(row: any, index?: any): any {
             return row[this.field]?.transactionType ?? '';
           }
