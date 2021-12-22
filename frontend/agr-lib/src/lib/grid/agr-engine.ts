@@ -192,7 +192,7 @@ export class AgrEngine<T> {
   }
 
   private isVisibleInCollapse(columnDef: ColumnDef) {
-    return this.isGroup(columnDef) ? true : !columnDef.hideInCollapse
+    return !columnDef.hideInCollapse
   }
 
 //TODO Test
