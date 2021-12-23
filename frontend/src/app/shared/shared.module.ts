@@ -13,6 +13,7 @@ import {DateFilterComponent} from "./grid/filter/date-filter/date-filter.compone
 import {GridFooterComponent} from './grid/grid-footer/grid-footer.component';
 import {GridCellComponent} from './grid/grid-cell/grid-cell.component';
 import { GridCellEditorComponent } from './grid/grid-cell-editor/grid-cell-editor.component';
+import { AppProgressSpinnerComponent } from './app-progress-spinner/app-progress-spinner.component';
 
 
 @NgModule({
@@ -27,26 +28,28 @@ import { GridCellEditorComponent } from './grid/grid-cell-editor/grid-cell-edito
     GridFooterComponent,
     GridCellComponent,
     GridCellEditorComponent,
+    AppProgressSpinnerComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     LibraryModule
   ],
-  exports: [
-    FixTablePrimengDirective,
-    DragColumnDirective,
-    CommonModule,
-    LibraryModule,
-    GridSectionHeaderComponent,
-    GridHeaderComponent,
-    SelectFilterComponent,
-    NumberFilterComponent,
-    DateFilterComponent,
-    GridFooterComponent,
-    GridCellComponent,
-    GridCellEditorComponent,
-  ]
+    exports: [
+        FixTablePrimengDirective,
+        DragColumnDirective,
+        CommonModule,
+        LibraryModule,
+        GridSectionHeaderComponent,
+        GridHeaderComponent,
+        SelectFilterComponent,
+        NumberFilterComponent,
+        DateFilterComponent,
+        GridFooterComponent,
+        GridCellComponent,
+        GridCellEditorComponent,
+        AppProgressSpinnerComponent,
+    ]
 })
 export class SharedModule {
 }

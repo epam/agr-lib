@@ -5,6 +5,7 @@ import {combineLatest} from "rxjs";
 import {BusinessService} from "../business.service";
 import {formatDate} from "@angular/common";
 import {Column, ColumnHelper, Row} from "agr-lib";
+import {AppProgressSpinnerService} from "../shared/app-progress-spinner/app-progress-spinner.service";
 
 @Injectable()
 export class FinancialGridService extends AgrGridService<any> {
@@ -14,12 +15,14 @@ export class FinancialGridService extends AgrGridService<any> {
   transactionTypes;
   private transactions;
 
-  constructor(private businessService: BusinessService) {
+  constructor(private businessService: BusinessService,
+              private progressSpinner:AppProgressSpinnerService) {
     super();
     this.gridEngine.setColumnDefs(financialGridColumnDefs());
   }
 
   refresh() {
+    this.progressSpinner.show();
     return combineLatest([
       this.businessService.getAccounts(),
       this.businessService.getAccountTypes(),
@@ -36,6 +39,9 @@ export class FinancialGridService extends AgrGridService<any> {
         this.transactions = transaction;
         // this.gridEngine.data = ;
         this.mapData();
+      })
+      .finally(()=>{
+        this.progressSpinner.hide();
       })
   }
 

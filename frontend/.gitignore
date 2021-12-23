@@ -44,3 +44,4 @@ testem.log
 .DS_Store
 Thumbs.db
 /agr-lib/dist/
+/agr-lib/.nyc_output/
