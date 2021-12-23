@@ -50,7 +50,7 @@ export class AgrEngine<T> {
   private draggedColumn: Column;
   private originalColumnDefs: ColumnDef[];
   selectedAll: boolean;
-
+  private xlsx;
   get data(): T[] {
     return this._originalData;
   }
@@ -656,7 +656,7 @@ export class AgrEngine<T> {
     this.rowsCache = [];
     this.rowsTreeCache = [];
     this.createChildRows(this._originalData, null);
-    console.log(this.rowsCache);
+    // console.log(this.rowsCache);
   }
 
   private createChildRows(children: T[], parent: Row<T>) {
@@ -760,47 +760,55 @@ export class AgrEngine<T> {
     this.selectedAll = this.rows.filter(row => row.selected).length === this.rows.length;
   }
 
-  exportToExcel(filename: string) {
-    let index = 0;
+  async exportToExcel(filename: string) {
     const xlsData = [];
-    // const merge = [];
-    // let rowIndex = 0;
-    // let r = 0;
-    // let c = 0;
-    // for (const column of this.header[0]) {
-    //
-    //     //   let columnIndex = 0;
-    //     //   for (const column of rowHeader){
-    //     //     const colSpan = column.colSpan>1?column.colSpan:1;
-    //     //     const rowSpan = column.rowSpan>1?column.rowSpan:1;
-    //     //     if (column.colSpan>1 || column.rowSpan>1){
-    //     //       merge.push(
-    //     //         { s: {r, c}, e: {r:r+rowSpan-1, c:c+colSpan-1} }
-    //     //       )
-    //     //     }
-    //     //     c = c+colSpan;
-    //     //     columnIndex++;
-    //   rowIndex++;
-    // }
-
-    console.log(this.header[0])
+    const xlsx = await import('xlsx');
+    this.xlsx = xlsx;
+    const worksheet = xlsx.utils.json_to_sheet([]);
+    if(!worksheet['!merges']) {
+      worksheet['!merges'] = [];
+    }
+    const header = this.prepareHeaderExcel(worksheet, this.header[0], 0, 0);
     for (const row of this.rows) {
-      const xslRow = {
-        "#": ++index
-      }
+      const xslRow = [];
       for (const column of this.body) {
         if (column.columnDef.skipExport) {
           continue;
         }
-        xslRow[column.columnDef.title] = ColumnHelper.getColumnValue(row.data, column.columnDef);
+        xslRow.push(ColumnHelper.getColumnValue(row.data, column.columnDef)) ;
       }
       xlsData.push(xslRow);
     }
-    import('xlsx').then(xlsx => {
-      const worksheet = xlsx.utils.json_to_sheet(xlsData);
-      const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
-      xlsx.writeFile(workbook, filename);
-    });
+    xlsx.utils.sheet_add_aoa(worksheet,xlsData,{origin:{c:0,r:header.maxRow+1}})
+    const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
+    xlsx.writeFile(workbook, filename);
+  }
+
+  prepareHeaderExcel(worksheet, children: Column[], r: number, c: number) {
+    let maxRow = r;
+    let parentColSpan = 0;
+    for (const child of children) {
+      if (child.columnDef.skipExport) {
+        continue;
+      }
+      let colSpan = child.colSpan > 1 ? child.colSpan : 1;
+      const rowSpan = child.rowSpan > 1 ? child.rowSpan : 1;
+      parentColSpan+=colSpan;
+      this.xlsx.utils.sheet_add_aoa(worksheet,[[child.columnDef.title]],{origin:{c,r},skipHeader:true})
+      if (Array.isArray(child.columns) && child.columns.length > 0) {
+        const result =  this.prepareHeaderExcel(worksheet, child.columns, r + 1, c)
+        maxRow = Math.max(maxRow,result.maxRow);
+        colSpan = result.parentColSpan
+      }
+      if (colSpan > 1 || rowSpan > 1) {
+        worksheet['!merges'].push({s: {r, c}, e: {r: r + rowSpan - 1, c: c + colSpan - 1}})
+      }
+      c = c + colSpan;
+    }
+    return {
+      maxRow,
+      parentColSpan
+    };
   }
 
   private processRowByLevel(row: Row<T>, columnDef: ColumnDef): boolean {

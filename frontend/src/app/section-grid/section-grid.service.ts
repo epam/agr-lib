@@ -18,7 +18,6 @@ export class SectionGridService extends AgrGridService<MedicalRecord> {
     this.businessService.getSimpleTable()
       .toPromise()
       .then((data) => {
-        console.log(data)
         this.gridEngine.data = data;
       })
   }
