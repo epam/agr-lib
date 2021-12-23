@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AppProgressSpinnerService} from "./shared/app-progress-spinner/app-progress-spinner.service";
 
 @Component({
   selector: 'agr-root',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'frontend';
+  constructor(public progressSpinner:AppProgressSpinnerService) {
+  }
 }
