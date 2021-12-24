@@ -18,6 +18,7 @@ import {
 } from "../types/column-filter.types";
 import {ColumnHelper} from "../types/column-helper";
 import {Row} from "../types/row";
+import Big from 'big.js';
 
 interface ColumnStack {
   column: Column;
@@ -51,6 +52,7 @@ export class AgrEngine<T> {
   private originalColumnDefs: ColumnDef[];
   selectedAll: boolean;
   private xlsx;
+
   get data(): T[] {
     return this._originalData;
   }
@@ -624,6 +626,9 @@ export class AgrEngine<T> {
     let columnValue: number;
     let index = 0;
     for (const row of this.rows) {
+      if (!this.processRowByLevel(row, column.columnDef)) {
+        continue;
+      }
       columnValue = ColumnHelper.getColumnValue(row.data, column.columnDef)
       if (this.isEmptyValue(columnValue)) {
         continue;
@@ -635,7 +640,7 @@ export class AgrEngine<T> {
         case ColumnFormulaTypes.sum:
         case ColumnFormulaTypes.average:
           if (index !== 0) {
-            column.columnDef.formulaResult += +columnValue;
+            column.columnDef.formulaResult = this.precisionSum(column.columnDef.formulaResult, columnValue);
           }
           break;
         case ColumnFormulaTypes.max:
@@ -650,6 +655,10 @@ export class AgrEngine<T> {
     if (formula === ColumnFormulaTypes.average) {
       column.columnDef.formulaResult /= this.rows.length;
     }
+  }
+
+  private precisionSum(a: number, b: number) {
+    return Big(a).plus(b).toNumber();
   }
 
   private createRows() {
@@ -765,7 +774,7 @@ export class AgrEngine<T> {
     const xlsx = await import('xlsx');
     this.xlsx = xlsx;
     const worksheet = xlsx.utils.json_to_sheet([]);
-    if(!worksheet['!merges']) {
+    if (!worksheet['!merges']) {
       worksheet['!merges'] = [];
     }
     const header = this.prepareHeaderExcel(worksheet, this.header[0], 0, 0);
@@ -775,11 +784,11 @@ export class AgrEngine<T> {
         if (column.columnDef.skipExport) {
           continue;
         }
-        xslRow.push(ColumnHelper.getColumnValue(row.data, column.columnDef)) ;
+        xslRow.push(ColumnHelper.getColumnValue(row.data, column.columnDef));
       }
       xlsData.push(xslRow);
     }
-    xlsx.utils.sheet_add_aoa(worksheet,xlsData,{origin:{c:0,r:header.maxRow+1}})
+    xlsx.utils.sheet_add_aoa(worksheet, xlsData, {origin: {c: 0, r: header.maxRow + 1}})
     const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
     xlsx.writeFile(workbook, filename);
   }
@@ -793,11 +802,11 @@ export class AgrEngine<T> {
       }
       let colSpan = child.colSpan > 1 ? child.colSpan : 1;
       const rowSpan = child.rowSpan > 1 ? child.rowSpan : 1;
-      parentColSpan+=colSpan;
-      this.xlsx.utils.sheet_add_aoa(worksheet,[[child.columnDef.title]],{origin:{c,r},skipHeader:true})
+      parentColSpan += colSpan;
+      this.xlsx.utils.sheet_add_aoa(worksheet, [[child.columnDef.title]], {origin: {c, r}, skipHeader: true})
       if (Array.isArray(child.columns) && child.columns.length > 0) {
-        const result =  this.prepareHeaderExcel(worksheet, child.columns, r + 1, c)
-        maxRow = Math.max(maxRow,result.maxRow);
+        const result = this.prepareHeaderExcel(worksheet, child.columns, r + 1, c)
+        maxRow = Math.max(maxRow, result.maxRow);
         colSpan = result.parentColSpan
       }
       if (colSpan > 1 || rowSpan > 1) {

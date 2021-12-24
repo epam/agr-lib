@@ -97,6 +97,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           filterable: true,
           editable: 'byRowLevel',
           rowLevel: [1],
+          showFooter: true,
           getDisplayValue(row: any, index?: any): string {
             return  isNaN(row[this.field]) ? '':`${formatNumber(this.getValue(row,index), 'en_US', '1.2-2')}`;
           },
@@ -153,6 +154,7 @@ export function financialGridColumnDefs(): ColumnDef[] {
           filterable: true,
           editable: 'byRowLevel',
           rowLevel: 2,
+          showFooter:true,
           getDisplayValue(row: any, index?: any): string {
             return  isNaN(row[this.field]) ? '':`${formatNumber(this.getValue(row,index), 'en_US', '1.2-2')}`;
           },
