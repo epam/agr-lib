@@ -37,7 +37,7 @@ export class FinancialGridComponent implements OnInit {
 
   togglePin(column: Column) {
     this.grid.gridEngine.togglePin(column);
-    this.frozenWidth = column.columnDef.pinned?'464px':'0px';
+    this.frozenWidth = column.columnDef.pinned?'600px':'0px';
   }
 
   dragStartColumn(column: Column) {

@@ -1,0 +1,41 @@
+@import "variables";
+
+.agr-btn {
+  font-size: $font-base-size;
+}
+
+.agr-page-grid-button-icon {
+  padding: 4px;
+  border-radius: 2px;
+}
+
+.agr-active {
+  background-color: $color-primary;
+  color: #FFFFFF;
+}
+
+.agr-page-grid-item, {
+  font-size: $font-size-s;
+  padding: 8px 16px;
+
+  &-label {
+    margin-left: 12px;
+  }
+
+  &-icon {
+    cursor: pointer;
+  }
+}
+.agr-page-grid-item-in-group{
+  margin-left: 8px;
+}
+//.sqr-page-filter-item-in-group{
+//  padding-top:8px;
+//  padding-bottom: 8px;
+//}
+
+.agr-page-grid-clear-all {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $color-primary;
+}

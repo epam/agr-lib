@@ -12,8 +12,9 @@ import {NumberFilterComponent} from "./grid/filter/number-filter/number-filter.c
 import {DateFilterComponent} from "./grid/filter/date-filter/date-filter.component";
 import {GridFooterComponent} from './grid/grid-footer/grid-footer.component';
 import {GridCellComponent} from './grid/grid-cell/grid-cell.component';
-import { GridCellEditorComponent } from './grid/grid-cell-editor/grid-cell-editor.component';
-import { AppProgressSpinnerComponent } from './app-progress-spinner/app-progress-spinner.component';
+import {GridCellEditorComponent} from './grid/grid-cell-editor/grid-cell-editor.component';
+import {AppProgressSpinnerComponent} from './app-progress-spinner/app-progress-spinner.component';
+import {PageGridFilterComponent} from "./grid/page-grid-filter/page-grid-filter.component";
 
 
 @NgModule({
@@ -29,27 +30,30 @@ import { AppProgressSpinnerComponent } from './app-progress-spinner/app-progress
     GridCellComponent,
     GridCellEditorComponent,
     AppProgressSpinnerComponent,
+    PageGridFilterComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     LibraryModule
   ],
-    exports: [
-        FixTablePrimengDirective,
-        DragColumnDirective,
-        CommonModule,
-        LibraryModule,
-        GridSectionHeaderComponent,
-        GridHeaderComponent,
-        SelectFilterComponent,
-        NumberFilterComponent,
-        DateFilterComponent,
-        GridFooterComponent,
-        GridCellComponent,
-        GridCellEditorComponent,
-        AppProgressSpinnerComponent,
-    ]
+  exports: [
+    FixTablePrimengDirective,
+    DragColumnDirective,
+    CommonModule,
+    LibraryModule,
+    GridSectionHeaderComponent,
+    GridHeaderComponent,
+    SelectFilterComponent,
+    NumberFilterComponent,
+    DateFilterComponent,
+    GridFooterComponent,
+    GridCellComponent,
+    GridCellEditorComponent,
+    AppProgressSpinnerComponent,
+    PageGridFilterComponent
+
+  ]
 })
 export class SharedModule {
 }
