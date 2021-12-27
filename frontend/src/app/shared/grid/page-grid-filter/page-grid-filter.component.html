@@ -1,0 +1,37 @@
+<button class="agr-btn"
+        [disabled]="gridService?.gridEngine?.filterColumnsData?.size<1"
+        (click)="overlay.toggle($event)">
+  <span class="agr-page-grid-button-icon"
+        [class.agr-active]="gridService?.gridEngine?.filterColumnsData?.size>0">
+    <i class="mdi mdi-filter"></i>
+  </span>
+  Filter
+</button>
+<p-overlayPanel #overlay
+                [appendTo]="'body'">
+  <ng-template pTemplate>
+    <div class="agr-page-grid-item agr-page-grid-clear-all">
+      <i class="mdi mdi-trash-can-outline agr-page-grid-item-icon"
+         (click)="resetFilters()"></i>
+      <span class="agr-page-grid-item-label u-margin-top-16">Clear All Filters</span>
+    </div>
+    <ng-container *ngFor="let filter of gridService.gridEngine.filterColumnsData.values()">
+      <div class="agr-page-grid-item" *ngIf="!isArray(filter); else group">
+        <i class="mdi mdi-trash-can-outline agr-page-grid-item-icon"
+           (click)="removeFilter(filter)"></i>
+        <span class="agr-page-grid-item-label u-margin-top-16">{{filter.title}}</span>
+      </div>
+      <ng-template #group>
+        <div class="sqr-page-filter-item sqr-page-filter-item-group">
+          <span class="u-margin-top-16">
+            {{filter.title}}</span>
+        </div>
+        <div class="agr-page-grid-item agr-page-grid-item-in-group" *ngFor="let subFilter of filter">
+          <i class="mdi mdi-trash-can-outline agr-page-grid-item-icon"
+             (click)="removeFilter(subFilter)"></i>
+          <span class="agr-page-grid-item-label u-margin-top-16">(OR Group) {{subFilter.title}}</span>
+        </div>
+      </ng-template>
+    </ng-container>
+  </ng-template>
+</p-overlayPanel>

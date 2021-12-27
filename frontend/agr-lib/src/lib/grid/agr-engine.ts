@@ -47,7 +47,7 @@ export class AgrEngine<T> {
   _originalData: T[] = [];
   options: AgrEngineOptions;
   private sortColumnsData = new Map<string, ColumnDef>();
-  private filterColumnsData = new Map<string, ColumnDef | ColumnDef[]>();
+  filterColumnsData = new Map<string, ColumnDef | ColumnDef[]>();
   private draggedColumn: Column;
   private originalColumnDefs: ColumnDef[];
   selectedAll: boolean;
@@ -329,18 +329,46 @@ export class AgrEngine<T> {
   }
 
 //TODO Test
-  removeFilter(column: Column, skipFilter = false) {
-    this.filterColumnsData.delete(column.getColumnId());
-    column.columnDef.filter = null;
+  removeFilter(column: Column|ColumnDef, skipFilter = false) {
+    const columnDef = column instanceof Column?column.columnDef:column;
+    let columnId = ColumnHelper.getColumnId(columnDef);
+    if (this.filterColumnsData.has(columnId)){
+      this.filterColumnsData.delete(columnId);
+      columnDef.filter = null;
+    } else {
+      for (const [key,filterDef] of [...this.filterColumnsData.entries()]){
+        if (Array.isArray(filterDef)){
+          let index = 0;
+          let found = false;
+          for (const columnDefFilter of filterDef){
+            if (ColumnHelper.getColumnId(columnDef)===ColumnHelper.getColumnId(columnDefFilter)){
+              filterDef.splice(index,1)[0].filter=null;
+              if (filterDef.length===0){
+                this.filterColumnsData.delete(key)
+              }
+              found = true;
+              break;
+            }
+            index++;
+          }
+          if (found){
+            break;
+          }
+        }
+      }
+    }
     if (!skipFilter) {
       this.filter();
     }
   }
 
 //TODO Test
-  resetFilter() {
-    for (const columnDef of [...this.filterColumnsData.values()]) {
-      columnDef.filter = null;
+  resetFilters() {
+    for (const filterValue of [...this.filterColumnsData.values()]) {
+      const columnDefArr = Array.isArray(filterValue)?filterValue:[filterValue];
+      for (const columnDef of columnDefArr){
+        columnDef.filter = null;
+      }
     }
     this.filterColumnsData.clear();
     this.filter();

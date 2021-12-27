@@ -1,4 +1,5 @@
 import {ColumnDef} from './column-def';
+import {Column} from "./column";
 
 export class ColumnHelper {
   static getColumnValue(data: unknown, columnDef: ColumnDef) {
@@ -12,6 +13,11 @@ export class ColumnHelper {
 
   static setColumnValue(data:unknown,columnDef:ColumnDef,value:unknown){
     columnDef.setValue ? columnDef.setValue(data, value) : data[columnDef.field] = value;
+  }
+
+  static getColumnId(column:Column|ColumnDef){
+    const columnDef = column instanceof Column?column.columnDef:column;
+    return columnDef.id??columnDef.field;
   }
 
   // static createColumnsFromDef(columnsDef: ColumnDef[]): Column[] {
