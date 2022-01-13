@@ -1,17 +1,32 @@
 {
   "name": "agr-lib",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "private": "true",
-  "main": "index.js",
-  "type": "commonjs",
+  "source": "src/index.ts",
+  "browser": "dist/agr-engine.umd.js",
+  "browserMin": "dist/agr-engine.umd.min.js",
+  "main": "dist/cjs/agr-engine.cjs",
+  "mainMin": "dist/cjs/agr-engine.min.cjs",
+  "module": "dist/fesm2015/agr-engine.js",
+  "moduleMin": "dist/fesm2015/agr-engine.min.js",
+  "type": "module",
+  "types": "dist/agr-engine.d.ts",
+  "exports": {
+    "require": "dist/cjs/agr-engine.cjs",
+    "import": "dist/fesm2015/agr-engine.js"
+  },
   "scripts": {
     "lint": "eslint src",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "commitlint": "commitlint",
     "test": "mocha --watch --watch-files src",
-    "test:coverage": "nyc mocha"
+    "test:coverage": "nyc mocha",
+    "build": "npm run rm-dist && npm run build-lib && rollup -c rollup.config.js",
+    "build-lib": "tsc -p tsconfig.lib.json",
+    "typecheck": "tsc -p . --noEmit",
+    "rm-dist": "npx rimraf dist"
   },
   "repository": {
     "type": "git",
@@ -30,10 +45,13 @@
   ],
   "license": "UNLICENSED",
   "devDependencies": {
+    "@babel/preset-env": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
     "@commitlint/cli": "^13.2.0",
     "@commitlint/config-conventional": "^13.2.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-typescript": "^8.3.0",
     "@types/chai": "^4.2.22",
@@ -49,11 +67,20 @@
     "mocha": "^9.1.2",
     "nyc": "^15.1.0",
     "prettier": "2.4.1",
+    "rimraf": "^3.0.2",
     "rollup": "^2.58.0",
+    "rollup-plugin-dts": "^4.1.0",
+    "rollup-plugin-terser": "^7.0.2",
     "ts-node": "^10.2.1",
+    "tslib": "^2.3.1",
     "typescript": "^4.4.3"
   },
-  "dependencies": {
-    "lodash-es": "^4.17.21"
-  }
+  "peerDependencies": {
+    "big.js": "^6.1.1",
+    "lodash-es": "^4.17.21",
+    "xlsx": "^0.17.4"
+  },
+  "files": [
+    "dist"
+  ]
 }

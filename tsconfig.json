@@ -1,20 +1,25 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "dist/out-tsc",
+    "outDir": "dist/lib",
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "module": "es2020",
+    "module": "ES2020",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
+    "target": "ES2020",
     "lib": [
-      "es2018",
-      "dom"
+      "ES2020",
+//      "dom"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   }
