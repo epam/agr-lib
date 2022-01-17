@@ -28,6 +28,7 @@
   <ng-template pTemplate="header">
     <tr *ngFor="let rowHeader of grid.gridEngine.header;index as index;last as last">
       <th *ngFor="let column of rowHeader;last as last"
+          style="height: 25px"
           [attr.colspan]="column.colSpan"
           [attr.rowspan]="column.rowSpan"
           [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0,
@@ -67,6 +68,7 @@
     <tr *ngFor="let rowHeader of grid.gridEngine.frozenHeader;index as index;last as last"
         [ngClass]="{'agr-tr-height':index!=0}">
       <th *ngFor="let column of rowHeader;last as last"
+          style="height: 25px"
           [attr.colspan]="column.colSpan"
           [attr.rowspan]="column.rowSpan"
           [ngClass]="{'agr-end-section':(index==0 || column.isLast),'agr-grid-section':index==0,
