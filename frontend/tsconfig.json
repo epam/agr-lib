@@ -25,7 +25,8 @@
       "primeng": ["node_modules/@billlater/primeng"],
       "primeng/*": ["node_modules/@billlater/primeng/*"],
       "agr-lib": ["agr-lib/src"],
-      "agr-lib/*": ["agr-lib/src/*"]
+      "agr-lib/*": ["agr-lib/src/*"],
+      "big.js": ["agr-lib/node_modules/big.js/big.mjs"]
     }
   },
   "angularCompilerOptions": {
