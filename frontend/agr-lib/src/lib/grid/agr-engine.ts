@@ -18,7 +18,7 @@ import {
 } from "../types/column-filter.types";
 import {ColumnHelper} from "../types/column-helper";
 import {Row} from "../types/row";
-import {Big} from 'big.js';
+import Big from 'big.js';
 
 interface ColumnStack {
   column: Column;
