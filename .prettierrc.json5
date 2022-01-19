@@ -1,10 +1,11 @@
 {
   "trailingComma": "es5",
   "tabWidth": 2,
+  //Don't use tabs. It can break source code by prettier or linter if turn on
   "useTabs": false,
   "semi": true,
   "singleQuote": true,
-  "bracketSpacing": true,
   "bracketSameLine": true,
-  "printWidth": 140
+  "printWidth": 140,
+  "endOfLine": "auto"
 }
