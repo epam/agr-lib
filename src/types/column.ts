@@ -5,13 +5,13 @@ export class Column {
   columns?: Column[] = [];
   colSpan = 1;
   rowSpan = 1;
-  width:string;
+  width: string;
   collapsed: boolean;
-  isLast:boolean;
+  isLast: boolean;
   constructor(public columnDef: ColumnDef, public parent?: Column) {
-    this.width = columnDef.width?(columnDef.width+'px'):'100px';
+    this.width = columnDef.width ? columnDef.width + 'px' : '100px';
   }
-  getColumnId(){
-    return this.columnDef.id??this.columnDef.field;
+  getColumnId() {
+    return this.columnDef.id ?? this.columnDef.field;
   }
 }

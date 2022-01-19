@@ -1,19 +1,18 @@
+export const ColumnFilterTypes = {
+  select: 'select',
+  number: 'number',
+  date: 'date',
+  custom: 'custom',
+} as const;
 
-export const ColumnFilterTypes =  {
-  select:'select',
-  number:'number',
-  date:'date',
-  custom:'custom',
-} as const
+export type ColumnFilterType = typeof ColumnFilterTypes[keyof typeof ColumnFilterTypes];
+export type ColumnFilterValueType = string[] | ColumnNumberFilterData | ColumnDateFilterData;
+export type ColumnFilterDataType = ColumnSelectFilterData[] | ColumnNumberFilterData | ColumnDateFilterData;
 
-export type ColumnFilterType = typeof ColumnFilterTypes[keyof typeof ColumnFilterTypes]
-export type ColumnFilterValueType = string[]|ColumnNumberFilterData|ColumnDateFilterData
-export type ColumnFilterDataType = ColumnSelectFilterData[]|ColumnNumberFilterData|ColumnDateFilterData
-
-export interface ColumnFilter{
-  value?:ColumnFilterValueType;
-  condition?:string;
-  showEmpty?:boolean;
+export interface ColumnFilter {
+  value?: ColumnFilterValueType;
+  condition?: string;
+  showEmpty?: boolean;
 }
 
 export interface ColumnSelectFilterData {
