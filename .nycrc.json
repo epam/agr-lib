@@ -1,20 +1,9 @@
 {
   "extends": "@istanbuljs/nyc-config-typescript",
   "all": true,
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/**/*.spec.ts"
-  ],
-  "extension": [
-    ".ts"
-  ],
-  "reporter": [
-    "text-summary",
-    "html",
-    "lcov"
-  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "src/**/*.spec.ts"],
+  "extension": [".ts"],
+  "reporter": ["text-summary", "html", "lcov"],
   "report-dir": "./coverage"
 }

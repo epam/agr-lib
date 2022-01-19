@@ -1,9 +1,9 @@
-import typescript from "@rollup/plugin-typescript";
-import {babel} from "@rollup/plugin-babel";
-import * as path from "path";
-import pkg from "./package.json";
-import dts from "rollup-plugin-dts";
-import {terser} from 'rollup-plugin-terser';
+import typescript from '@rollup/plugin-typescript';
+import { babel } from '@rollup/plugin-babel';
+import * as path from 'path';
+import pkg from './package.json';
+import dts from 'rollup-plugin-dts';
+import { terser } from 'rollup-plugin-terser';
 
 export default [
   {
@@ -13,60 +13,51 @@ export default [
         format: 'umd',
         file: pkg.browser,
         name: 'agr-engine',
-        sourcemap: true
+        sourcemap: true,
       },
       {
         format: 'umd',
         file: pkg.browserMin,
         name: 'agr-engine',
         sourcemap: true,
-        plugins: [
-          terser()
-        ]
+        plugins: [terser()],
       },
       {
         format: 'es',
         file: pkg.module,
-        sourcemap: true
+        sourcemap: true,
       },
       {
         format: 'es',
         file: pkg.moduleMin,
         sourcemap: true,
-        plugins: [
-          terser()
-        ]
+        plugins: [terser()],
       },
       {
         format: 'cjs',
         file: pkg.main,
-        sourcemap: true
+        sourcemap: true,
       },
       {
         format: 'cjs',
         file: pkg.mainMin,
         sourcemap: true,
-        plugins: [
-          terser()
-        ]
-      }
+        plugins: [terser()],
+      },
     ],
     plugins: [
       typescript(),
       babel({
         babelHelpers: 'bundled',
-        configFile: path.resolve(__dirname, "babel.config.js")
-      })
+        configFile: path.resolve(__dirname, 'babel.config.js'),
+      }),
     ],
-    external: [
-      ...Object.keys(pkg.peerDependencies || {})
-    ],
-
+    external: [...Object.keys(pkg.peerDependencies || {})],
   },
   //Bundle types definition into single file
   {
     input: 'dist/lib/index.d.ts',
-    output: [{file: pkg.types, format: "es"}],
-    plugins: [dts()]
-  }
-]
+    output: [{ file: pkg.types, format: 'es' }],
+    plugins: [dts()],
+  },
+];

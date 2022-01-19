@@ -1,28 +1,24 @@
 import orderBy from 'lodash-es/orderBy.js';
 import sortBy from 'lodash-es/sortBy.js';
 import cloneDeep from 'lodash-es/cloneDeep.js';
-import {ColumnDef} from "../types/column-def";
-import {Column} from "../types/column";
-import {
-  ColumnFormulaTypes,
-  ColumnSortOrder,
-  ColumnSortOrderType,
-  ColumnTypes
-} from "../types/column.types";
+import { ColumnDef } from '../types/column-def';
+import { Column } from '../types/column';
+import { ColumnFormulaTypes, ColumnSortOrder, ColumnSortOrderType, ColumnTypes } from '../types/column.types';
 import {
   ColumnDateFilterData,
-  ColumnFilter, ColumnFilterDataType,
+  ColumnFilter,
+  ColumnFilterDataType,
   ColumnFilterTypes,
   ColumnNumberFilterData,
-  ColumnSelectFilterData
-} from "../types/column-filter.types";
-import {ColumnHelper} from "../types/column-helper";
-import {Row} from "../types/row";
+  ColumnSelectFilterData,
+} from '../types/column-filter.types';
+import { ColumnHelper } from '../types/column-helper';
+import { Row } from '../types/row';
 import Big from 'big.js';
 
 interface ColumnStack {
   column: Column;
-  parent?: Column
+  parent?: Column;
   rowIndex: number;
   collapsed?: boolean;
   pinned?: boolean;
@@ -68,10 +64,10 @@ export class AgrEngine<T> {
       ...{
         unSortColumn: false,
         nameRowChildrenProperty: 'children',
-        nameRowParentProperty: 'row'
+        nameRowParentProperty: 'row',
       },
-      ...options
-    }
+      ...options,
+    };
     //TODO May be need deep clone that encapsulate
     this.originalColumnDefs = columnDefs;
     this.columnDefs = columnDefs;
@@ -89,8 +85,8 @@ export class AgrEngine<T> {
   private createColumns(columnsDefinition: ColumnDef[]) {
     this.header = [];
     this.body = [];
-    this.frozenHeader = []
-    this.frozenBody = []
+    this.frozenHeader = [];
+    this.frozenBody = [];
     let header = [];
     let body = [];
     let stack: ColumnStack[] = columnsDefinition.map((columnDef) => {
@@ -98,10 +94,10 @@ export class AgrEngine<T> {
         column: new Column(columnDef, null),
         rowIndex: 0,
         collapsed: columnDef.collapsed,
-        pinned: columnDef.pinned
+        pinned: columnDef.pinned,
       };
-    })
-    let count = 0
+    });
+    let count = 0;
     while (stack.length > 0) {
       if (count++ > 1000) {
         return;
@@ -110,13 +106,12 @@ export class AgrEngine<T> {
       if ((header.length === 0 && current.rowIndex === 0) || header.length < current.rowIndex + 1) {
         header.push([]);
       }
-      if (Array.isArray(current.column.columnDef.columns)
-        && current.column.columnDef.columns.length > 0 && !current.visited) {
+      if (Array.isArray(current.column.columnDef.columns) && current.column.columnDef.columns.length > 0 && !current.visited) {
         current.visited = true;
         current.column.colSpan = 0;
         const newStack = current.column.columnDef.columns
           .filter((columnDef) => {
-            let collapsed = current.collapsed || columnDef.collapsed
+            let collapsed = current.collapsed || columnDef.collapsed;
             return collapsed ? this.isVisibleInCollapse(columnDef) : true;
           })
           .map((columnDef) => {
@@ -126,19 +121,15 @@ export class AgrEngine<T> {
               column,
               rowIndex: current.rowIndex + 1,
               collapsed: current.collapsed || columnDef.collapsed,
-              pinned: current.pinned || columnDef.pinned
+              pinned: current.pinned || columnDef.pinned,
             };
-          })
-        stack = [
-          ...newStack,
-          ...stack
-        ]
+          });
+        stack = [...newStack, ...stack];
         continue;
       }
       current = stack.shift();
-      header[current.rowIndex].push(current)
-      if (!Array.isArray(current.column.columns)
-        || current.column.columns.length === 0) {
+      header[current.rowIndex].push(current);
+      if (!Array.isArray(current.column.columns) || current.column.columns.length === 0) {
         body.push(current);
         let parent = current.column.parent;
         while (parent) {
@@ -154,7 +145,6 @@ export class AgrEngine<T> {
         if (!Array.isArray(columnStack.column.columns) || columnStack.column.columns.length === 0) {
           columnStack.column.rowSpan = rowSpan;
         }
-
       }
     }
     if (this.options.sectionMode && header.length > 0) {
@@ -172,10 +162,11 @@ export class AgrEngine<T> {
       this.header.push([]);
       this.frozenHeader.push([]);
       for (const columnStack of row) {
-        columnStack.pinned ? this.frozenHeader[columnStack.rowIndex].push(columnStack.column)
+        columnStack.pinned
+          ? this.frozenHeader[columnStack.rowIndex].push(columnStack.column)
           : this.header[columnStack.rowIndex].push(columnStack.column);
       }
-      const helperColumn = new Column({title: 'r', field: 'r'});
+      const helperColumn = new Column({ title: 'r', field: 'r' });
       this.frozenHeader[this.frozenHeader.length - 1].push(helperColumn);
       // if (this.frozenHeader[this.frozenHeader.length-1].length===0){
       //   // this.frozenHeader[this.frozenHeader.length-1].push(new Column({title:'',field:''}))
@@ -188,16 +179,15 @@ export class AgrEngine<T> {
     // console.log('header', this.header);
   }
 
-
   private isGroup(columnDef: ColumnDef) {
     return Array.isArray(columnDef.columns) && columnDef.columns.length > 0;
   }
 
   private isVisibleInCollapse(columnDef: ColumnDef) {
-    return !columnDef.hideInCollapse
+    return !columnDef.hideInCollapse;
   }
 
-//TODO Test
+  //TODO Test
   toggleCollapse(column: Column) {
     column.columnDef.collapsed = !column.columnDef.collapsed;
     this.createColumns(this.columnDefs);
@@ -208,12 +198,12 @@ export class AgrEngine<T> {
     this.createColumns(this.columnDefs);
   }
 
-//TODO Test
+  //TODO Test
   switchSort(column: Column, multiple?: boolean) {
     switch (column.columnDef.sort) {
       case ColumnSortOrder.asc:
         this.addSort(column, ColumnSortOrder.desc, multiple);
-        break
+        break;
       case ColumnSortOrder.desc:
         this.options.unSortColumn ? this.removeSort(column) : this.addSort(column, ColumnSortOrder.asc, multiple);
         break;
@@ -222,7 +212,7 @@ export class AgrEngine<T> {
     }
   }
 
-//TODO Test
+  //TODO Test
   resetSort() {
     for (const columnDef of [...this.sortColumnsData.values()]) {
       columnDef.sort = null;
@@ -230,7 +220,7 @@ export class AgrEngine<T> {
     this.sortColumnsData.clear();
   }
 
-//TODO Test
+  //TODO Test
   addSort(column: Column, order: ColumnSortOrderType, multiple?: boolean) {
     if (!multiple) {
       this.resetSort();
@@ -240,7 +230,7 @@ export class AgrEngine<T> {
     this.sort();
   }
 
-//TODO Test
+  //TODO Test
   removeSort(column: Column) {
     column.columnDef.sort = null;
     this.sortColumnsData.delete(column.getColumnId());
@@ -249,7 +239,7 @@ export class AgrEngine<T> {
 
   sort() {
     const rootRow = new Row<T>();
-    rootRow.filteredChildren = this.rows.filter(row => row.rowLevel === 0);
+    rootRow.filteredChildren = this.rows.filter((row) => row.rowLevel === 0);
     this.rows = [];
     this.sortChildren(rootRow);
   }
@@ -284,7 +274,6 @@ export class AgrEngine<T> {
       this.rows.push(orderRow);
       this.sortChildren(orderRow);
     }
-
   }
 
   // getColumnValue(row: T, columnDef: ColumnDef): any {
@@ -299,7 +288,7 @@ export class AgrEngine<T> {
     columnDef.setValue ? columnDef.setValue(data, value) : (data[columnDef.field] = value);
   }
 
-//TODO Test
+  //TODO Test
   getListFilterConditions(): string[] {
     const conditions = ['AND', 'OR'];
     if (this.options.sectionMode) {
@@ -308,7 +297,7 @@ export class AgrEngine<T> {
     return conditions;
   }
 
-//TODO Test
+  //TODO Test
   switchFilter(column: Column, filter: ColumnFilter) {
     if (!filter.value || (filter.value as string[]).length === 0) {
       this.removeFilter(column);
@@ -328,30 +317,30 @@ export class AgrEngine<T> {
     this.filter();
   }
 
-//TODO Test
-  removeFilter(column: Column|ColumnDef, skipFilter = false) {
-    const columnDef = column instanceof Column?column.columnDef:column;
+  //TODO Test
+  removeFilter(column: Column | ColumnDef, skipFilter = false) {
+    const columnDef = column instanceof Column ? column.columnDef : column;
     let columnId = ColumnHelper.getColumnId(columnDef);
-    if (this.filterColumnsData.has(columnId)){
+    if (this.filterColumnsData.has(columnId)) {
       this.filterColumnsData.delete(columnId);
       columnDef.filter = null;
     } else {
-      for (const [key,filterDef] of [...this.filterColumnsData.entries()]){
-        if (Array.isArray(filterDef)){
+      for (const [key, filterDef] of [...this.filterColumnsData.entries()]) {
+        if (Array.isArray(filterDef)) {
           let index = 0;
           let found = false;
-          for (const columnDefFilter of filterDef){
-            if (ColumnHelper.getColumnId(columnDef)===ColumnHelper.getColumnId(columnDefFilter)){
-              filterDef.splice(index,1)[0].filter=null;
-              if (filterDef.length===0){
-                this.filterColumnsData.delete(key)
+          for (const columnDefFilter of filterDef) {
+            if (ColumnHelper.getColumnId(columnDef) === ColumnHelper.getColumnId(columnDefFilter)) {
+              filterDef.splice(index, 1)[0].filter = null;
+              if (filterDef.length === 0) {
+                this.filterColumnsData.delete(key);
               }
               found = true;
               break;
             }
             index++;
           }
-          if (found){
+          if (found) {
             break;
           }
         }
@@ -362,11 +351,11 @@ export class AgrEngine<T> {
     }
   }
 
-//TODO Test
+  //TODO Test
   resetFilters() {
     for (const filterValue of [...this.filterColumnsData.values()]) {
-      const columnDefArr = Array.isArray(filterValue)?filterValue:[filterValue];
-      for (const columnDef of columnDefArr){
+      const columnDefArr = Array.isArray(filterValue) ? filterValue : [filterValue];
+      for (const columnDef of columnDefArr) {
         columnDef.filter = null;
       }
     }
@@ -374,7 +363,7 @@ export class AgrEngine<T> {
     this.filter();
   }
 
-//TODO Test
+  //TODO Test
   getColumnFilterData(column: Column): ColumnFilterDataType {
     switch (column.columnDef.filterType ?? ColumnFilterTypes.select) {
       case ColumnFilterTypes.number:
@@ -388,7 +377,7 @@ export class AgrEngine<T> {
     }
   }
 
-//TODO Test
+  //TODO Test
   getSelectFilterValues(column: Column): ColumnSelectFilterData[] {
     const mapValues = new Map<any, ColumnSelectFilterData>();
     for (const row of this.rowsCache) {
@@ -401,7 +390,7 @@ export class AgrEngine<T> {
         }
         mapValues.set(value, {
           label,
-          value: value
+          value: value,
         });
       }
     }
@@ -409,7 +398,7 @@ export class AgrEngine<T> {
   }
 
   getNumberFilterData(column: Column): ColumnNumberFilterData {
-    let filterData: ColumnNumberFilterData
+    let filterData: ColumnNumberFilterData;
     let wasInit = false;
     for (const row of this.rowsCache) {
       const values = this.getValueAsArray(row.data, column.columnDef);
@@ -421,8 +410,8 @@ export class AgrEngine<T> {
           wasInit = true;
           filterData = {
             min: value,
-            max: value
-          }
+            max: value,
+          };
         }
         if (value > filterData.max) {
           filterData.max = value;
@@ -436,7 +425,7 @@ export class AgrEngine<T> {
   }
 
   getDateFilterData(column: Column): ColumnDateFilterData {
-    let filterData: ColumnDateFilterData
+    let filterData: ColumnDateFilterData;
     let wasInit = false;
     for (const row of this.rowsCache) {
       const values = this.getValueAsArray(row.data, column.columnDef);
@@ -453,8 +442,8 @@ export class AgrEngine<T> {
           wasInit = true;
           filterData = {
             startDate: value,
-            endDate: value
-          }
+            endDate: value,
+          };
         }
         // if (value.getTime() > filterData.startDate.getTime()) {
         //   filterData.max = value;
@@ -471,7 +460,7 @@ export class AgrEngine<T> {
   // getCustomFilterValues(column: Column) {
   //   //it's stub for custom filter. Developer can override method in child with some custom logic
   // }
-//TODO Test
+  //TODO Test
   filter() {
     this.rows = [...this.rowsCache];
     this.rows = this.rows.filter((row) => {
@@ -486,9 +475,10 @@ export class AgrEngine<T> {
             wasReInit = true;
           }
           for (const childColumnDef of columnDef) {
-            groupLogicResult ||= (this.filterByColumn(childColumnDef, row) ||
+            groupLogicResult ||=
+              this.filterByColumn(childColumnDef, row) ||
               this.filterChild((row as any).children, childColumnDef) ||
-              this.filterParent(row, childColumnDef));
+              this.filterParent(row, childColumnDef);
           }
           logicResult &&= groupLogicResult;
         } else {
@@ -499,14 +489,16 @@ export class AgrEngine<T> {
           }
           switch (columnDef.filter.condition) {
             case 'OR':
-              logicResult ||= (this.filterByColumn(columnDef, row) ||
+              logicResult ||=
+                this.filterByColumn(columnDef, row) ||
                 this.filterChild((row as any).children, columnDef) ||
-                this.filterParent(row, columnDef));
+                this.filterParent(row, columnDef);
               break;
             default:
-              logicResult &&= (this.filterByColumn(columnDef, row) ||
+              logicResult &&=
+                this.filterByColumn(columnDef, row) ||
                 this.filterChild((row as any).children, columnDef) ||
-                this.filterParent(row, columnDef));
+                this.filterParent(row, columnDef);
           }
         }
       }
@@ -540,7 +532,7 @@ export class AgrEngine<T> {
         // case ColumnFilterType.custom:
         //   return this.filterCustomColumn(row, filter);
         default:
-          columnResult = this.filterSelectColumn(value, (columnDef.filter.value as string[]));
+          columnResult = this.filterSelectColumn(value, columnDef.filter.value as string[]);
       }
       if (columnResult) {
         return true;
@@ -586,7 +578,7 @@ export class AgrEngine<T> {
       endDate: this.toDate(filterValue.endDate),
     };
     const valueAsDate = this.toDate(value);
-    return valueAsDate.getTime() >= filterAsDate.startDate.getTime() && valueAsDate.getTime() <= filterAsDate.endDate.getTime()
+    return valueAsDate.getTime() >= filterAsDate.startDate.getTime() && valueAsDate.getTime() <= filterAsDate.endDate.getTime();
   }
 
   /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -605,7 +597,6 @@ export class AgrEngine<T> {
     }
     return false;
   }
-
 
   private isEmptyValue(value) {
     return value === '' || value === undefined || value === null;
@@ -627,8 +618,7 @@ export class AgrEngine<T> {
   }
 
   dropColumn(column: Column) {
-    if (!this.draggedColumn || this.draggedColumn.parent !== column.parent
-      || this.draggedColumn.getColumnId() === column.getColumnId()) {
+    if (!this.draggedColumn || this.draggedColumn.parent !== column.parent || this.draggedColumn.getColumnId() === column.getColumnId()) {
       this.draggedColumn = null;
       return;
     }
@@ -640,7 +630,7 @@ export class AgrEngine<T> {
       dragIndex %= columns.length;
     }
     columns.splice(dropIndex, 0, columns.splice(dragIndex, 1)[0]);
-    this.createColumns(this.columnDefs)
+    this.createColumns(this.columnDefs);
     this.draggedColumn = null;
   }
 
@@ -657,7 +647,7 @@ export class AgrEngine<T> {
       if (!this.processRowByLevel(row, column.columnDef)) {
         continue;
       }
-      columnValue = ColumnHelper.getColumnValue(row.data, column.columnDef)
+      columnValue = ColumnHelper.getColumnValue(row.data, column.columnDef);
       if (this.isEmptyValue(columnValue)) {
         continue;
       }
@@ -748,7 +738,7 @@ export class AgrEngine<T> {
   }
 
   setSelect(row: Row<T>, selected?: boolean) {
-    row.selected = selected
+    row.selected = selected;
     this.selectChildren(row, selected);
     this.selectParent(row, selected);
     this.recalculateSelectedAll();
@@ -766,8 +756,7 @@ export class AgrEngine<T> {
   private selectParent(row: Row<T>, selected?: boolean) {
     let parent = row.parent;
     while (parent) {
-      parent.selected = parent.filteredChildren
-        .filter(child => child.selected).length === parent.filteredChildren.length;
+      parent.selected = parent.filteredChildren.filter((child) => child.selected).length === parent.filteredChildren.length;
       parent = parent.parent;
     }
   }
@@ -794,7 +783,7 @@ export class AgrEngine<T> {
   }
 
   private recalculateSelectedAll() {
-    this.selectedAll = this.rows.filter(row => row.selected).length === this.rows.length;
+    this.selectedAll = this.rows.filter((row) => row.selected).length === this.rows.length;
   }
 
   async exportToExcel(filename: string) {
@@ -816,8 +805,8 @@ export class AgrEngine<T> {
       }
       xlsData.push(xslRow);
     }
-    xlsx.utils.sheet_add_aoa(worksheet, xlsData, {origin: {c: 0, r: header.maxRow + 1}})
-    const workbook = {Sheets: {data: worksheet}, SheetNames: ['data']};
+    xlsx.utils.sheet_add_aoa(worksheet, xlsData, { origin: { c: 0, r: header.maxRow + 1 } });
+    const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
     xlsx.writeFile(workbook, filename);
   }
 
@@ -831,20 +820,20 @@ export class AgrEngine<T> {
       let colSpan = child.colSpan > 1 ? child.colSpan : 1;
       const rowSpan = child.rowSpan > 1 ? child.rowSpan : 1;
       parentColSpan += colSpan;
-      this.xlsx.utils.sheet_add_aoa(worksheet, [[child.columnDef.title]], {origin: {c, r}, skipHeader: true})
+      this.xlsx.utils.sheet_add_aoa(worksheet, [[child.columnDef.title]], { origin: { c, r }, skipHeader: true });
       if (Array.isArray(child.columns) && child.columns.length > 0) {
-        const result = this.prepareHeaderExcel(worksheet, child.columns, r + 1, c)
+        const result = this.prepareHeaderExcel(worksheet, child.columns, r + 1, c);
         maxRow = Math.max(maxRow, result.maxRow);
-        colSpan = result.parentColSpan
+        colSpan = result.parentColSpan;
       }
       if (colSpan > 1 || rowSpan > 1) {
-        worksheet['!merges'].push({s: {r, c}, e: {r: r + rowSpan - 1, c: c + colSpan - 1}})
+        worksheet['!merges'].push({ s: { r, c }, e: { r: r + rowSpan - 1, c: c + colSpan - 1 } });
       }
       c = c + colSpan;
     }
     return {
       maxRow,
-      parentColSpan
+      parentColSpan,
     };
   }
 
@@ -858,12 +847,11 @@ export class AgrEngine<T> {
 
   editableColumn(column: Column, row: Row<T>) {
     if (typeof column.columnDef.editable === 'function') {
-      return column.columnDef.editable.apply(null, [{columnDef: column.columnDef, row}])
+      return column.columnDef.editable.apply(null, [{ columnDef: column.columnDef, row }]);
     }
     if (column.columnDef.editable === 'byRowLevel') {
-      const rowLevels = Array.isArray(column.columnDef.rowLevel) ? column.columnDef.rowLevel :
-        [column.columnDef.rowLevel]
-      return rowLevels.includes(row.rowLevel)
+      const rowLevels = Array.isArray(column.columnDef.rowLevel) ? column.columnDef.rowLevel : [column.columnDef.rowLevel];
+      return rowLevels.includes(row.rowLevel);
     }
 
     return column.columnDef.editable;

@@ -1,6 +1,5 @@
-import {ColumnEditable, ColumnSortOrderType, ColumnType} from "./column.types";
-import {ColumnFilter, ColumnFilterType} from "./column-filter.types";
-
+import { ColumnEditable, ColumnSortOrderType, ColumnType } from './column.types';
+import { ColumnFilter, ColumnFilterType } from './column-filter.types';
 
 export interface ColumnDef {
   title: string;
@@ -9,18 +8,18 @@ export interface ColumnDef {
   columns?: ColumnDef[];
   colSpan?: number;
   rowSpan?: number;
-  width?: number
+  width?: number;
   collapsible?: boolean;
   collapsed?: boolean;
   hideInCollapse?: boolean;
   sortable?: boolean;
   sort?: ColumnSortOrderType | null | '' | undefined;
   rowLevel?: number | number[];
-  type?: ColumnType
+  type?: ColumnType;
   filterable?: boolean;
   filter?: ColumnFilter;
   filterType?: ColumnFilterType;
-  step?: number;//step for number filter
+  step?: number; //step for number filter
   pin?: boolean;
   pinned?: boolean;
   dragDisabled?: boolean;
