@@ -43,7 +43,7 @@
       "email": "vasily_bernshteyn@epam.com"
     }
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "@babel/preset-env": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
