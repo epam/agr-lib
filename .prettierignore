@@ -31,4 +31,4 @@ speed-measure-plugin*.json
 /coverage
 *.log
 /typings
-
+README.md
