@@ -1,0 +1,36 @@
+@import "variables";
+:host{
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+:host:hover{
+  .agr-footer-formula-group,.agr-footer-chevron{
+    opacity: 1;
+  }
+}
+
+.agr-footer-formula-group{
+  flex:1;
+  min-width: 0;
+  text-align: left;
+  font-size: 11px;
+  .agr-footer-formula{
+    font-family: $font-family-regular;
+    color:$color-semi-bold;
+  }
+  opacity: 0;
+}
+.agr-ellipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.agr-footer-chevron{
+  cursor: pointer;
+  font-size: $font-base-size;
+  opacity: 0;
+}
+.agr-footer-formula-active{
+  opacity: 1;
+}

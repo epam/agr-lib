@@ -1,0 +1,18 @@
+<div class="agr-page">
+  <div class="agr-page-header">
+    <div class="agr-page-header-title">
+      <div class="agr-page-header-caption">Demo</div>
+      Finance
+    </div>
+    <div class="agr-page-header-filter">
+      <agr-page-grid-filter></agr-page-grid-filter>
+    </div>
+    <div class="agr-page-header-last">
+      <button class="agr-btn" (click)="financialGridService.export()">Export</button>
+      <button class="agr-btn" (click)="financialGridService.refresh()">Refresh</button>
+    </div>
+  </div>
+  <div class="agr-page-content">
+    <agr-financial-grid></agr-financial-grid>
+  </div>
+</div>

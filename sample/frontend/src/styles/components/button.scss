@@ -1,0 +1,94 @@
+@import "variables";
+.agr-btn {
+  //background-color: $color-page-content-bg;
+  background-color: inherit;
+  border: none;
+  color: black;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 0.5em 1em;
+  vertical-align: middle;
+  outline: none;
+  font-weight: 600;
+  display: inline-block;
+  //height: 32px;
+  //width: 88px;
+}
+
+.agr-btn:enabled:hover {
+  text-decoration: none;
+  background-color: $color-page-content-bg
+}
+
+.agr-btn:enabled:focus {
+  box-shadow: none !important;
+  border: none;
+}
+
+.agr-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.agr-btn-primary,a.agr-btn-primary:enabled:hover{
+  background-color: $color-primary;
+  border-color: $color-primary;
+  color: white!important;
+}
+
+.agr-btn-primary:disabled {
+  background-color: $color-secondary-dark;
+}
+
+.agr-btn-icon {
+  background-color: inherit;
+  padding: 0;
+}
+
+.agr-btn.ui-button, body.ui-button {
+  background-color: white;
+  border-color: white;
+  color: black;
+  border-radius: 2px;
+}
+
+.agr-btn.ui-button:enabled:hover {
+  background-color: $color-secondary-gray;
+  border-color: $color-secondary-gray;
+  opacity: 0.9;
+  box-shadow: none;
+  color: black;
+}
+
+.agr-btn.ui-button:enabled:focus {
+  box-shadow: none;
+}
+
+
+.agr-btn-primary.ui-button {
+  background-color: $color-primary;
+  border-color: $color-primary;
+  color: white;
+}
+
+.agr-btn-primary.ui-button:enabled:hover {
+  background-color: $color-primary;
+  color: white;
+  border-color: $color-primary;
+}
+.agr-btn.agr-btn-icon{
+  //background-color: #FFFFFF;
+}
+
+.agr-btn{
+  .agr-icon{
+    margin-right: 8px;
+  }
+}
+
+.agr-btn-white{
+  background-color: #FFFFFF;
+}
+
+
+

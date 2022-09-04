@@ -1,0 +1,57 @@
+@import "variables";
+button{
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+}
+
+.agr-grid-section-header {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  &-title {
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    font-size: $font-size-xs;
+    font-weight: bold;
+    color: $color-semi-bold;
+    padding: 8px;
+    font-family: $font-family-semi-bold;
+    //min-width: 120px;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    background-color: $color-secondary-light-gray;
+  }
+
+  &-buttons {
+    button {
+      margin-left: 4px;
+      background-color: inherit;
+      color: $color-semi-bold;
+      opacity: 0.9;
+      border: none;
+    }
+
+    button:enabled:hover {
+      background-color: inherit;
+      border: none;
+      opacity: 1;
+      box-shadow: none;
+    }
+
+    button:enabled:focus {
+      box-shadow: none;
+    }
+
+    button.agr-active {
+      color: $color-primary;
+    }
+  }
+
+}

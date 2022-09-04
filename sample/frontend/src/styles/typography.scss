@@ -1,0 +1,80 @@
+@import "variables";
+
+$path-to-font: "/assets/fonts";
+
+@font-face {
+  font-family: $font-family-light;
+  src: local($font-family-light), url("../assets/fonts/Inter-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: $font-family-regular;
+  src: local($font-family-regular), url("../assets/fonts/Inter-Regular.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: $font-family-semi-bold;
+  src: local($font-family-semi-bold), url("../assets/fonts/Inter-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: $font-family-bold;
+  src: local($font-family-bold), url("../assets/fonts/Inter-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+
+}
+
+body {
+  font-family: $font-family-regular;
+  font-size: $font-base-size;
+  color: black;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: $font-family-bold;
+}
+
+h1 {
+  font-size: $font-size-4x;
+  //text-transform: uppercase;
+}
+
+h2 {
+  font-size: $font-size-3x;
+  font-weight: normal;
+}
+
+h3 {
+  font-size: $font-size-2x;
+  font-weight: normal;
+}
+
+h4 {
+  font-size: $font-size-x;
+  font-weight: normal;
+}
+
+h5 {
+  font-size: $font-size-x;
+  font-weight: normal;
+}

@@ -1,0 +1,68 @@
+@import "variables";
+:host {
+  display: flex;
+  position: relative;
+}
+
+:host:hover {
+  .agr-grid-header-button {
+    opacity: 1;
+  }
+}
+
+.agr-grid-header-title {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agr-grid-header-right {
+  //opacity: 0;
+  white-space: nowrap;
+}
+
+.agr-grid-header-button {
+  cursor: pointer;
+  opacity: 0;
+}
+
+.agr-grid-header-button-active,.agr-grid-header-button-visible {
+  opacity: 1;
+}
+.agr-grid-header-button-active{
+  color: red;
+}
+
+.agr-filter-header{
+  padding: 16px 8px 0 8px;
+  .agr-filter-condition{
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    .agr-filter-clear-btn {
+      margin-left: auto;
+      font-size: $font-size-xs;
+      background-color: #FFFFFF;
+    }
+  }
+  .agr-show-empty{
+    font-size: $font-size-xs;
+    margin-top:8px;
+  }
+}
+.agr-filter{
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  .agr-filter-content{
+    flex: 1;
+    height: 100%;
+  }
+}
+
+
+
+

@@ -1,0 +1,29 @@
+<ng-container [ngSwitch]="column.columnDef.type">
+  <input  *ngSwitchCase="columnTypes.number"
+          type="number"
+          [(ngModel)]="value.value"
+          [min]="column.columnDef.editMin"
+          [max]="column.columnDef.editMax"
+          [step]="column.columnDef.step">
+  <p-calendar *ngSwitchCase="columnTypes.date"
+              styleClass="agr-date-cell-calendar"
+              panelStyleClass="agr-date-cell-panel"
+              appendTo="body"
+              [(ngModel)]="value.value"
+              [numberOfMonths]="1"
+              [showOtherMonths]="false"
+              [showIcon]="false"
+              [showWeek]="true"></p-calendar>
+  <p-dropdown *ngSwitchCase="columnTypes.reference"
+              [options]="reference"
+              [filter]="false"
+              [autoDisplayFirst]="false"
+              [(ngModel)]="value.value"
+              defaultLabel=""
+              [showClear]="false"
+              appendTo="body"
+              optionLabel="{{referenceLabel}}"
+              dataKey="{{referenceId}}"></p-dropdown>
+
+  <input  *ngSwitchDefault [(ngModel)]="value.value">
+</ng-container>
