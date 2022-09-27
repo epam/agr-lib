@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { AgrEngine } from './agr-engine';
-import { expect } from 'chai';
-import { getColumnsDef, getData } from './agr-engine-data.spec';
+import { getColumnsDef, getData } from './agr-engine-data.mock';
 
 describe('Agr Engine', () => {
   let grid: AgrEngine<unknown>;
@@ -10,9 +10,9 @@ describe('Agr Engine', () => {
     grid.data = getData();
   });
   it('Setting Defs', () => {
-    expect(grid.header[0][0].colSpan).to.equal(4);
-    expect(grid.header[0][1].colSpan).to.equal(1);
-    expect(grid.header[0][1].rowSpan).to.equal(3);
+    expect(grid.header[0][0].colSpan).toBe(4);
+    expect(grid.header[0][1].colSpan).toBe(1);
+    expect(grid.header[0][1].rowSpan).toBe(3);
   });
   it('OR Group Filter', () => {
     grid.switchFilter(grid.header[1][0], {
@@ -23,6 +23,9 @@ describe('Agr Engine', () => {
       condition: 'OR_GROUP',
       value: { min: 30, max: 30 },
     });
-    expect(grid.data.length).to.equal(2);
+    const parentRows = grid.rows.filter((row) => row.rowLevel === 0);
+
+    expect(grid.rows.length).toBe(4);
+    expect(parentRows.length).toBe(2);
   });
 });

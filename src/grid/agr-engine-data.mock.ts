@@ -50,6 +50,8 @@ export function getColumnsDef(): ColumnDef[] {
         {
           title: '1.2',
           field: 'field1_2',
+          filterable: true,
+          filterType: ColumnFilterTypes.number,
         },
         {
           title: '1.3',
@@ -57,7 +59,7 @@ export function getColumnsDef(): ColumnDef[] {
           columns: [
             {
               title: '1.3.1',
-              field: 'field1_3_2',
+              field: 'field1_3_1',
             },
             {
               title: '1.3.2',

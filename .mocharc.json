@@ -1,5 +1,0 @@
-{
-  "extension": ["ts", "js"],
-  "spec": "src/**/*.spec.{ts,js}",
-  "require": "mocha-register.js"
-}
