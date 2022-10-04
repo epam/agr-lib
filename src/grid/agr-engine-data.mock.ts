@@ -46,12 +46,16 @@ export function getColumnsDef(): ColumnDef[] {
           field: 'field1_1',
           filterable: true,
           filterType: ColumnFilterTypes.number,
+          collapsed: false,
+          hideInCollapse: true,
         },
         {
           title: '1.2',
           field: 'field1_2',
           filterable: true,
           filterType: ColumnFilterTypes.number,
+          collapsed: false,
+          hideInCollapse: false,
         },
         {
           title: '1.3',
