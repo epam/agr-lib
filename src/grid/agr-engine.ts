@@ -87,8 +87,8 @@ export class AgrEngine<T> {
     this.body = [];
     this.frozenHeader = [];
     this.frozenBody = [];
-    let header = [];
-    let body = [];
+    const header = [];
+    const body = [];
     let stack: ColumnStack[] = columnsDefinition.map((columnDef) => {
       return {
         column: new Column(columnDef, null),
@@ -111,7 +111,7 @@ export class AgrEngine<T> {
         current.column.colSpan = 0;
         const newStack = current.column.columnDef.columns
           .filter((columnDef) => {
-            let collapsed = current.collapsed || columnDef.collapsed;
+            const collapsed = current.collapsed || columnDef.collapsed;
             return collapsed ? this.isVisibleInCollapse(columnDef) : true;
           })
           .map((columnDef) => {
@@ -187,7 +187,6 @@ export class AgrEngine<T> {
     return !columnDef.hideInCollapse;
   }
 
-  //TODO Test
   toggleCollapse(column: Column) {
     column.columnDef.collapsed = !column.columnDef.collapsed;
     this.createColumns(this.columnDefs);
@@ -198,7 +197,6 @@ export class AgrEngine<T> {
     this.createColumns(this.columnDefs);
   }
 
-  //TODO Test
   switchSort(column: Column, multiple?: boolean) {
     switch (column.columnDef.sort) {
       case ColumnSortOrder.asc:
@@ -212,7 +210,6 @@ export class AgrEngine<T> {
     }
   }
 
-  //TODO Test
   resetSort() {
     for (const columnDef of [...this.sortColumnsData.values()]) {
       columnDef.sort = null;
@@ -220,7 +217,6 @@ export class AgrEngine<T> {
     this.sortColumnsData.clear();
   }
 
-  //TODO Test
   addSort(column: Column, order: ColumnSortOrderType, multiple?: boolean) {
     if (!multiple) {
       this.resetSort();
@@ -230,7 +226,6 @@ export class AgrEngine<T> {
     this.sort();
   }
 
-  //TODO Test
   removeSort(column: Column) {
     column.columnDef.sort = null;
     this.sortColumnsData.delete(column.getColumnId());
@@ -288,7 +283,6 @@ export class AgrEngine<T> {
     columnDef.setValue ? columnDef.setValue(data, value) : (data[columnDef.field] = value);
   }
 
-  //TODO Test
   getListFilterConditions(): string[] {
     const conditions = ['AND', 'OR'];
     if (this.options.sectionMode) {
@@ -317,10 +311,9 @@ export class AgrEngine<T> {
     this.filter();
   }
 
-  //TODO Test
   removeFilter(column: Column | ColumnDef, skipFilter = false) {
     const columnDef = column instanceof Column ? column.columnDef : column;
-    let columnId = ColumnHelper.getColumnId(columnDef);
+    const columnId = ColumnHelper.getColumnId(columnDef);
     if (this.filterColumnsData.has(columnId)) {
       this.filterColumnsData.delete(columnId);
       columnDef.filter = null;
@@ -351,7 +344,6 @@ export class AgrEngine<T> {
     }
   }
 
-  //TODO Test
   resetFilters() {
     for (const filterValue of [...this.filterColumnsData.values()]) {
       const columnDefArr = Array.isArray(filterValue) ? filterValue : [filterValue];
@@ -720,7 +712,7 @@ export class AgrEngine<T> {
   }
 
   private flatRowChildren(row: Row<T>): Row<T>[] {
-    let rows: Row<T>[] = [];
+    const rows: Row<T>[] = [];
     if (row.filteredChildren && !row.collapsed) {
       for (const child of row.filteredChildren) {
         rows.push(child, ...this.flatRowChildren(child));
