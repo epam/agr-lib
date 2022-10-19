@@ -6,6 +6,7 @@ export function getData() {
     {
       field1_1: 37,
       field1_2: 40,
+      field1_3: new Date(2015, 1, 1),
       children: [
         {
           field2: 1,
@@ -20,6 +21,7 @@ export function getData() {
     {
       field1_1: 50,
       field1_2: 60,
+      field1_3: new Date(2018, 1, 1),
       children: [
         {
           field2: 3,
@@ -31,7 +33,7 @@ export function getData() {
         },
       ],
     },
-    { field1_1: 50, field1_2: 30 },
+    { field1_1: 50, field1_2: 30, field1_3: new Date(2020, 1, 1) },
   ];
 }
 
@@ -60,6 +62,8 @@ export function getColumnsDef(): ColumnDef[] {
         {
           title: '1.3',
           field: 'field1_3',
+          filterable: true,
+          filterType: ColumnFilterTypes.date,
           columns: [
             {
               title: '1.3.1',

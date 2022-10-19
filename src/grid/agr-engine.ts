@@ -291,7 +291,6 @@ export class AgrEngine<T> {
     return conditions;
   }
 
-  //TODO Test
   switchFilter(column: Column, filter: ColumnFilter) {
     if (!filter.value || (filter.value as string[]).length === 0) {
       this.removeFilter(column);
@@ -369,7 +368,6 @@ export class AgrEngine<T> {
     }
   }
 
-  //TODO Test
   getSelectFilterValues(column: Column): ColumnSelectFilterData[] {
     const mapValues = new Map<any, ColumnSelectFilterData>();
     for (const row of this.rowsCache) {
@@ -437,12 +435,12 @@ export class AgrEngine<T> {
             endDate: value,
           };
         }
-        // if (value.getTime() > filterData.startDate.getTime()) {
-        //   filterData.max = value;
-        // }
-        // if (value < filterData.min) {
-        //   filterData.min = value;
-        // }
+        if (value.getTime() > (filterData.endDate as Date).getTime()) {
+          filterData.endDate = value;
+        }
+        if (value.getTime() < (filterData.startDate as Date).getTime()) {
+          filterData.startDate = value;
+        }
       }
     }
     return filterData;

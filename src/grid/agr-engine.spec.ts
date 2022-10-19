@@ -18,19 +18,57 @@ describe('Agr Engine', () => {
     expect(grid.header[0][1].rowSpan).toBe(3);
   });
 
-  it('OR Group Filter', () => {
-    grid.switchFilter(grid.header[1][0], {
-      condition: 'OR_GROUP',
-      value: { min: 37, max: 37 },
-    });
-    grid.switchFilter(grid.header[1][1], {
-      condition: 'OR_GROUP',
-      value: { min: 30, max: 30 },
-    });
-    const parentRows = grid.rows.filter((row) => row.rowLevel === 0);
+  describe('switchFilter method', () => {
+    let removeFilter;
 
-    expect(grid.rows.length).toBe(4);
-    expect(parentRows.length).toBe(2);
+    beforeEach(() => {
+      removeFilter = vi.spyOn(grid, 'removeFilter');
+    });
+
+    afterEach(() => {
+      removeFilter.mockReset();
+    });
+
+    it('should work properly with OR Group Filter', () => {
+      grid.switchFilter(grid.header[1][0], {
+        condition: 'OR_GROUP',
+        value: { min: 37, max: 37 },
+      });
+      grid.switchFilter(grid.header[1][1], {
+        condition: 'OR_GROUP',
+        value: { min: 30, max: 30 },
+      });
+      const parentRows = grid.rows.filter((row) => row.rowLevel === 0);
+
+      expect(grid.rows.length).toBe(4);
+      expect(parentRows.length).toBe(2);
+    });
+
+    it('should work properly with AND Filter', () => {
+      grid.switchFilter(grid.header[1][0], {
+        condition: 'AND',
+        value: { min: 50, max: 50 },
+      });
+      grid.switchFilter(grid.header[1][1], {
+        condition: 'AND',
+        value: { min: 30, max: 30 },
+      });
+
+      expect(grid.rows.length).toBe(1);
+    });
+
+    it('should work properly when switching filters without filter value', () => {
+      grid.switchFilter(grid.header[1][0], {
+        condition: 'AND',
+        value: { min: 50, max: 50 },
+      });
+      grid.switchFilter(grid.header[1][0], {
+        condition: 'AND',
+      });
+
+      expect(grid.removeFilter).toHaveBeenCalled();
+      expect(grid.rows.length).toBe(7);
+    });
   });
 
   it('getListFilterConditions method', () => {
@@ -74,7 +112,38 @@ describe('Agr Engine', () => {
     });
   });
 
-  it('getColumnFilterData method', () => {
+  describe('getColumnFilterData method', () => {
+    it('should work properly when filter type is number', () => {
+      vi.spyOn(grid, 'getNumberFilterData');
+      const columnFilterData = grid.getColumnFilterData(grid.header[1][0]);
+
+      expect(grid.getNumberFilterData).toHaveBeenCalledWith(grid.header[1][0]);
+      expect(columnFilterData).toStrictEqual({ min: 37, max: 50 });
+    });
+
+    it('should work properly when filter type is date', () => {
+      vi.spyOn(grid, 'getDateFilterData');
+      const columnFilterData = grid.getColumnFilterData(grid.header[1][2]);
+
+      expect(grid.getDateFilterData).toHaveBeenCalledWith(grid.header[1][2]);
+      expect(columnFilterData).toStrictEqual({ startDate: new Date(2015, 1, 1), endDate: new Date(2020, 1, 1) });
+    });
+
+    it('should work properly when filter type is default', () => {
+      vi.spyOn(grid, 'getSelectFilterValues');
+      const columnFilterData = grid.getColumnFilterData(grid.header[0][1]);
+
+      expect(grid.getSelectFilterValues).toHaveBeenCalledWith(grid.header[0][1]);
+      expect(columnFilterData).toStrictEqual([
+        { label: 1, value: 1 },
+        { label: 2, value: 2 },
+        { label: 3, value: 3 },
+        { label: 5, value: 5 },
+      ]);
+    });
+  });
+
+  it('getColumnFilterData method ', () => {
     vi.spyOn(grid, 'getNumberFilterData');
 
     const columnFilterData = grid.getColumnFilterData(grid.header[1][0]);
